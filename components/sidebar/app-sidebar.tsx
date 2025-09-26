@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Users, User, Hospital, Scan, Shield } from "lucide-react";
+import { Users, Hospital, Scan, Shield } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavUser } from "./sidebar-user";
@@ -21,7 +21,6 @@ const items = [
   { name: "Dashboard", href: "/home", icon: Home },
   { name: "Scan", href: "/scan", icon: Scan },
   { name: "Community", href: "/community", icon: Users },
-  { name: "Profile", href: "/profile", icon: User },
   { name: "Trusted Clinics", href: "/clinics", icon: Hospital },
   { name: "Admin", href: "/admin", icon: Shield },
 ];

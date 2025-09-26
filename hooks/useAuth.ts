@@ -94,35 +94,46 @@ export const useUpdateCurrentUser = () => {
 export const useRegisterMutation = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { setUser } = useAuthStore();
 
   return useMutation({
     mutationFn: ({
       email,
       password,
-      name,
+      firstName,
+      lastName,
       profilePicture,
     }: {
       email: string;
       password: string;
-      name: string;
+      firstName: string;
+      lastName: string;
       profilePicture?: string;
-    }) => authApi.register(email, password, name, profilePicture),
+    }) => {
+      const name = firstName + " " + lastName;
+      return authApi.register(email, password, name, profilePicture);
+    },
     onSuccess: async (data) => {
-      console.log(data);
-      await authStorage.setToken(data.accessToken);
-      await authStorage.setUser(data.user);
+      // Make sure to import from 'cookies-next' if you use setCookie
+      setCookie("authToken", data.accessToken, { path: "/" });
+
+      const safeUser = sanitizeUser(data.user);
+      setUser(safeUser);
 
       queryClient.setQueryData(authQueryKeys.token(), data.accessToken);
-      queryClient.setQueryData(authQueryKeys.user(), data.user);
-      queryClient.setQueryData(authQueryKeys.currentUser(), data.user);
-      router.replace("/(tabs)");
+      queryClient.setQueryData(authQueryKeys.user(), safeUser);
+      queryClient.setQueryData(authQueryKeys.currentUser(), safeUser);
+
+      toast.success(`Glad to have you on board, ${data.user.name}`);
+
+      router.push("/home");
     },
     onError: (error) => {
       console.error("Registration error:", error);
+      toast.error("Failed to create account. Try again.");
     },
   });
 };
-
 export const useLogoutMutation = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -131,7 +142,6 @@ export const useLogoutMutation = () => {
     mutationFn: () => authApi.logout(),
     onSuccess: async () => {
       router.replace("/login");
-
       queryClient.removeQueries({ queryKey: authQueryKeys.all });
     },
     onError: async (error) => {
