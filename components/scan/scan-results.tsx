@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -59,6 +60,16 @@ export function ScanResults({ result, onNewScan }: ScanResultsProps) {
 
   return (
     <div className="space-y-6">
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          <strong>Medical Disclaimer:</strong> This AI analysis is for
+          informational purposes only and should not be used as a substitute for
+          professional medical advice, diagnosis, or treatment. Always consult
+          with a qualified healthcare provider for proper medical evaluation.
+        </AlertDescription>
+      </Alert>
+
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Analysis Results</h2>
@@ -145,30 +156,24 @@ export function ScanResults({ result, onNewScan }: ScanResultsProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <Users className="h-5 w-5" />
-              Community Support
+              Community
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardFooter className="flex-col justify-between items-start">
             <p className="text-sm text-muted-foreground mb-4">
-              Share your experience and get support from others with similar
-              conditions.
+              Browse posts from the community, discover shared experiences, and
+              connect with others who understand your journey.
             </p>
-            <Button asChild variant="outline" className="w-full bg-transparent">
+            <Button
+              asChild
+              variant="outline"
+              className="w-full bg-transparent flex items-end"
+            >
               <Link href="/community">Join Community</Link>
             </Button>
-          </CardContent>
+          </CardFooter>
         </Card>
       </div>
-
-      <Alert>
-        <Info className="h-4 w-4" />
-        <AlertDescription>
-          <strong>Medical Disclaimer:</strong> This AI analysis is for
-          informational purposes only and should not be used as a substitute for
-          professional medical advice, diagnosis, or treatment. Always consult
-          with a qualified healthcare provider for proper medical evaluation.
-        </AlertDescription>
-      </Alert>
     </div>
   );
 }

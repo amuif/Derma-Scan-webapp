@@ -22,7 +22,7 @@ import Image from "next/image";
 import {
   Upload,
   FileImage,
-  Scan,
+  Scan as ScanIcon,
   AlertCircle,
   CheckCircle,
   Info,
@@ -30,14 +30,7 @@ import {
 import { ScanResults } from "./scan-results";
 import { ImageValidation } from "@/lib/check-image-quality";
 import { useImageUploadMutation } from "@/hooks/useAuth";
-
-interface AnalysisResult {
-  condition: string;
-  confidence: number;
-  riskLevel: "low" | "medium" | "high";
-  description: string;
-  recommendations: string[];
-}
+import { Scan } from "@/types/scan";
 
 export function ScanInterface() {
   const { mutateAsync: UploadImage } = useImageUploadMutation();
@@ -46,7 +39,7 @@ export function ScanInterface() {
   const [symptoms, setSymptoms] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
-  const [results, setResults] = useState<AnalysisResult | null>(null);
+  const [results, setResults] = useState<Scan | null>(null);
   const [imageQuality, setImageQuality] = useState<"good" | "poor" | null>(
     null,
   );
@@ -286,7 +279,7 @@ export function ScanInterface() {
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Scan className="h-5 w-5 animate-spin text-primary" />
+                <ScanIcon className="h-5 w-5 animate-spin text-primary" />
                 <span className="font-medium">Analyzing with AI...</span>
               </div>
               <Progress value={analysisProgress} className="w-full" />
@@ -308,12 +301,12 @@ export function ScanInterface() {
         >
           {isAnalyzing ? (
             <>
-              <Scan className="mr-2 h-5 w-5 animate-spin" />
+              <ScanIcon className="mr-2 h-5 w-5 animate-spin" />
               Analyzing...
             </>
           ) : (
             <>
-              <Scan className="mr-2 h-5 w-5" />
+              <ScanIcon className="mr-2 h-5 w-5" />
               Start Analysis
             </>
           )}
