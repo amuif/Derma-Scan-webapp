@@ -1,27 +1,32 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Activity, Mail, ArrowLeft,  AlertCircle } from "lucide-react"
+import type React from "react";
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Activity, Mail, ArrowLeft, AlertCircle } from "lucide-react";
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
-
-    
-  }
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -33,15 +38,22 @@ export default function ForgotPasswordPage() {
               <Activity className="h-6 w-6" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Forgot password?</h1>
-          <p className="text-muted-foreground">No worries, we&apos;ll send you reset instructions</p>
+          <h1 className="text-2xl font-bold text-foreground">
+            Forgot password?
+          </h1>
+          <p className="text-muted-foreground">
+            No worries, we&apos;ll send you reset instructions
+          </p>
         </div>
 
         {/* Forgot Password Form */}
         <Card className="border-border">
           <CardHeader className="space-y-1">
             <CardTitle className="text-xl">Reset password</CardTitle>
-            <CardDescription>Enter your email address and we'll send you a link to reset your password</CardDescription>
+            <CardDescription>
+              Enter your email address and we'll send you a link to reset your
+              password
+            </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
@@ -90,12 +102,13 @@ export default function ForgotPasswordPage() {
             <div className="text-center space-y-2">
               <p className="text-sm font-medium text-foreground">Need help?</p>
               <p className="text-xs text-muted-foreground">
-                If you&apos;re still having trouble accessing your account, contact our support team for assistance.
+                If you&apos;re still having trouble accessing your account,
+                contact our support team for assistance.
               </p>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }

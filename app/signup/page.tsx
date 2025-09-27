@@ -78,8 +78,8 @@ export default function SignupPage() {
       await registeruser(formData);
     } catch (error) {
       console.error("Error creating user", error);
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 

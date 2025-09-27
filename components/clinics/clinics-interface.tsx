@@ -1,13 +1,19 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import {
   Search,
   MapPin,
@@ -21,33 +27,33 @@ import {
   Award,
   Users,
   Stethoscope,
-} from "lucide-react"
+} from "lucide-react";
 
 interface Clinic {
-  id: number
-  name: string
-  type: "clinic" | "hospital" | "private_practice"
-  rating: number
-  reviewCount: number
-  distance: string
-  address: string
-  phone: string
-  website?: string
-  image: string
-  specialties: string[]
+  id: number;
+  name: string;
+  type: "clinic" | "hospital" | "private_practice";
+  rating: number;
+  reviewCount: number;
+  distance: string;
+  address: string;
+  phone: string;
+  website?: string;
+  image: string;
+  specialties: string[];
   doctors: {
-    name: string
-    title: string
-    avatar: string
-    experience: string
-  }[]
-  nextAvailable: string
-  acceptsInsurance: boolean
-  verified: boolean
-  description: string
+    name: string;
+    title: string;
+    avatar: string;
+    experience: string;
+  }[];
+  nextAvailable: string;
+  acceptsInsurance: boolean;
+  verified: boolean;
+  description: string;
   hours: {
-    [key: string]: string
-  }
+    [key: string]: string;
+  };
 }
 
 const mockClinics: Clinic[] = [
@@ -62,7 +68,12 @@ const mockClinics: Clinic[] = [
     phone: "(415) 555-0123",
     website: "https://advancedderm.com",
     image: "/modern-medical-clinic.png",
-    specialties: ["Acne Treatment", "Skin Cancer", "Cosmetic Dermatology", "Psoriasis"],
+    specialties: [
+      "Acne Treatment",
+      "Skin Cancer",
+      "Cosmetic Dermatology",
+      "Psoriasis",
+    ],
     doctors: [
       {
         name: "Dr. Sarah Johnson",
@@ -103,7 +114,12 @@ const mockClinics: Clinic[] = [
     phone: "(415) 555-0456",
     website: "https://bayareaskin.org",
     image: "/hospital-dermatology-department.jpg",
-    specialties: ["Melanoma Treatment", "Mohs Surgery", "Pediatric Dermatology", "Eczema"],
+    specialties: [
+      "Melanoma Treatment",
+      "Mohs Surgery",
+      "Pediatric Dermatology",
+      "Eczema",
+    ],
     doctors: [
       {
         name: "Dr. Emily Rodriguez",
@@ -161,13 +177,13 @@ const mockClinics: Clinic[] = [
       Sunday: "Closed",
     },
   },
-]
+];
 
 export function ClinicsInterface() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedSpecialty, setSelectedSpecialty] = useState("all")
-  const [selectedType, setSelectedType] = useState("all")
-  const [sortBy, setSortBy] = useState("distance")
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
+  const [sortBy, setSortBy] = useState("distance");
 
   const specialties = [
     "Acne Treatment",
@@ -181,48 +197,54 @@ export function ClinicsInterface() {
     "Anti-Aging",
     "Laser Treatments",
     "Rosacea",
-  ]
+  ];
 
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "clinic":
-        return Stethoscope
+        return Stethoscope;
       case "hospital":
-        return Award
+        return Award;
       case "private_practice":
-        return Users
+        return Users;
       default:
-        return Stethoscope
+        return Stethoscope;
     }
-  }
+  };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
       case "clinic":
-        return "Medical Clinic"
+        return "Medical Clinic";
       case "hospital":
-        return "Hospital"
+        return "Hospital";
       case "private_practice":
-        return "Private Practice"
+        return "Private Practice";
       default:
-        return "Medical Facility"
+        return "Medical Facility";
     }
-  }
+  };
 
   const filteredClinics = mockClinics.filter((clinic) => {
     const matchesSearch =
       clinic.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      clinic.specialties.some((specialty) => specialty.toLowerCase().includes(searchQuery.toLowerCase()))
-    const matchesSpecialty = selectedSpecialty === "all" || clinic.specialties.includes(selectedSpecialty)
-    const matchesType = selectedType === "all" || clinic.type === selectedType
+      clinic.specialties.some((specialty) =>
+        specialty.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    const matchesSpecialty =
+      selectedSpecialty === "all" ||
+      clinic.specialties.includes(selectedSpecialty);
+    const matchesType = selectedType === "all" || clinic.type === selectedType;
 
-    return matchesSearch && matchesSpecialty && matchesType
-  })
+    return matchesSearch && matchesSpecialty && matchesType;
+  });
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Trusted Clinics & Specialists</h1>
+        <h1 className="text-3xl font-bold mb-2">
+          Trusted Clinics & Specialists
+        </h1>
         <p className="text-muted-foreground text-lg">
           Find verified dermatologists and healthcare providers in your area.
         </p>
@@ -242,7 +264,10 @@ export function ClinicsInterface() {
               />
             </div>
 
-            <Select value={selectedSpecialty} onValueChange={setSelectedSpecialty}>
+            <Select
+              value={selectedSpecialty}
+              onValueChange={setSelectedSpecialty}
+            >
               <SelectTrigger className="w-full lg:w-48">
                 <SelectValue placeholder="Specialty" />
               </SelectTrigger>
@@ -264,7 +289,9 @@ export function ClinicsInterface() {
                 <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="clinic">Medical Clinic</SelectItem>
                 <SelectItem value="hospital">Hospital</SelectItem>
-                <SelectItem value="private_practice">Private Practice</SelectItem>
+                <SelectItem value="private_practice">
+                  Private Practice
+                </SelectItem>
               </SelectContent>
             </Select>
 
@@ -286,7 +313,8 @@ export function ClinicsInterface() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">
-            Found {filteredClinics.length} {filteredClinics.length === 1 ? "clinic" : "clinics"}
+            Found {filteredClinics.length}{" "}
+            {filteredClinics.length === 1 ? "clinic" : "clinics"}
           </p>
           <Button variant="outline" size="sm">
             <Filter className="mr-2 h-4 w-4" />
@@ -295,7 +323,7 @@ export function ClinicsInterface() {
         </div>
 
         {filteredClinics.map((clinic) => {
-          const TypeIcon = getTypeIcon(clinic.type)
+          const TypeIcon = getTypeIcon(clinic.type);
           return (
             <Card key={clinic.id} className="overflow-hidden">
               <div className="flex flex-col lg:flex-row">
@@ -312,7 +340,9 @@ export function ClinicsInterface() {
                     <div>
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="text-xl font-semibold">{clinic.name}</h3>
-                        {clinic.verified && <CheckCircle className="h-5 w-5 text-blue-500" />}
+                        {clinic.verified && (
+                          <CheckCircle className="h-5 w-5 text-blue-500" />
+                        )}
                       </div>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
                         <div className="flex items-center gap-1">
@@ -329,7 +359,9 @@ export function ClinicsInterface() {
                           <span>{clinic.distance}</span>
                         </div>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-3">{clinic.address}</p>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {clinic.address}
+                      </p>
                     </div>
 
                     <div className="text-right">
@@ -366,12 +398,18 @@ export function ClinicsInterface() {
                       {clinic.doctors.map((doctor, index) => (
                         <div key={index} className="flex items-center gap-2">
                           <Avatar className="h-8 w-8">
-                            <AvatarImage src={doctor.avatar || "/placeholder.svg"} />
-                            <AvatarFallback>{doctor.name.charAt(0)}</AvatarFallback>
+                            <AvatarImage
+                              src={doctor.avatar || "/placeholder.svg"}
+                            />
+                            <AvatarFallback>
+                              {doctor.name.charAt(0)}
+                            </AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="text-sm font-medium">{doctor.name}</p>
-                            <p className="text-xs text-muted-foreground">{doctor.title}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {doctor.title}
+                            </p>
                           </div>
                         </div>
                       ))}
@@ -408,21 +446,23 @@ export function ClinicsInterface() {
                 </div>
               </div>
             </Card>
-          )
+          );
         })}
       </div>
 
       {filteredClinics.length === 0 && (
         <Card>
           <CardContent className="pt-6 text-center">
-            <p className="text-muted-foreground">No clinics found matching your criteria.</p>
+            <p className="text-muted-foreground">
+              No clinics found matching your criteria.
+            </p>
             <Button
               variant="outline"
               className="mt-4 bg-transparent"
               onClick={() => {
-                setSearchQuery("")
-                setSelectedSpecialty("all")
-                setSelectedType("all")
+                setSearchQuery("");
+                setSelectedSpecialty("all");
+                setSelectedType("all");
               }}
             >
               Clear Filters
@@ -431,5 +471,5 @@ export function ClinicsInterface() {
         </Card>
       )}
     </div>
-  )
+  );
 }

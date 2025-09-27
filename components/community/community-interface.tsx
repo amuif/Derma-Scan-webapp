@@ -1,14 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import {
   History,
   Users,
@@ -22,7 +28,7 @@ import {
   CheckCircle,
   AlertTriangle,
   Plus,
-} from "lucide-react"
+} from "lucide-react";
 
 // Mock data for scan history
 const scanHistory = [
@@ -66,7 +72,7 @@ const scanHistory = [
     notes: "Initial scan showing moderate acne. Starting treatment plan.",
     improvement: 0,
   },
-]
+];
 
 // Mock data for community posts
 const communityPosts = [
@@ -115,44 +121,45 @@ const communityPosts = [
     comments: 15,
     image: null,
   },
-]
+];
 
 export function CommunityInterface() {
-  const [activeTab, setActiveTab] = useState("history")
-  const [newPost, setNewPost] = useState("")
+  const [activeTab, setActiveTab] = useState("history");
+  const [newPost, setNewPost] = useState("");
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
       case "low":
-        return "bg-green-500/10 text-green-500 border-green-500/20"
+        return "bg-green-500/10 text-green-500 border-green-500/20";
       case "medium":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
+        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
       case "high":
-        return "bg-red-500/10 text-red-500 border-red-500/20"
+        return "bg-red-500/10 text-red-500 border-red-500/20";
       default:
-        return "bg-muted text-muted-foreground"
+        return "bg-muted text-muted-foreground";
     }
-  }
+  };
 
   const getRiskIcon = (risk: string) => {
     switch (risk) {
       case "low":
-        return CheckCircle
+        return CheckCircle;
       case "medium":
-        return AlertTriangle
+        return AlertTriangle;
       case "high":
-        return AlertTriangle
+        return AlertTriangle;
       default:
-        return CheckCircle
+        return CheckCircle;
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold mb-2">Community & History</h1>
         <p className="text-muted-foreground text-lg">
-          Track your progress and connect with others on their skin health journey.
+          Track your progress and connect with others on their skin health
+          journey.
         </p>
       </div>
 
@@ -175,7 +182,9 @@ export function CommunityInterface() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Scans</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Total Scans
+                    </p>
                     <p className="text-2xl font-bold">{scanHistory.length}</p>
                   </div>
                   <History className="h-8 w-8 text-primary" />
@@ -187,7 +196,9 @@ export function CommunityInterface() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Avg Improvement</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Avg Improvement
+                    </p>
                     <p className="text-2xl font-bold text-green-500">+12%</p>
                   </div>
                   <TrendingUp className="h-8 w-8 text-green-500" />
@@ -199,7 +210,9 @@ export function CommunityInterface() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Days Tracked</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Days Tracked
+                    </p>
                     <p className="text-2xl font-bold">45</p>
                   </div>
                   <Calendar className="h-8 w-8 text-blue-500" />
@@ -212,17 +225,21 @@ export function CommunityInterface() {
           <Card>
             <CardHeader>
               <CardTitle>Scan History</CardTitle>
-              <CardDescription>Your complete skin analysis timeline</CardDescription>
+              <CardDescription>
+                Your complete skin analysis timeline
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {scanHistory.map((scan, index) => {
-                const RiskIcon = getRiskIcon(scan.riskLevel)
-                const isImprovement = scan.improvement > 0
-                const isDecline = scan.improvement < 0
+                const RiskIcon = getRiskIcon(scan.riskLevel);
+                const isImprovement = scan.improvement > 0;
+                const isDecline = scan.improvement < 0;
 
                 return (
                   <div key={scan.id} className="relative">
-                    {index < scanHistory.length - 1 && <div className="absolute left-6 top-16 w-px h-16 bg-border" />}
+                    {index < scanHistory.length - 1 && (
+                      <div className="absolute left-6 top-16 w-px h-16 bg-border" />
+                    )}
                     <div className="flex gap-4">
                       <div className="flex-shrink-0">
                         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
@@ -242,10 +259,15 @@ export function CommunityInterface() {
                             </p>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Badge className={getRiskColor(scan.riskLevel)} variant="outline">
+                            <Badge
+                              className={getRiskColor(scan.riskLevel)}
+                              variant="outline"
+                            >
                               {scan.riskLevel} risk
                             </Badge>
-                            <Badge variant="secondary">{scan.confidence}% confidence</Badge>
+                            <Badge variant="secondary">
+                              {scan.confidence}% confidence
+                            </Badge>
                           </div>
                         </div>
 
@@ -256,15 +278,25 @@ export function CommunityInterface() {
                             className="w-20 h-20 rounded-lg object-cover"
                           />
                           <div className="flex-1">
-                            <p className="text-sm text-muted-foreground mb-2">{scan.notes}</p>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {scan.notes}
+                            </p>
                             {scan.improvement !== 0 && (
                               <div className="flex items-center gap-1 text-sm">
                                 <TrendingUp
                                   className={`h-4 w-4 ${
-                                    isImprovement ? "text-green-500" : "text-red-500"
+                                    isImprovement
+                                      ? "text-green-500"
+                                      : "text-red-500"
                                   } ${isDecline ? "rotate-180" : ""}`}
                                 />
-                                <span className={isImprovement ? "text-green-500" : "text-red-500"}>
+                                <span
+                                  className={
+                                    isImprovement
+                                      ? "text-green-500"
+                                      : "text-red-500"
+                                  }
+                                >
                                   {isImprovement ? "+" : ""}
                                   {scan.improvement}% change
                                 </span>
@@ -275,7 +307,7 @@ export function CommunityInterface() {
                       </div>
                     </div>
                   </div>
-                )
+                );
               })}
             </CardContent>
           </Card>
@@ -333,16 +365,24 @@ export function CommunityInterface() {
                 <CardContent className="pt-6">
                   <div className="flex gap-3">
                     <Avatar>
-                      <AvatarImage src={post.user.avatar || "/placeholder.svg"} />
-                      <AvatarFallback>{post.user.name.charAt(0)}</AvatarFallback>
+                      <AvatarImage
+                        src={post.user.avatar || "/placeholder.svg"}
+                      />
+                      <AvatarFallback>
+                        {post.user.name.charAt(0)}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 space-y-3">
                       <div className="flex items-center gap-2">
                         <span className="font-semibold">{post.user.name}</span>
-                        {post.user.verified && <CheckCircle className="h-4 w-4 text-blue-500" />}
+                        {post.user.verified && (
+                          <CheckCircle className="h-4 w-4 text-blue-500" />
+                        )}
                         <Badge variant="outline">{post.condition}</Badge>
                         <span className="text-sm text-muted-foreground">•</span>
-                        <span className="text-sm text-muted-foreground">{post.timestamp}</span>
+                        <span className="text-sm text-muted-foreground">
+                          {post.timestamp}
+                        </span>
                       </div>
 
                       <p className="text-sm leading-relaxed">{post.content}</p>
@@ -358,15 +398,27 @@ export function CommunityInterface() {
                       <Separator />
 
                       <div className="flex items-center gap-6">
-                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-red-500">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-muted-foreground hover:text-red-500"
+                        >
                           <Heart className="mr-2 h-4 w-4" />
                           {post.likes}
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-muted-foreground">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-muted-foreground"
+                        >
                           <MessageSquare className="mr-2 h-4 w-4" />
                           {post.comments}
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-muted-foreground">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-muted-foreground"
+                        >
                           <Share2 className="mr-2 h-4 w-4" />
                           Share
                         </Button>
@@ -380,5 +432,5 @@ export function CommunityInterface() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

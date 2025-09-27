@@ -1,12 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Building2,
   Users,
@@ -22,7 +28,7 @@ import {
   AlertTriangle,
   TrendingUp,
   Activity,
-} from "lucide-react"
+} from "lucide-react";
 
 // Mock data for clinic suggestions
 const pendingClinics = [
@@ -51,9 +57,10 @@ const pendingClinics = [
     submittedBy: "Dr. Michael Chen",
     submittedDate: "2024-01-12",
     status: "pending",
-    description: "Specialized clinic focusing on chronic skin conditions with holistic treatment approaches.",
+    description:
+      "Specialized clinic focusing on chronic skin conditions with holistic treatment approaches.",
   },
-]
+];
 
 // Mock data for users
 const users = [
@@ -84,7 +91,7 @@ const users = [
     status: "suspended",
     avatar: "/user-avatar.jpg",
   },
-]
+];
 
 // Mock data for reported content
 const reportedContent = [
@@ -108,36 +115,36 @@ const reportedContent = [
     reportDate: "2024-01-13",
     status: "pending",
   },
-]
+];
 
 export function AdminInterface() {
-  const [activeTab, setActiveTab] = useState("clinics")
-  const [searchTerm, setSearchTerm] = useState("")
+  const [activeTab, setActiveTab] = useState("clinics");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleApproveClinic = (clinicId: number) => {
-    console.log(`Approving clinic ${clinicId}`)
+    console.log(`Approving clinic ${clinicId}`);
     // In a real app, this would make an API call
-  }
+  };
 
   const handleRejectClinic = (clinicId: number) => {
-    console.log(`Rejecting clinic ${clinicId}`)
+    console.log(`Rejecting clinic ${clinicId}`);
     // In a real app, this would make an API call
-  }
+  };
 
   const handleSuspendUser = (userId: number) => {
-    console.log(`Suspending user ${userId}`)
+    console.log(`Suspending user ${userId}`);
     // In a real app, this would make an API call
-  }
+  };
 
   const handleActivateUser = (userId: number) => {
-    console.log(`Activating user ${userId}`)
+    console.log(`Activating user ${userId}`);
     // In a real app, this would make an API call
-  }
+  };
 
   const handleResolveReport = (reportId: number, action: string) => {
-    console.log(`Resolving report ${reportId} with action: ${action}`)
+    console.log(`Resolving report ${reportId} with action: ${action}`);
     // In a real app, this would make an API call
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -145,7 +152,9 @@ export function AdminInterface() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Clinics</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Pending Clinics
+            </CardTitle>
             <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -160,12 +169,16 @@ export function AdminInterface() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1,234</div>
-            <p className="text-xs text-muted-foreground">+12% from last month</p>
+            <p className="text-xs text-muted-foreground">
+              +12% from last month
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Reported Content</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Reported Content
+            </CardTitle>
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -186,7 +199,11 @@ export function AdminInterface() {
       </div>
 
       {/* Main Admin Interface */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-4"
+      >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="clinics">Clinic Approvals</TabsTrigger>
           <TabsTrigger value="users">User Management</TabsTrigger>
@@ -199,28 +216,42 @@ export function AdminInterface() {
           <Card>
             <CardHeader>
               <CardTitle>Pending Clinic Approvals</CardTitle>
-              <CardDescription>Review and approve clinic suggestions from users</CardDescription>
+              <CardDescription>
+                Review and approve clinic suggestions from users
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {pendingClinics.map((clinic) => (
-                <div key={clinic.id} className="border rounded-lg p-4 space-y-4">
+                <div
+                  key={clinic.id}
+                  className="border rounded-lg p-4 space-y-4"
+                >
                   <div className="flex items-start justify-between">
                     <div className="space-y-2">
                       <h3 className="font-semibold text-lg">{clinic.name}</h3>
-                      <p className="text-sm text-muted-foreground">{clinic.address}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {clinic.address}
+                      </p>
                       <div className="flex items-center gap-4 text-sm">
                         <span>{clinic.phone}</span>
                         <span>{clinic.email}</span>
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {clinic.specialties.map((specialty) => (
-                          <Badge key={specialty} variant="secondary" className="text-xs">
+                          <Badge
+                            key={specialty}
+                            variant="secondary"
+                            className="text-xs"
+                          >
                             {specialty}
                           </Badge>
                         ))}
                       </div>
                     </div>
-                    <Badge variant="outline" className="flex items-center gap-1">
+                    <Badge
+                      variant="outline"
+                      className="flex items-center gap-1"
+                    >
                       <Clock className="h-3 w-3" />
                       Pending
                     </Badge>
@@ -231,7 +262,8 @@ export function AdminInterface() {
                       <strong>Description:</strong> {clinic.description}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Submitted by {clinic.submittedBy} on {clinic.submittedDate}
+                      Submitted by {clinic.submittedBy} on{" "}
+                      {clinic.submittedDate}
                     </p>
                   </div>
 
@@ -253,7 +285,11 @@ export function AdminInterface() {
                       <XCircle className="h-4 w-4" />
                       Reject
                     </Button>
-                    <Button size="sm" variant="outline" className="flex items-center gap-1 bg-transparent">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex items-center gap-1 bg-transparent"
+                    >
                       <Eye className="h-4 w-4" />
                       View Details
                     </Button>
@@ -271,7 +307,9 @@ export function AdminInterface() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle>User Management</CardTitle>
-                  <CardDescription>Manage user accounts and permissions</CardDescription>
+                  <CardDescription>
+                    Manage user accounts and permissions
+                  </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
                   <Search className="h-4 w-4 text-muted-foreground" />
@@ -287,10 +325,16 @@ export function AdminInterface() {
             <CardContent>
               <div className="space-y-4">
                 {users.map((user) => (
-                  <div key={user.id} className="flex items-center justify-between border rounded-lg p-4">
+                  <div
+                    key={user.id}
+                    className="flex items-center justify-between border rounded-lg p-4"
+                  >
                     <div className="flex items-center gap-4">
                       <Avatar>
-                        <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+                        <AvatarImage
+                          src={user.avatar || "/placeholder.svg"}
+                          alt={user.name}
+                        />
                         <AvatarFallback>
                           {user.name
                             .split(" ")
@@ -300,14 +344,22 @@ export function AdminInterface() {
                       </Avatar>
                       <div>
                         <h3 className="font-medium">{user.name}</h3>
-                        <p className="text-sm text-muted-foreground">{user.email}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {user.email}
+                        </p>
                         <p className="text-xs text-muted-foreground">
                           Joined {user.joinDate} • {user.scansCount} scans
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={user.status === "active" ? "default" : "destructive"}>{user.status}</Badge>
+                      <Badge
+                        variant={
+                          user.status === "active" ? "default" : "destructive"
+                        }
+                      >
+                        {user.status}
+                      </Badge>
                       {user.status === "active" ? (
                         <Button
                           size="sm"
@@ -341,20 +393,28 @@ export function AdminInterface() {
           <Card>
             <CardHeader>
               <CardTitle>Content Moderation</CardTitle>
-              <CardDescription>Review reported content and community posts</CardDescription>
+              <CardDescription>
+                Review reported content and community posts
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {reportedContent.map((report) => (
-                <div key={report.id} className="border rounded-lg p-4 space-y-3">
+                <div
+                  key={report.id}
+                  className="border rounded-lg p-4 space-y-3"
+                >
                   <div className="flex items-start justify-between">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <Badge variant="outline">{report.type.replace("_", " ")}</Badge>
+                        <Badge variant="outline">
+                          {report.type.replace("_", " ")}
+                        </Badge>
                         <Badge variant="destructive">Reported</Badge>
                       </div>
                       <p className="text-sm font-medium">"{report.content}"</p>
                       <p className="text-xs text-muted-foreground">
-                        By {report.author} • Reported by {report.reportedBy} on {report.reportDate}
+                        By {report.author} • Reported by {report.reportedBy} on{" "}
+                        {report.reportDate}
                       </p>
                       <p className="text-sm text-orange-600">
                         <strong>Reason:</strong> {report.reportReason}
@@ -512,5 +572,5 @@ export function AdminInterface() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

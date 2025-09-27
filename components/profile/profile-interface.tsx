@@ -1,18 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   User,
   Settings,
@@ -27,44 +39,44 @@ import {
   Mail,
   Info,
   CheckCircle,
-} from "lucide-react"
+} from "lucide-react";
 
 interface ProfileData {
   personalInfo: {
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-    dateOfBirth: string
-    location: string
-    avatar: string
-  }
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    dateOfBirth: string;
+    location: string;
+    avatar: string;
+  };
   skinProfile: {
-    skinType: string
-    primaryConcerns: string[]
-    allergies: string
-    currentMedications: string
-    skinGoals: string
-    previousTreatments: string
-  }
+    skinType: string;
+    primaryConcerns: string[];
+    allergies: string;
+    currentMedications: string;
+    skinGoals: string;
+    previousTreatments: string;
+  };
   preferences: {
     notifications: {
-      scanReminders: boolean
-      communityUpdates: boolean
-      treatmentAlerts: boolean
-      clinicRecommendations: boolean
-    }
+      scanReminders: boolean;
+      communityUpdates: boolean;
+      treatmentAlerts: boolean;
+      clinicRecommendations: boolean;
+    };
     privacy: {
-      profileVisibility: string
-      shareScansWithCommunity: boolean
-      allowClinicRecommendations: boolean
-    }
-  }
+      profileVisibility: string;
+      shareScansWithCommunity: boolean;
+      allowClinicRecommendations: boolean;
+    };
+  };
 }
 
 export function ProfileInterface() {
-  const [activeTab, setActiveTab] = useState("personal")
-  const [isEditing, setIsEditing] = useState(false)
+  const [activeTab, setActiveTab] = useState("personal");
+  const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState<ProfileData>({
     personalInfo: {
       firstName: "John",
@@ -96,13 +108,13 @@ export function ProfileInterface() {
         allowClinicRecommendations: true,
       },
     },
-  })
+  });
 
   const handleSave = () => {
-    setIsEditing(false)
+    setIsEditing(false);
     // Here you would typically save to a backend
-    console.log("Saving profile data:", profileData)
-  }
+    console.log("Saving profile data:", profileData);
+  };
 
   const skinTypes = [
     { value: "oily", label: "Oily" },
@@ -110,7 +122,7 @@ export function ProfileInterface() {
     { value: "combination", label: "Combination" },
     { value: "sensitive", label: "Sensitive" },
     { value: "normal", label: "Normal" },
-  ]
+  ];
 
   const skinConcerns = [
     "Acne",
@@ -123,16 +135,21 @@ export function ProfileInterface() {
     "Psoriasis",
     "Melasma",
     "Scarring",
-  ]
+  ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold mb-2">Profile Settings</h1>
-          <p className="text-muted-foreground text-lg">Manage your personal information and skin health profile.</p>
+          <p className="text-muted-foreground text-lg">
+            Manage your personal information and skin health profile.
+          </p>
         </div>
-        <Button onClick={() => setIsEditing(!isEditing)} variant={isEditing ? "outline" : "default"}>
+        <Button
+          onClick={() => setIsEditing(!isEditing)}
+          variant={isEditing ? "outline" : "default"}
+        >
           {isEditing ? (
             <>
               <Save className="mr-2 h-4 w-4" />
@@ -167,13 +184,17 @@ export function ProfileInterface() {
           <Card>
             <CardHeader>
               <CardTitle>Personal Information</CardTitle>
-              <CardDescription>Update your basic profile information and contact details.</CardDescription>
+              <CardDescription>
+                Update your basic profile information and contact details.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Avatar Section */}
               <div className="flex items-center gap-6">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={profileData.personalInfo.avatar || "/placeholder.svg"} />
+                  <AvatarImage
+                    src={profileData.personalInfo.avatar || "/placeholder.svg"}
+                  />
                   <AvatarFallback className="text-lg">
                     {profileData.personalInfo.firstName.charAt(0)}
                     {profileData.personalInfo.lastName.charAt(0)}
@@ -181,7 +202,8 @@ export function ProfileInterface() {
                 </Avatar>
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold">
-                    {profileData.personalInfo.firstName} {profileData.personalInfo.lastName}
+                    {profileData.personalInfo.firstName}{" "}
+                    {profileData.personalInfo.lastName}
                   </h3>
                   <Button variant="outline" size="sm" disabled={!isEditing}>
                     <Camera className="mr-2 h-4 w-4" />
@@ -202,7 +224,10 @@ export function ProfileInterface() {
                     onChange={(e) =>
                       setProfileData((prev) => ({
                         ...prev,
-                        personalInfo: { ...prev.personalInfo, firstName: e.target.value },
+                        personalInfo: {
+                          ...prev.personalInfo,
+                          firstName: e.target.value,
+                        },
                       }))
                     }
                     disabled={!isEditing}
@@ -217,7 +242,10 @@ export function ProfileInterface() {
                     onChange={(e) =>
                       setProfileData((prev) => ({
                         ...prev,
-                        personalInfo: { ...prev.personalInfo, lastName: e.target.value },
+                        personalInfo: {
+                          ...prev.personalInfo,
+                          lastName: e.target.value,
+                        },
                       }))
                     }
                     disabled={!isEditing}
@@ -235,7 +263,10 @@ export function ProfileInterface() {
                       onChange={(e) =>
                         setProfileData((prev) => ({
                           ...prev,
-                          personalInfo: { ...prev.personalInfo, email: e.target.value },
+                          personalInfo: {
+                            ...prev.personalInfo,
+                            email: e.target.value,
+                          },
                         }))
                       }
                       disabled={!isEditing}
@@ -254,7 +285,10 @@ export function ProfileInterface() {
                       onChange={(e) =>
                         setProfileData((prev) => ({
                           ...prev,
-                          personalInfo: { ...prev.personalInfo, phone: e.target.value },
+                          personalInfo: {
+                            ...prev.personalInfo,
+                            phone: e.target.value,
+                          },
                         }))
                       }
                       disabled={!isEditing}
@@ -274,7 +308,10 @@ export function ProfileInterface() {
                       onChange={(e) =>
                         setProfileData((prev) => ({
                           ...prev,
-                          personalInfo: { ...prev.personalInfo, dateOfBirth: e.target.value },
+                          personalInfo: {
+                            ...prev.personalInfo,
+                            dateOfBirth: e.target.value,
+                          },
                         }))
                       }
                       disabled={!isEditing}
@@ -293,7 +330,10 @@ export function ProfileInterface() {
                       onChange={(e) =>
                         setProfileData((prev) => ({
                           ...prev,
-                          personalInfo: { ...prev.personalInfo, location: e.target.value },
+                          personalInfo: {
+                            ...prev.personalInfo,
+                            location: e.target.value,
+                          },
                         }))
                       }
                       disabled={!isEditing}
@@ -311,7 +351,8 @@ export function ProfileInterface() {
             <CardHeader>
               <CardTitle>Skin Health Profile</CardTitle>
               <CardDescription>
-                Provide detailed information about your skin to get more accurate AI recommendations.
+                Provide detailed information about your skin to get more
+                accurate AI recommendations.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -347,19 +388,33 @@ export function ProfileInterface() {
                     {skinConcerns.map((concern) => (
                       <Badge
                         key={concern}
-                        variant={profileData.skinProfile.primaryConcerns.includes(concern) ? "default" : "secondary"}
+                        variant={
+                          profileData.skinProfile.primaryConcerns.includes(
+                            concern,
+                          )
+                            ? "default"
+                            : "secondary"
+                        }
                         className={`cursor-pointer ${!isEditing ? "pointer-events-none" : ""}`}
                         onClick={() => {
-                          if (!isEditing) return
+                          if (!isEditing) return;
                           setProfileData((prev) => ({
                             ...prev,
                             skinProfile: {
                               ...prev.skinProfile,
-                              primaryConcerns: prev.skinProfile.primaryConcerns.includes(concern)
-                                ? prev.skinProfile.primaryConcerns.filter((c) => c !== concern)
-                                : [...prev.skinProfile.primaryConcerns, concern],
+                              primaryConcerns:
+                                prev.skinProfile.primaryConcerns.includes(
+                                  concern,
+                                )
+                                  ? prev.skinProfile.primaryConcerns.filter(
+                                      (c) => c !== concern,
+                                    )
+                                  : [
+                                      ...prev.skinProfile.primaryConcerns,
+                                      concern,
+                                    ],
                             },
-                          }))
+                          }));
                         }}
                       >
                         {concern}
@@ -377,7 +432,10 @@ export function ProfileInterface() {
                   onChange={(e) =>
                     setProfileData((prev) => ({
                       ...prev,
-                      skinProfile: { ...prev.skinProfile, allergies: e.target.value },
+                      skinProfile: {
+                        ...prev.skinProfile,
+                        allergies: e.target.value,
+                      },
                     }))
                   }
                   disabled={!isEditing}
@@ -393,7 +451,10 @@ export function ProfileInterface() {
                   onChange={(e) =>
                     setProfileData((prev) => ({
                       ...prev,
-                      skinProfile: { ...prev.skinProfile, currentMedications: e.target.value },
+                      skinProfile: {
+                        ...prev.skinProfile,
+                        currentMedications: e.target.value,
+                      },
                     }))
                   }
                   disabled={!isEditing}
@@ -410,7 +471,10 @@ export function ProfileInterface() {
                   onChange={(e) =>
                     setProfileData((prev) => ({
                       ...prev,
-                      skinProfile: { ...prev.skinProfile, skinGoals: e.target.value },
+                      skinProfile: {
+                        ...prev.skinProfile,
+                        skinGoals: e.target.value,
+                      },
                     }))
                   }
                   disabled={!isEditing}
@@ -427,7 +491,10 @@ export function ProfileInterface() {
                   onChange={(e) =>
                     setProfileData((prev) => ({
                       ...prev,
-                      skinProfile: { ...prev.skinProfile, previousTreatments: e.target.value },
+                      skinProfile: {
+                        ...prev.skinProfile,
+                        previousTreatments: e.target.value,
+                      },
                     }))
                   }
                   disabled={!isEditing}
@@ -446,40 +513,51 @@ export function ProfileInterface() {
                 <Bell className="h-5 w-5" />
                 Notification Preferences
               </CardTitle>
-              <CardDescription>Choose what notifications you'd like to receive.</CardDescription>
+              <CardDescription>
+                Choose what notifications you'd like to receive.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {Object.entries(profileData.preferences.notifications).map(([key, value]) => (
-                <div key={key} className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-base">
-                      {key
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, (str) => str.toUpperCase())
-                        .trim()}
-                    </Label>
-                    <p className="text-sm text-muted-foreground">
-                      {key === "scanReminders" && "Get reminders to perform regular skin scans"}
-                      {key === "communityUpdates" && "Receive updates from community discussions"}
-                      {key === "treatmentAlerts" && "Get alerts about your treatment progress"}
-                      {key === "clinicRecommendations" && "Receive recommendations for nearby clinics"}
-                    </p>
+              {Object.entries(profileData.preferences.notifications).map(
+                ([key, value]) => (
+                  <div key={key} className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-base">
+                        {key
+                          .replace(/([A-Z])/g, " $1")
+                          .replace(/^./, (str) => str.toUpperCase())
+                          .trim()}
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {key === "scanReminders" &&
+                          "Get reminders to perform regular skin scans"}
+                        {key === "communityUpdates" &&
+                          "Receive updates from community discussions"}
+                        {key === "treatmentAlerts" &&
+                          "Get alerts about your treatment progress"}
+                        {key === "clinicRecommendations" &&
+                          "Receive recommendations for nearby clinics"}
+                      </p>
+                    </div>
+                    <Switch
+                      checked={value}
+                      onCheckedChange={(checked) =>
+                        setProfileData((prev) => ({
+                          ...prev,
+                          preferences: {
+                            ...prev.preferences,
+                            notifications: {
+                              ...prev.preferences.notifications,
+                              [key]: checked,
+                            },
+                          },
+                        }))
+                      }
+                      disabled={!isEditing}
+                    />
                   </div>
-                  <Switch
-                    checked={value}
-                    onCheckedChange={(checked) =>
-                      setProfileData((prev) => ({
-                        ...prev,
-                        preferences: {
-                          ...prev.preferences,
-                          notifications: { ...prev.preferences.notifications, [key]: checked },
-                        },
-                      }))
-                    }
-                    disabled={!isEditing}
-                  />
-                </div>
-              ))}
+                ),
+              )}
             </CardContent>
           </Card>
 
@@ -489,7 +567,9 @@ export function ProfileInterface() {
                 <Shield className="h-5 w-5" />
                 Privacy Settings
               </CardTitle>
-              <CardDescription>Control how your information is shared and used.</CardDescription>
+              <CardDescription>
+                Control how your information is shared and used.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
@@ -501,7 +581,10 @@ export function ProfileInterface() {
                       ...prev,
                       preferences: {
                         ...prev.preferences,
-                        privacy: { ...prev.preferences.privacy, profileVisibility: value },
+                        privacy: {
+                          ...prev.preferences.privacy,
+                          profileVisibility: value,
+                        },
                       },
                     }))
                   }
@@ -520,19 +603,27 @@ export function ProfileInterface() {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label className="text-base">Share Scans with Community</Label>
+                  <Label className="text-base">
+                    Share Scans with Community
+                  </Label>
                   <p className="text-sm text-muted-foreground">
-                    Allow your scan results to be shared anonymously for community insights
+                    Allow your scan results to be shared anonymously for
+                    community insights
                   </p>
                 </div>
                 <Switch
-                  checked={profileData.preferences.privacy.shareScansWithCommunity}
+                  checked={
+                    profileData.preferences.privacy.shareScansWithCommunity
+                  }
                   onCheckedChange={(checked) =>
                     setProfileData((prev) => ({
                       ...prev,
                       preferences: {
                         ...prev.preferences,
-                        privacy: { ...prev.preferences.privacy, shareScansWithCommunity: checked },
+                        privacy: {
+                          ...prev.preferences.privacy,
+                          shareScansWithCommunity: checked,
+                        },
                       },
                     }))
                   }
@@ -542,19 +633,27 @@ export function ProfileInterface() {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label className="text-base">Allow Clinic Recommendations</Label>
+                  <Label className="text-base">
+                    Allow Clinic Recommendations
+                  </Label>
                   <p className="text-sm text-muted-foreground">
-                    Receive personalized clinic recommendations based on your location and needs
+                    Receive personalized clinic recommendations based on your
+                    location and needs
                   </p>
                 </div>
                 <Switch
-                  checked={profileData.preferences.privacy.allowClinicRecommendations}
+                  checked={
+                    profileData.preferences.privacy.allowClinicRecommendations
+                  }
                   onCheckedChange={(checked) =>
                     setProfileData((prev) => ({
                       ...prev,
                       preferences: {
                         ...prev.preferences,
-                        privacy: { ...prev.preferences.privacy, allowClinicRecommendations: checked },
+                        privacy: {
+                          ...prev.preferences.privacy,
+                          allowClinicRecommendations: checked,
+                        },
                       },
                     }))
                   }
@@ -567,8 +666,9 @@ export function ProfileInterface() {
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              Your privacy is important to us. All personal health information is encrypted and stored securely. We
-              never share your data without your explicit consent.
+              Your privacy is important to us. All personal health information
+              is encrypted and stored securely. We never share your data without
+              your explicit consent.
             </AlertDescription>
           </Alert>
         </TabsContent>
@@ -586,5 +686,5 @@ export function ProfileInterface() {
         </div>
       )}
     </div>
-  )
+  );
 }
