@@ -17,16 +17,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavUser } from "./sidebar-user";
 import { ModeToggle } from "../mode-toggle";
+import { useAuthStore } from "@/stores/auth";
 
 const items = [
   { name: "Dashboard", href: "/home", icon: Home },
   { name: "Scan", href: "/scan", icon: Scan },
   { name: "Community", href: "/community", icon: Users },
   { name: "Trusted Clinics", href: "/clinics", icon: Hospital },
-  { name: "Admin", href: "/admin", icon: Shield },
 ];
 export function AppSidebar() {
+  const { user } = useAuthStore();
   const pathname = usePathname();
+  const isAdminButtonActive = pathname === "/admin";
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -61,6 +64,24 @@ export function AppSidebar() {
                   </SidebarMenuItem>
                 );
               })}
+
+              {user?.role === "ADMIN" && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild size="lg">
+                    <Link
+                      href="/admin"
+                      className={`flex items-center gap-3 rounded-lg px-3 py-2  font-medium transition-colors ${
+                        isAdminButtonActive
+                          ? "bg-primary text-primary-foreground"
+                          : " "
+                      }`}
+                    >
+                      <Shield />
+                      <span>Admin</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

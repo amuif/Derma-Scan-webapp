@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,11 +19,12 @@ import {
   CheckCircle,
   ArrowRight,
 } from "lucide-react";
+import { useTokenQuery } from "@/hooks/useAuth";
 
 export default function LandingPage() {
+  const { data: token } = useTokenQuery();
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-border m-auto">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
         <div className="relative container mx-auto px-6 py-24">
@@ -41,7 +43,7 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild className="text-lg px-8">
-                <Link href="/login">
+                <Link href={token ? "/home" : "/login"}>
                   <Scan className="mr-2 h-5 w-5" />
                   Start Scanning
                 </Link>
@@ -52,7 +54,7 @@ export default function LandingPage() {
                 asChild
                 className="text-lg px-8 bg-transparent"
               >
-                <Link href="/clinics">
+                <Link href={token ? "/clinics" : "/login"}>
                   View Trusted Clinics
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -270,7 +272,7 @@ export default function LandingPage() {
               condition detection.
             </p>
             <Button size="lg" asChild className="text-lg px-8">
-              <Link href="/scan">
+              <Link href={token ? "/home" : "/login"}>
                 <Scan className="mr-2 h-5 w-5" />
                 Start Your First Scan
               </Link>

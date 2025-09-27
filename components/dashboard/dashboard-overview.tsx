@@ -11,6 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 import {
   Scan,
   TrendingUp,
@@ -26,34 +27,7 @@ import {
 import Link from "next/link";
 import { FeatureCard } from "@/types/feature-card";
 import { useScanHistory } from "@/hooks/useScan";
-
-// Mock data for demonstration
-const recentScans = [
-  {
-    id: 1,
-    date: "2024-01-15",
-    condition: "Acne Vulgaris",
-    riskLevel: "low" as const,
-    confidence: 87,
-    image: "/skin-scan.jpg",
-  },
-  {
-    id: 2,
-    date: "2024-01-10",
-    condition: "Seborrheic Dermatitis",
-    riskLevel: "medium" as const,
-    confidence: 92,
-    image: "/skin-condition.jpg",
-  },
-  {
-    id: 3,
-    date: "2024-01-05",
-    condition: "Dry Skin",
-    riskLevel: "low" as const,
-    confidence: 78,
-    image: "/dry-skin.jpg",
-  },
-];
+import { FILES_URL } from "@/constants/backend-url";
 
 const communityActivity = [
   {
@@ -85,7 +59,7 @@ const nearbyClinic = {
 };
 
 export function DashboardOverview() {
-  const { data, isLoading } = useScanHistory();
+  const { data: recentScans, isLoading } = useScanHistory();
   if (isLoading) {
     return;
   }
@@ -94,7 +68,7 @@ export function DashboardOverview() {
       id: 1,
       title: "Total Scans",
       Icon: Scan,
-      amount: data?.length || 0,
+      amount: recentScans?.length || 0,
     },
     {
       id: 2,
@@ -137,10 +111,9 @@ export function DashboardOverview() {
           Track your skin health journey and stay connected with your care.
         </p>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {featureCards.map((card) => (
-          <Card key={card.id}>
+          <Card key={card.id} className=" @container/card ">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -156,9 +129,7 @@ export function DashboardOverview() {
         ))}
       </div>
 
-      {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Scans */}
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -176,31 +147,39 @@ export function DashboardOverview() {
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
-              {recentScans.map((scan) => {
-                const RiskIcon = getRiskIcon(scan.riskLevel);
+              {recentScans?.map((scan) => {
+                const RiskIcon = getRiskIcon(scan.risk);
                 return (
                   <div
                     key={scan.id}
                     className="flex items-center gap-4 p-4 rounded-lg border border-border/50"
                   >
-                    <img
-                      src={scan.image || "/placeholder.svg"}
+                    <Image
+                      src={
+                        `${FILES_URL}/${scan.imageUrl}` || "/placeholder.svg"
+                      }
                       alt="Scan result"
                       className="w-12 h-12 rounded-lg object-cover"
+                      width={500}
+                      height={500}
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <p className="font-medium truncate">{scan.condition}</p>
+                        <p className="font-medium truncate">
+                          {(scan.confidence * 100).toFixed(1)}
+                        </p>
                         <Badge
-                          className={getRiskColor(scan.riskLevel)}
+                          className={getRiskColor(scan.risk)}
                           variant="outline"
                         >
                           <RiskIcon className="mr-1 h-3 w-3" />
-                          {scan.riskLevel}
+                          {scan.risk}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <span>{new Date(scan.date).toLocaleDateString()}</span>
+                        <span>
+                          {new Date(scan.timestamp).toLocaleDateString()}
+                        </span>
                         <div className="flex items-center gap-1">
                           <span>Confidence:</span>
                           <span className="font-medium">
@@ -224,124 +203,8 @@ export function DashboardOverview() {
               </Button>
             </CardContent>
           </Card>
-
-          {/* Skin Health Progress */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Skin Health Progress
-              </CardTitle>
-              <CardDescription>
-                Track your improvement over time
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">
-                    Overall Health Score
-                  </span>
-                  <span className="text-sm text-muted-foreground">85%</span>
-                </div>
-                <Progress value={85} className="h-2" />
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">
-                    Treatment Adherence
-                  </span>
-                  <span className="text-sm text-muted-foreground">92%</span>
-                </div>
-                <Progress value={92} className="h-2" />
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">
-                    Symptom Improvement
-                  </span>
-                  <span className="text-sm text-muted-foreground">78%</span>
-                </div>
-                <Progress value={78} className="h-2" />
-              </div>
-            </CardContent>
-          </Card>
         </div>
-
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button asChild className="w-full justify-start">
-                <Link href="/scan">
-                  <Scan className="mr-2 h-4 w-4" />
-                  Start New Scan
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="w-full justify-start bg-transparent"
-              >
-                <Link href="/profile">
-                  <Activity className="mr-2 h-4 w-4" />
-                  Update Profile
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="w-full justify-start bg-transparent"
-              >
-                <Link href="/clinics">
-                  <Hospital className="mr-2 h-4 w-4" />
-                  Find Clinics
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Community Activity */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>Community Activity</CardTitle>
-                <CardDescription>
-                  Recent updates from the community
-                </CardDescription>
-              </div>
-              <Button asChild size="sm" variant="ghost">
-                <Link href="/community">
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {communityActivity.map((activity, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={activity.avatar || "/placeholder.svg"} />
-                    <AvatarFallback>{activity.user.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm">
-                      <span className="font-medium">{activity.user}</span>{" "}
-                      {activity.action}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {activity.time}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Nearby Clinic */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

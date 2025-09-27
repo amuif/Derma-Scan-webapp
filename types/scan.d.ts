@@ -4,8 +4,8 @@ export interface Scan {
   imageUrl: string;
   imageQuality: string;
   confidence: number;
-  conditions: ScanCondition;
-  risk: 'HIGH' | 'LOW' | 'MEDIUM';
+  conditions: string[];
+  risk: "HIGH" | "LOW" | "MEDIUM";
   notes: string;
   timestamp: string;
 }

@@ -1,164 +1,148 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useRef, useCallback } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Upload, FileImage, Scan, AlertCircle, CheckCircle, Info } from "lucide-react"
-import { ScanResults } from "./scan-results"
+import { useState, useRef, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+import Image from "next/image";
+import {
+  Upload,
+  FileImage,
+  Scan,
+  AlertCircle,
+  CheckCircle,
+  Info,
+} from "lucide-react";
+import { ScanResults } from "./scan-results";
+import { ImageValidation } from "@/lib/check-image-quality";
+import { useImageUploadMutation } from "@/hooks/useAuth";
 
 interface AnalysisResult {
-  condition: string
-  confidence: number
-  riskLevel: "low" | "medium" | "high"
-  description: string
-  recommendations: string[]
+  condition: string;
+  confidence: number;
+  riskLevel: "low" | "medium" | "high";
+  description: string;
+  recommendations: string[];
 }
 
 export function ScanInterface() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [symptoms, setSymptoms] = useState("")
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [analysisProgress, setAnalysisProgress] = useState(0)
-  const [results, setResults] = useState<AnalysisResult | null>(null)
-  const [imageQuality, setImageQuality] = useState<"good" | "fair" | "poor" | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const { mutateAsync: UploadImage } = useImageUploadMutation();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [symptoms, setSymptoms] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisProgress, setAnalysisProgress] = useState(0);
+  const [results, setResults] = useState<AnalysisResult | null>(null);
+  const [imageQuality, setImageQuality] = useState<"good" | "poor" | null>(
+    null,
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const imageUrl = e.target?.result as string
-        setSelectedImage(imageUrl)
-        // Simulate image quality assessment
-        const qualities = ["good", "fair", "poor"] as const
-        const randomQuality = qualities[Math.floor(Math.random() * qualities.length)]
-        setImageQuality(randomQuality)
+  const handleImageUpload = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        setImageFile(file);
+        reader.onload = (e) => {
+          const imageUrl = e.target?.result as string;
+          ImageValidation(file);
+          setSelectedImage(imageUrl);
+        };
+        reader.readAsDataURL(file);
       }
-      reader.readAsDataURL(file)
-    }
-  }, [])
+    },
+    [],
+  );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-  }, [])
+    e.preventDefault();
+  }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    const file = e.dataTransfer.files[0]
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    setImageFile(file);
+
     if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onload = (e) => {
-        const imageUrl = e.target?.result as string
-        setSelectedImage(imageUrl)
-        const qualities = ["good", "fair", "poor"] as const
-        const randomQuality = qualities[Math.floor(Math.random() * qualities.length)]
-        setImageQuality(randomQuality)
-      }
-      reader.readAsDataURL(file)
+        const imageUrl = e.target?.result as string;
+        ImageValidation(file);
+        setSelectedImage(imageUrl);
+      };
+      reader.readAsDataURL(file);
     }
-  }, [])
+  }, []);
 
   const simulateAnalysis = async () => {
-    setIsAnalyzing(true)
-    setAnalysisProgress(0)
-    setResults(null)
-
-    // Simulate progress
-    const progressInterval = setInterval(() => {
-      setAnalysisProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressInterval)
-          return 100
-        }
-        return prev + Math.random() * 15
-      })
-    }, 200)
-
-    // Simulate analysis delay
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-
-    // Mock analysis results
-    const mockResults: AnalysisResult[] = [
-      {
-        condition: "Acne Vulgaris",
-        confidence: 87,
-        riskLevel: "low",
-        description: "Common inflammatory skin condition affecting hair follicles and sebaceous glands.",
-        recommendations: [
-          "Use gentle, non-comedogenic skincare products",
-          "Consider topical retinoids or benzoyl peroxide",
-          "Maintain consistent skincare routine",
-          "Consult dermatologist if condition worsens",
-        ],
-      },
-      {
-        condition: "Seborrheic Dermatitis",
-        confidence: 92,
-        riskLevel: "medium",
-        description: "Inflammatory skin condition causing scaly, itchy rashes in oily areas.",
-        recommendations: [
-          "Use antifungal shampoos or creams",
-          "Apply topical corticosteroids as directed",
-          "Avoid harsh soaps and detergents",
-          "Schedule dermatologist consultation",
-        ],
-      },
-      {
-        condition: "Melanoma",
-        confidence: 78,
-        riskLevel: "high",
-        description: "Serious form of skin cancer that requires immediate medical attention.",
-        recommendations: [
-          "Seek immediate dermatologist consultation",
-          "Schedule biopsy if recommended",
-          "Monitor for changes in size, color, or shape",
-          "Avoid sun exposure and use broad-spectrum SPF",
-        ],
-      },
-    ]
-
-    const randomResult = mockResults[Math.floor(Math.random() * mockResults.length)]
-    setResults(randomResult)
-    setIsAnalyzing(false)
-    clearInterval(progressInterval)
-    setAnalysisProgress(100)
-  }
+    setIsAnalyzing(true);
+    setAnalysisProgress(0);
+    setResults(null);
+    if (!imageFile) return;
+    try {
+      const response = await UploadImage({ imageFile, symptoms });
+      console.log(response);
+      setResults(response);
+    } catch (error) {
+      console.error("Error uploading image ", error);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const getQualityMessage = (quality: string) => {
     switch (quality) {
       case "good":
-        return { message: "Excellent image quality for analysis", icon: CheckCircle, color: "text-green-500" }
+        return {
+          message: "Excellent image quality for analysis",
+          icon: CheckCircle,
+          color: "text-green-500",
+        };
       case "fair":
-        return { message: "Good quality - analysis possible", icon: Info, color: "text-yellow-500" }
+        return {
+          message: "Good quality - analysis possible",
+          icon: Info,
+          color: "text-yellow-500",
+        };
       case "poor":
-        return { message: "Poor quality - consider retaking photo", icon: AlertCircle, color: "text-red-500" }
+        return {
+          message: "Poor quality - consider retaking photo",
+          icon: AlertCircle,
+          color: "text-red-500",
+        };
       default:
-        return { message: "", icon: Info, color: "text-muted-foreground" }
+        return { message: "", icon: Info, color: "text-muted-foreground" };
     }
-  }
+  };
 
   if (results) {
     return (
       <ScanResults
         result={results}
         onNewScan={() => {
-          setResults(null)
-          setSelectedImage(null)
-          setSymptoms("")
-          setImageQuality(null)
-          setAnalysisProgress(0)
+          setResults(null);
+          setSelectedImage(null);
+          setSymptoms("");
+          setImageQuality(null);
+          setAnalysisProgress(0);
         }}
       />
-    )
+    );
   }
 
   return (
@@ -177,8 +161,10 @@ export function ScanInterface() {
                 Upload Skin Image
               </CardTitle>
               <CardDescription>
-                Upload a clear, well-lit photo of the affected skin area for AI analysis.
+                Upload a clear, well-lit photo of the affected skin area for AI
+                analysis.
               </CardDescription>
+              <div className="flex justify-end items-end"></div>
             </CardHeader>
             <CardContent>
               <div
@@ -189,30 +175,38 @@ export function ScanInterface() {
               >
                 {selectedImage ? (
                   <div className="space-y-4">
-                    <img
+                    <Image
                       src={selectedImage || "/placeholder.svg"}
                       alt="Uploaded skin image"
                       className="mx-auto max-h-64 rounded-lg object-cover"
+                      width={500}
+                      height={500}
                     />
                     {imageQuality && (
                       <div className="flex items-center justify-center gap-2">
                         {(() => {
-                          const { message, icon: Icon, color } = getQualityMessage(imageQuality)
+                          const {
+                            message,
+                            icon: Icon,
+                            color,
+                          } = getQualityMessage(imageQuality);
                           return (
                             <>
                               <Icon className={`h-4 w-4 ${color}`} />
-                              <span className={`text-sm ${color}`}>{message}</span>
+                              <span className={`text-sm ${color}`}>
+                                {message}
+                              </span>
                             </>
-                          )
+                          );
                         })()}
                       </div>
                     )}
                     <Button
                       variant="outline"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        setSelectedImage(null)
-                        setImageQuality(null)
+                        e.stopPropagation();
+                        setSelectedImage(null);
+                        setImageQuality(null);
                       }}
                     >
                       Remove Image
@@ -222,13 +216,23 @@ export function ScanInterface() {
                   <div className="space-y-4">
                     <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
                     <div>
-                      <p className="text-lg font-medium">Drop your image here or click to browse</p>
-                      <p className="text-sm text-muted-foreground">Supports JPG, PNG, WebP up to 10MB</p>
+                      <p className="text-lg font-medium">
+                        Drop your image here or click to browse
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Supports JPG, PNG, WebP up to 10MB
+                      </p>
                     </div>
                   </div>
                 )}
               </div>
-              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
             </CardContent>
           </Card>
 
@@ -236,8 +240,9 @@ export function ScanInterface() {
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                <strong>Image Quality Tips:</strong> Ensure good lighting, avoid shadows, keep the camera steady, and
-                capture the affected area clearly for best analysis results.
+                <strong>Image Quality Tips:</strong> Ensure good lighting, avoid
+                shadows, keep the camera steady, and capture the affected area
+                clearly for best analysis results.
               </AlertDescription>
             </Alert>
           )}
@@ -248,8 +253,8 @@ export function ScanInterface() {
             <CardHeader>
               <CardTitle>Describe Your Symptoms</CardTitle>
               <CardDescription>
-                Provide detailed information about your skin condition, including symptoms like pain, redness, itching,
-                etc.
+                Provide detailed information about your skin condition,
+                including symptoms like pain, redness, itching, etc.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -286,7 +291,8 @@ export function ScanInterface() {
               </div>
               <Progress value={analysisProgress} className="w-full" />
               <p className="text-sm text-muted-foreground">
-                Our AI is examining the image and processing your information. This may take a few moments.
+                Our AI is examining the image and processing your information.
+                This may take a few moments.
               </p>
             </div>
           </CardContent>
@@ -314,5 +320,5 @@ export function ScanInterface() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

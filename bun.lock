@@ -43,6 +43,7 @@
         "date-fns": "4.1.0",
         "embla-carousel-react": "8.5.1",
         "geist": "^1.3.1",
+        "image-validator": "^1.2.1",
         "input-otp": "1.4.1",
         "lucide-react": "^0.544.0",
         "next": "14.2.25",
@@ -384,6 +385,8 @@
     "get-nonce": ["get-nonce@1.0.1", "", {}, "sha512-FJhYRoDaiatfEkUK8HKlicmu/3SGFD51q3itKDGoSTysQJBnfOcxU5GxnhE1E6soB76MbT0MBtnKJuXyAx+96Q=="],
 
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
+
+    "image-validator": ["image-validator@1.2.1", "", {}, "sha512-mNV9ABWD9rKaMvBH0BeYOWtZaV6s459RNfPL+WJ+NMDO4qchucbQRFzePVg1+V5c09NjOOOOTMSaU2OtHcX1Ig=="],
 
     "input-otp": ["input-otp@1.4.1", "", { "peerDependencies": { "react": "^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc", "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc" } }, "sha512-+yvpmKYKHi9jIGngxagY9oWiiblPB7+nEO75F2l2o4vs+6vpPZZmUl4tBNYuTCvQjhvEIbdNeJu70bhfYP2nbw=="],
 

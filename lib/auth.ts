@@ -169,7 +169,7 @@ export const authApi = {
 export const scanApi = {
   uploadImage: async (
     token: string,
-    uri: string,
+    imageFile: File,
     userId: string,
     symptoms?: string,
   ) => {
@@ -177,7 +177,7 @@ export const scanApi = {
 
     console.log("userId", userId);
 
-    form.append("file", uri);
+    form.append("file", imageFile);
 
     form.append("userId", userId);
 

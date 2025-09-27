@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface UploadVariables {
-  uri: string;
+  imageFile: File;
   symptoms: string;
 }
 export const useTokenQuery = () => {
@@ -180,13 +180,13 @@ export const useDeleteMutation = () => {
 export const useImageUploadMutation = () => {
   const { user } = useAuthStore();
   return useMutation({
-    mutationFn: async ({ uri, symptoms }: UploadVariables) => {
+    mutationFn: async ({ imageFile, symptoms }: UploadVariables) => {
       const token = await authStorage.getToken();
 
       if (!user?.id) {
         throw new Error("No user found in storage");
       }
-      return scanApi.uploadImage(token!, uri, user.id, symptoms);
+      return scanApi.uploadImage(token!, imageFile, user.id, symptoms);
     },
     onSuccess: () => {
       console.log("uploaded successfully!");
