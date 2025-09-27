@@ -129,7 +129,7 @@ export const authApi = {
     if (data.name) formData.append("name", data.name);
     if (data.email) formData.append("email", data.email);
 
-    if (data.profilePicture && data.profilePicture instanceof File) {
+    if (data.profilePicture) {
       formData.append("profilePicture", data.profilePicture);
     }
 
@@ -169,7 +169,7 @@ export const authApi = {
 export const scanApi = {
   uploadImage: async (
     token: string,
-    file: File,
+    uri: string,
     userId: string,
     symptoms?: string,
   ) => {
@@ -177,7 +177,7 @@ export const scanApi = {
 
     console.log("userId", userId);
 
-    form.append("file", file, "lesion.jpg");
+    form.append("file", uri);
 
     form.append("userId", userId);
 

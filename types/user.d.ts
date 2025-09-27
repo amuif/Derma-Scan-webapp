@@ -1,3 +1,5 @@
+export type UserRole = "ADMIN" | "USER";
+
 export interface User {
   id: string;
   email: string;
@@ -5,4 +7,5 @@ export interface User {
   profilePicture: string;
   createdAt: string;
   updatedAt: string;
+  role: UserRole;
 }

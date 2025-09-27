@@ -16,6 +16,7 @@ import { Users, Hospital, Scan, Shield } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavUser } from "./sidebar-user";
+import { ModeToggle } from "../mode-toggle";
 
 const items = [
   { name: "Dashboard", href: "/home", icon: Home },
@@ -62,6 +63,11 @@ export function AppSidebar() {
               })}
             </SidebarMenu>
           </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup className="mt-auto">
+          <SidebarMenu>
+            <ModeToggle />
+          </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>

@@ -75,7 +75,10 @@ export const useUpdateCurrentUser = () => {
       if (!token) {
         throw new Error("No user found in storage");
       }
-      const response = authApi.updateCurrentUser(user?.id, data, token);
+      if (!user?.id) {
+        throw new Error("No user found in storage");
+      }
+      const response = authApi.updateCurrentUser(user.id, data, token);
       return response;
     },
     onSuccess: async (data) => {
@@ -179,7 +182,11 @@ export const useImageUploadMutation = () => {
   return useMutation({
     mutationFn: async ({ uri, symptoms }: UploadVariables) => {
       const token = await authStorage.getToken();
-      return scanApi.uploadImage(token!, uri, user?.id!, symptoms);
+
+      if (!user?.id) {
+        throw new Error("No user found in storage");
+      }
+      return scanApi.uploadImage(token!, uri, user.id, symptoms);
     },
     onSuccess: () => {
       console.log("uploaded successfully!");

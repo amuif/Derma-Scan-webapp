@@ -42,6 +42,8 @@ export default function LoginPage() {
     } catch (error) {
       console.error("Error signing user", error);
       toast.error("Error signing in user");
+    }finally{
+      setIsLoading(false)
     }
   };
 
