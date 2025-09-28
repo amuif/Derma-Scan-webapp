@@ -83,11 +83,11 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={()=>router.push('/profile')}>
+              <DropdownMenuItem onClick={() => router.push("/profile")}>
                 <IconUserCircle />
                 Account
               </DropdownMenuItem>
-           </DropdownMenuGroup>
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogOut}>
               <IconLogout />
