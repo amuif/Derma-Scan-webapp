@@ -31,15 +31,21 @@ import { ScanResults } from "./scan-results";
 import { ImageValidation } from "@/lib/check-image-quality";
 import { useImageUploadMutation } from "@/hooks/useAuth";
 import { Scan } from "@/types/scan";
+import { useTextScan } from "@/hooks/useScan";
+import { TextAnalysisResult, TextScanResults } from "./text-scan-results";
 
 export function ScanInterface() {
   const { mutateAsync: UploadImage } = useImageUploadMutation();
+  const { mutateAsync: UploadText } = useTextScan();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [symptoms, setSymptoms] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [results, setResults] = useState<Scan | null>(null);
+  const [textResults, setTextResults] = useState<TextAnalysisResult | null>(
+    null,
+  );
   const [imageQuality, setImageQuality] = useState<"good" | "poor" | null>(
     null,
   );
@@ -86,11 +92,36 @@ export function ScanInterface() {
     setIsAnalyzing(true);
     setAnalysisProgress(0);
     setResults(null);
-    if (!imageFile) return;
     try {
-      const response = await UploadImage({ imageFile, symptoms });
-      console.log(response);
-      setResults(response);
+      if (!imageFile) {
+        const response = await UploadText({ symptoms });
+        console.log("Analysis property type:", typeof response.analysis);
+
+        const { conditions, risk_level, confidence, guidance } =
+          response.analysis;
+        const mappedResult: TextAnalysisResult = {
+          conditions:
+            conditions?.map((c: string) => ({
+              name: c,
+              description: "",
+            })) || [], // Fallback to empty array
+          risk_level: risk_level || "Unknown",
+          confidence: confidence || 0,
+          guidance: [
+            {
+              message: guidance || "No specific guidance available",
+              reason: "",
+            },
+          ],
+        };
+
+        console.log("Mapped result:", mappedResult);
+        setTextResults(mappedResult);
+      } else {
+        const response: Scan = await UploadImage({ imageFile, symptoms });
+        console.log(response);
+        setResults(response);
+      }
     } catch (error) {
       console.error("Error uploading image ", error);
     } finally {
@@ -126,8 +157,23 @@ export function ScanInterface() {
   if (results) {
     return (
       <ScanResults
-        result={results}
+        result={results as Scan}
         onNewScan={() => {
+          setResults(null);
+          setSelectedImage(null);
+          setSymptoms("");
+          setImageQuality(null);
+          setAnalysisProgress(0);
+        }}
+      />
+    );
+  }
+  if (textResults) {
+    return (
+      <TextScanResults
+        result={textResults}
+        onNewScan={() => {
+          setTextResults(null);
           setResults(null);
           setSelectedImage(null);
           setSymptoms("");
@@ -252,7 +298,9 @@ export function ScanInterface() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="symptoms">Symptom Description</Label>
+                <Label htmlFor="symptoms" className="pb-3">
+                  Symptom Description
+                </Label>
                 <Textarea
                   id="symptoms"
                   placeholder="Describe your symptoms in detail... (e.g., red, itchy patches on arms that appeared 3 days ago, mild pain when touched)"

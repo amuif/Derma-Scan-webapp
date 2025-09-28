@@ -22,7 +22,7 @@ import { useAuthStore } from "@/stores/auth";
 const items = [
   { name: "Dashboard", href: "/home", icon: Home },
   { name: "Scan", href: "/scan", icon: Scan },
-  { name: "Community", href: "/community", icon: Users },
+  { name: "Posts", href: "/posts", icon: Users },
   { name: "Trusted Clinics", href: "/clinics", icon: Hospital },
 ];
 export function AppSidebar() {
@@ -54,7 +54,7 @@ export function AppSidebar() {
                       <Link
                         href={item.href}
                         className={`flex items-center gap-3 rounded-lg px-3 py-2  font-medium transition-colors ${
-                          isActive ? "bg-primary text-primary-foreground" : " "
+                          isActive ? "bg-primary! text-primary-foreground!" : " "
                         }`}
                       >
                         <item.icon />

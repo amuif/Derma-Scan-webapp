@@ -169,7 +169,7 @@ export function ScanResults({ result, onNewScan }: ScanResultsProps) {
               variant="outline"
               className="w-full bg-transparent flex items-end"
             >
-              <Link href="/community">Join Community</Link>
+              <Link href="/community">Goto Community</Link>
             </Button>
           </CardFooter>
         </Card>

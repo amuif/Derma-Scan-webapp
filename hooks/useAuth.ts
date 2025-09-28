@@ -1,5 +1,6 @@
 "use client";
-import { authApi, authStorage, scanApi } from "@/lib/auth";
+import { authApi, authStorage } from "@/lib/auth";
+import { scanApi } from "@/lib/scan";
 import { useAuthStore } from "@/stores/auth";
 import { User } from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -50,7 +51,7 @@ export const useLoginMutation = () => {
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       authApi.login(email, password),
     onSuccess: async (data) => {
-      setCookie("authToken", data.accessToken, { path: "/" }); // middleware can now read it
+      setCookie("authToken", data.accessToken, { path: "/" });
 
       const safeUser = sanitizeUser(data.user);
       setUser(safeUser);

@@ -1,7 +1,6 @@
 import { User } from "@/types/user";
 import { API_URL } from "@/constants/backend-url";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
-import { Scan } from "@/types/scan";
 
 export const authStorage = {
   getToken: async (): Promise<string | null> => {
@@ -59,6 +58,7 @@ export const authStorage = {
     }
   },
 };
+
 export const authApi = {
   login: async (
     email: string,
@@ -163,61 +163,5 @@ export const authApi = {
     }
 
     return response.json();
-  },
-};
-
-export const scanApi = {
-  uploadImage: async (
-    token: string,
-    imageFile: File,
-    userId: string,
-    symptoms?: string,
-  ) => {
-    const form = new FormData();
-
-    console.log("userId", userId);
-
-    form.append("file", imageFile);
-
-    form.append("userId", userId);
-
-    if (symptoms) {
-      form.append("symptoms", symptoms);
-    }
-
-    try {
-      const response = await fetch(`${API_URL}/models/image`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: form,
-      });
-
-      const result = await response.json();
-      console.log(result);
-      return result;
-    } catch (error) {
-      console.error("Error uploading image", error);
-      throw error;
-    }
-  },
-
-  scanHistory: async (token: string) => {
-    try {
-      const response = await fetch(`${API_URL}/models/history`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const result = (await response.json()) as Scan[];
-      console.log(result);
-      return result;
-    } catch (error) {
-      console.log("Error fetching scan history", error);
-      throw error;
-    }
   },
 };
