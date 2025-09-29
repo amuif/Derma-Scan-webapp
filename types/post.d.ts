@@ -1,10 +1,12 @@
+import { User } from "./user";
+
 export interface CreatePost {
   title: string;
   content: string;
   category: EducationCategory;
   language: string;
   authorId: string;
-  status: Status;
+  status: string;
   token: string;
 }
 
@@ -14,10 +16,10 @@ export interface Post {
   content: string;
   category: EducationCategory;
   language: string;
-  authorId: string;
+  author: User;
   status: Status;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface UpdatePost {

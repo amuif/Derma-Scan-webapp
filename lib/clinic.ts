@@ -1,5 +1,9 @@
 import { API_URL } from "@/constants/backend-url";
-import { CreateClinicPayload, UpdateClinicPayload } from "@/types/clinic";
+import {
+  Clinic,
+  CreateClinicPayload,
+  UpdateClinicPayload,
+} from "@/types/clinic";
 
 export const clinicApi = {
   createClinic: async ({
@@ -12,33 +16,22 @@ export const clinicApi = {
     status,
     specialties,
   }: CreateClinicPayload) => {
-    const form = new FormData();
-
-    form.append("name", name);
-    form.append("address", address);
-    form.append("status", status);
-
-    specialties.forEach((specialty: string) => {
-      form.append("specialties", specialty);
-    });
-
-    if (phone) {
-      form.append("phone", phone);
-    }
-    if (email) {
-      form.append("email", email);
-    }
-    if (website) {
-      form.append("website", website);
-    }
-
     try {
-      const response = await fetch(`${API_URL}/community/create`, {
+      const response = await fetch(`${API_URL}/clinics/create`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: form,
+        body: JSON.stringify({
+          name,
+          address,
+          phone,
+          email,
+          website,
+          status,
+          specialties,
+        }),
       });
 
       if (!response.ok) {
@@ -53,7 +46,7 @@ export const clinicApi = {
   },
   getAllowedClinics: async (token: string) => {
     try {
-      const response = await fetch(`${API_URL}/community`, {
+      const response = await fetch(`${API_URL}/clinics`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -64,7 +57,7 @@ export const clinicApi = {
         throw new Error(`Failed to getting clinic: ${response.statusText}`);
       }
 
-      return await response.json();
+      return ((await response.json()) as Clinic[]) || [];
     } catch (error) {
       console.error("Error getting clinic:", error);
       throw error;
@@ -72,7 +65,7 @@ export const clinicApi = {
   },
   getAllClinics: async (token: string) => {
     try {
-      const response = await fetch(`${API_URL}/community/all`, {
+      const response = await fetch(`${API_URL}/clinics/all`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -127,7 +120,7 @@ export const clinicApi = {
       form.append("website", website);
     }
     try {
-      const response = await fetch(`${API_URL}/community/${id}`, {
+      const response = await fetch(`${API_URL}/clinics/${id}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -147,7 +140,7 @@ export const clinicApi = {
   },
   deleteClinic: async (id: string, token: string) => {
     try {
-      const response = await fetch(`${API_URL}/community/${id}`, {
+      const response = await fetch(`${API_URL}/clinics/${id}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

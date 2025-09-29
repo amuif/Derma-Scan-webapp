@@ -3,6 +3,7 @@ import { authStorage } from "@/lib/auth";
 import { postApi } from "@/lib/post";
 import { CreatePost, UpdatePost } from "@/types/post";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const usePostCreation = () => {
   return useMutation({
@@ -10,9 +11,9 @@ export const usePostCreation = () => {
       title,
       content,
       category,
-      language,
       authorId,
-      status,
+      language = "en",
+      status = "pending",
     }: CreatePost) => {
       const token = await authStorage.getToken();
 
@@ -26,6 +27,12 @@ export const usePostCreation = () => {
         status,
         token,
       });
+    },
+    onSuccess: () => {
+      toast.success("Post created successfully");
+    },
+    onError: () => {
+      toast.error("Failed to create post, please try again later");
     },
   });
 };

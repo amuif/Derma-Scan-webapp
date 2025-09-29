@@ -1,4 +1,4 @@
-import { CreatePost, UpdatePost } from "@/types/post";
+import { CreatePost, Post, UpdatePost } from "@/types/post";
 import { API_URL } from "@/constants/backend-url";
 
 export const postApi = {
@@ -11,22 +11,32 @@ export const postApi = {
     status,
     token,
   }: CreatePost) => {
-    const form = new FormData();
-    form.append("title", title);
-    form.append("content", content);
-    form.append("category", category);
-    form.append("language", language);
-    form.append("authorId", authorId);
-    form.append("status", status);
+    console.table({
+      title,
+      content,
+      category,
+      language,
+      authorId,
+      status,
+      token,
+    });
     try {
       const response = await fetch(`${API_URL}/education/create`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: form,
+        body: JSON.stringify({
+          title,
+          content,
+          category,
+          language,
+          authorId,
+          status,
+        }),
       });
-      return response;
+      return response.json();
     } catch (error) {
       console.log("Error creating post", error);
     }
@@ -39,7 +49,7 @@ export const postApi = {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response;
+      return response.json();
     } catch (error) {
       console.log("Error creating post", error);
     }
@@ -52,7 +62,7 @@ export const postApi = {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response;
+      return response.json() as unknown as Post[];
     } catch (error) {
       console.log("Error creating post", error);
     }
@@ -89,7 +99,7 @@ export const postApi = {
         },
         body: form,
       });
-      return response;
+      return response.json();
     } catch (error) {
       console.log("Error creating post", error);
     }
@@ -103,7 +113,7 @@ export const postApi = {
         },
         body: JSON.stringify({ id }),
       });
-      return response;
+      return response.json();
     } catch (error) {
       console.log("Error creating post", error);
     }
