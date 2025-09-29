@@ -8,6 +8,7 @@ export interface Scan {
   risk: "HIGH" | "LOW" | "MEDIUM";
   notes: string;
   timestamp: string;
+  user: User;
 }
 
 export interface ScanCondition {

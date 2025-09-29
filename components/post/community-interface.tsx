@@ -63,6 +63,7 @@ export function CommunityInterface() {
 
     setCommunityPosts(communityPost);
   }, [posts, user]);
+
   const handleChange = (catagory: string) => {
     setNewPostCatagory(catagory);
   };
@@ -149,296 +150,291 @@ export function CommunityInterface() {
   }
 
   return (
- (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Community & Posts</h1>
-          <p className="text-muted-foreground text-lg">
-            Track your progress and connect with others on their skin health
-            journey.
-          </p>
-        </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold mb-2">Community & Posts</h1>
+        <p className="text-muted-foreground text-lg">
+          Track your progress and connect with others on their skin health
+          journey.
+        </p>
+      </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="history" className="flex items-center gap-2">
-              <History className="h-4 w-4" />
-              My Posts
-            </TabsTrigger>
-            <TabsTrigger value="community" className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Community
-            </TabsTrigger>
-          </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="history" className="flex items-center gap-2">
+            <History className="h-4 w-4" />
+            My Posts
+          </TabsTrigger>
+          <TabsTrigger value="community" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Community
+          </TabsTrigger>
+        </TabsList>
 
-          <TabsContent value="history" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Total Posts
-                      </p>
-                      <p className="text-2xl font-bold">{posts?.length}</p>
-                    </div>
-                    <History className="h-8 w-8 text-primary" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Days Tracked since
-                      </p>
-                      <p className="text-2xl font-bold">
-                        {user && formatDate(user.createdAt)}
-                      </p>
-                    </div>
-                    <Calendar className="h-8 w-8 text-blue-500" />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Scan History */}
+        <TabsContent value="history" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Post History</CardTitle>
-                <CardDescription>
-                  Your complete skin analysis timeline
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {selfPosts?.map((post) => {
-                  return (
-                    <div key={post.id} className="relative">
-                     <div className="flex gap-4">
-                        <div className="flex-shrink-0"></div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
-                              <h4 className="font-semibold">{post.title}</h4>
-                              <p className="text-sm text-muted-foreground">
-                                {new Date(post.createdAt).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                  },
-                                )}
-                              </p>
-                            </div>
-                            <div>By {post.author.name}</div>
-                          </div>
-
-                          <div className="flex gap-4 mb-3">
-                            <div className="flex-1">
-                              <p className="text-sm text-muted-foreground mb-2">
-                                {post.content}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="community" className="space-y-6">
-            {/* Community Header */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-between">
-              <div className="flex gap-2">
-                <div className="relative flex">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search posts..."
-                    className="pl-10 w-full"
-                  />
-                </div>
-                <Button variant="outline" size="icon">
-                  <Filter className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Create new post</CardTitle>
-              </CardHeader>
-              <CardContent className="">
-                <div className="flex gap-3">
-                  <div className="flex-1 space-y-3">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                      <div className="flex-col space-y-2">
-                        <Label>Title</Label>
-                        <Input
-                          placeholder="Post title..."
-                          value={newPostTitle}
-                          onChange={(e) => setNewPostTitle(e.target.value)}
-                        />
-                      </div>
-                      <div className="flex-col space-y-2">
-                        <Label>Select Category</Label>
-                        <Select
-                          value={newPostCatagory}
-                          onValueChange={handleChange}
-                        >
-                          <SelectTrigger className="w-[250px]">
-                            <SelectValue placeholder="Catagory" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Catagory.map((cat) => (
-                              <SelectItem key={cat} value={cat}>
-                                {cat}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="flex-col space-y-2">
-                      <Label>Description</Label>
-                      <Textarea
-                        placeholder="Share your experience, ask questions, or offer support to the community..."
-                        value={newPost}
-                        onChange={(e) => setNewPost(e.target.value)}
-                        className="min-h-24"
-                      />
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                      <div className="flex gap-2">
-                        <Badge variant="secondary">General</Badge>
-                      </div>
-                      <Button
-                        disabled={!newPost.trim() || !newPostTitle.trim()}
-                        onClick={handleCreatePost}
-                      >
-                        Post
-                      </Button>
-                    </div>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Total Posts
+                    </p>
+                    <p className="text-2xl font-bold">{posts?.length}</p>
                   </div>
+                  <History className="h-8 w-8 text-primary" />
                 </div>
               </CardContent>
             </Card>
 
-            <div className="space-y-6">
-              {loading ? (
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center justify-center py-8">
-                      <div className="text-muted-foreground">
-                        Loading posts...
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ) : communityPosts.length === 0 ? (
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center justify-center py-8">
-                      <div className="text-muted-foreground">
-                        No posts available
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ) : (
-                communityPosts.map((post) => (
-                  <Card key={post.id}>
-                    <CardContent className="pt-6">
-                      <div className="flex gap-3">
-                        <Avatar>
-                          <AvatarFallback>
-                            {post.author.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
-                              .toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 space-y-3">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-semibold">
-                              {post.author.name}
-                            </span>
-                            <Badge
-                              variant="outline"
-                              className={getCategoryColor(post.category)}
-                            >
-                              {post.category}
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className={getStatusColor(post.status)}
-                            >
-                              {post.status}
-                            </Badge>
-                            <span className="text-sm text-muted-foreground">
-                              •
-                            </span>
-                            <span className="text-sm text-muted-foreground flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {formatDate(post.createdAt)}
-                            </span>
-                          </div>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Days Tracked since
+                    </p>
+                    <p className="text-2xl font-bold">
+                      {user && formatDate(user.createdAt)}
+                    </p>
+                  </div>
+                  <Calendar className="h-8 w-8 text-blue-500" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
+          {/* Scan History */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Post History</CardTitle>
+              <CardDescription>
+                Your complete skin analysis timeline
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {selfPosts?.map((post) => {
+                return (
+                  <div key={post.id} className="relative">
+                    <div className="flex gap-4">
+                      <div className="flex-shrink-0"></div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h3 className="font-semibold text-lg mb-2">
-                              {post.title}
-                            </h3>
-                            <p className="text-sm leading-relaxed">
+                            <h4 className="font-semibold">{post.title}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              {new Date(post.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                },
+                              )}
+                            </p>
+                          </div>
+                          <div>By {post.author.name}</div>
+                        </div>
+
+                        <div className="flex gap-4 mb-3">
+                          <div className="flex-1">
+                            <p className="text-sm text-muted-foreground mb-2">
                               {post.content}
                             </p>
                           </div>
-
-                          <Separator />
-
-                          <div className="flex items-center gap-6">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-muted-foreground hover:text-red-500"
-                            >
-                              <Heart className="mr-2 h-4 w-4" />
-                              Like
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-muted-foreground"
-                            >
-                              <MessageSquare className="mr-2 h-4 w-4" />
-                              Comment
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-muted-foreground"
-                            >
-                              <Share2 className="mr-2 h-4 w-4" />
-                              Share
-                            </Button>
-                          </div>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))
-              )}
+                    </div>
+                  </div>
+                );
+              })}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="community" className="space-y-6">
+          {/* Community Header */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+            <div className="flex gap-2">
+              <div className="relative flex">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Search posts..." className="pl-10 w-full" />
+              </div>
+              <Button variant="outline" size="icon">
+                <Filter className="h-4 w-4" />
+              </Button>
             </div>
-          </TabsContent>
-        </Tabs>
-      </div>
-    )
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Create new post</CardTitle>
+            </CardHeader>
+            <CardContent className="">
+              <div className="flex gap-3">
+                <div className="flex-1 space-y-3">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div className="flex-col space-y-2">
+                      <Label>Title</Label>
+                      <Input
+                        placeholder="Post title..."
+                        value={newPostTitle}
+                        onChange={(e) => setNewPostTitle(e.target.value)}
+                      />
+                    </div>
+                    <div className="flex-col space-y-2">
+                      <Label>Select Category</Label>
+                      <Select
+                        value={newPostCatagory}
+                        onValueChange={handleChange}
+                      >
+                        <SelectTrigger className="w-[250px]">
+                          <SelectValue placeholder="Catagory" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Catagory.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                              {cat}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="flex-col space-y-2">
+                    <Label>Description</Label>
+                    <Textarea
+                      placeholder="Share your experience, ask questions, or offer support to the community..."
+                      value={newPost}
+                      onChange={(e) => setNewPost(e.target.value)}
+                      className="min-h-24"
+                    />
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2">
+                      <Badge variant="secondary">General</Badge>
+                    </div>
+                    <Button
+                      disabled={!newPost.trim() || !newPostTitle.trim()}
+                      onClick={handleCreatePost}
+                    >
+                      Post
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="space-y-6">
+            {loading ? (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-center py-8">
+                    <div className="text-muted-foreground">
+                      Loading posts...
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : communityPosts.length === 0 ? (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-center py-8">
+                    <div className="text-muted-foreground">
+                      No posts available
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              communityPosts.map((post) => (
+                <Card key={post.id}>
+                  <CardContent className="pt-6">
+                    <div className="flex gap-3">
+                      <Avatar>
+                        <AvatarFallback>
+                          {post.author.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 space-y-3">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold">
+                            {post.author.name}
+                          </span>
+                          <Badge
+                            variant="outline"
+                            className={getCategoryColor(post.category)}
+                          >
+                            {post.category}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className={getStatusColor(post.status)}
+                          >
+                            {post.status}
+                          </Badge>
+                          <span className="text-sm text-muted-foreground">
+                            •
+                          </span>
+                          <span className="text-sm text-muted-foreground flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {formatDate(post.createdAt)}
+                          </span>
+                        </div>
+
+                        <div>
+                          <h3 className="font-semibold text-lg mb-2">
+                            {post.title}
+                          </h3>
+                          <p className="text-sm leading-relaxed">
+                            {post.content}
+                          </p>
+                        </div>
+
+                        <Separator />
+
+                        <div className="flex items-center gap-6">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-muted-foreground hover:text-red-500"
+                          >
+                            <Heart className="mr-2 h-4 w-4" />
+                            Like
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-muted-foreground"
+                          >
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            Comment
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-muted-foreground"
+                          >
+                            <Share2 className="mr-2 h-4 w-4" />
+                            Share
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }
 export const Catagory = ["Tips", "Prevention", "Awareness", "Treatment"];

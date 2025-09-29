@@ -9,18 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import {
   Scan,
-  TrendingUp,
-  Calendar,
   Users,
   Hospital,
   AlertTriangle,
   CheckCircle,
-  Activity,
   ArrowRight,
   Plus,
 } from "lucide-react";
@@ -28,39 +23,14 @@ import Link from "next/link";
 import { FeatureCard } from "@/types/feature-card";
 import { useScanHistory } from "@/hooks/useScan";
 import { FILES_URL } from "@/constants/backend-url";
-
-const communityActivity = [
-  {
-    user: "Sarah M.",
-    action: "shared experience with Eczema treatment",
-    time: "2 hours ago",
-    avatar: "/user-avatar.jpg",
-  },
-  {
-    user: "Dr. Johnson",
-    action: "posted new skincare tips",
-    time: "4 hours ago",
-    avatar: "/doctor-avatar.png",
-  },
-  {
-    user: "Mike R.",
-    action: "asked about acne treatment options",
-    time: "6 hours ago",
-    avatar: "/user-avatar-2.jpg",
-  },
-];
-
-const nearbyClinic = {
-  name: "Advanced Dermatology Center",
-  rating: 4.8,
-  distance: "2.3 miles",
-  specialties: ["Acne Treatment", "Skin Cancer", "Cosmetic Dermatology"],
-  nextAvailable: "Tomorrow 2:00 PM",
-};
+import { useGetAllowedPost } from "@/hooks/usePost";
+import { useFindClinic } from "@/hooks/useClinic";
 
 export function DashboardOverview() {
   const { data: recentScans, isLoading } = useScanHistory();
-  if (isLoading) {
+  const { data: posts, isLoading: isPostLoading } = useGetAllowedPost();
+  const { data: clinics, isLoading: isClincsLoading } = useFindClinic();
+  if (isLoading || isPostLoading || isClincsLoading) {
     return;
   }
   const featureCards: FeatureCard[] = [
@@ -74,7 +44,7 @@ export function DashboardOverview() {
       id: 2,
       title: "Community Posts",
       Icon: Users,
-      amount: 5,
+      amount: posts?.length || 0,
     },
   ];
   const getRiskColor = (risk: string) => {
@@ -165,9 +135,6 @@ export function DashboardOverview() {
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <p className="font-medium truncate">
-                          {(scan.confidence * 100).toFixed(1)}
-                        </p>
                         <Badge
                           className={getRiskColor(scan.risk)}
                           variant="outline"
@@ -183,7 +150,7 @@ export function DashboardOverview() {
                         <div className="flex items-center gap-1">
                           <span>Confidence:</span>
                           <span className="font-medium">
-                            {scan.confidence}%
+                            {(scan.confidence * 100).toFixed(1)}%
                           </span>
                         </div>
                       </div>
@@ -209,37 +176,31 @@ export function DashboardOverview() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Hospital className="h-5 w-5" />
-                Nearby Clinic
+                Clinics
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-medium">{nearbyClinic.name}</h4>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>★ {nearbyClinic.rating}</span>
-                  <span>•</span>
-                  <span>{nearbyClinic.distance}</span>
+              {clinics?.slice(0, 3).map((clinic) => (
+                <div key={clinic.id}>
+                  <div>
+                    <h4 className="font-medium">{clinic.name}</h4>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium mb-2">Specialties:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {clinic.specialties.map((specialty, index) => (
+                        <Badge
+                          key={index}
+                          variant="secondary"
+                          className="text-xs"
+                        >
+                          {specialty}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <p className="text-sm font-medium mb-2">Specialties:</p>
-                <div className="flex flex-wrap gap-1">
-                  {nearbyClinic.specialties.map((specialty, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {specialty}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              <div className="text-sm">
-                <span className="text-muted-foreground">Next available: </span>
-                <span className="font-medium">
-                  {nearbyClinic.nextAvailable}
-                </span>
-              </div>
-              <Button asChild className="w-full">
-                <Link href="/clinics">View Details</Link>
-              </Button>
+              ))}
             </CardContent>
           </Card>
         </div>

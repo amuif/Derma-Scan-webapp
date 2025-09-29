@@ -1,5 +1,5 @@
 "use client";
-import { Activity, Home } from "lucide-react";
+import { Activity, History, Home } from "lucide-react";
 
 import {
   Sidebar,
@@ -22,6 +22,7 @@ import { useAuthStore } from "@/stores/auth";
 const items = [
   { name: "Dashboard", href: "/home", icon: Home },
   { name: "Scan", href: "/scan", icon: Scan },
+  { name: "Scan history", href: "/community", icon: History },
   { name: "Posts", href: "/posts", icon: Users },
   { name: "Trusted Clinics", href: "/clinics", icon: Hospital },
 ];
