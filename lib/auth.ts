@@ -104,8 +104,9 @@ export const authApi = {
     return await authStorage.clearAuth();
   },
 
-  getCurrentUser: async (token: string) => {
-    const response = await fetch(`${API_URL}/auth/me`, {
+  getCurrentUser: async (token: string, id: string) => {
+    const response = await fetch(`${API_URL}/auth/${id}`, {
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -115,31 +116,21 @@ export const authApi = {
       throw new Error("Failed to fetch user");
     }
 
+    console.log("retunrinig");
     return response.json();
   },
 
   updateCurrentUser: async (
     id: string,
-    data: Partial<User>,
+    data: FormData,
     token: string,
   ): Promise<{ user: User }> => {
-    const formData = new FormData();
-
-    if (data.id) formData.append("id", String(data.id));
-    if (data.name) formData.append("name", data.name);
-    if (data.email) formData.append("email", data.email);
-
-    if (data.profilePicture) {
-      formData.append("profilePicture", data.profilePicture);
-    }
-
     const response = await fetch(`${API_URL}/auth/${id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
-        // ❌ Do NOT set Content-Type; browser sets it automatically for FormData
       },
-      body: formData,
+      body: data,
     });
 
     if (!response.ok) {

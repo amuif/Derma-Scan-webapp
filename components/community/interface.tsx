@@ -22,7 +22,6 @@ import {
   CheckCircle,
   AlertTriangle,
   Clock,
-  ArrowRight,
 } from "lucide-react";
 import { Scan } from "@/types/scan";
 import { useAuthStore } from "@/stores/auth";
@@ -207,9 +206,6 @@ export function Community() {
                         </div>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm">
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
                   </div>
                 );
               })}

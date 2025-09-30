@@ -16,7 +16,6 @@ import {
   Hospital,
   AlertTriangle,
   CheckCircle,
-  ArrowRight,
   Plus,
 } from "lucide-react";
 import Link from "next/link";
@@ -155,9 +154,6 @@ export function DashboardOverview() {
                         </div>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm">
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
                   </div>
                 );
               })}

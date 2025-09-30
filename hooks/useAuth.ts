@@ -32,12 +32,14 @@ export const useUserQuery = () => {
 };
 
 export const useCurrentUserQuery = () => {
-  const tokenQuery = useTokenQuery();
-
+  const { user } = useAuthStore();
   return useQuery({
     queryKey: authQueryKeys.currentUser(),
-    queryFn: () => authApi.getCurrentUser(tokenQuery.data!),
-    enabled: !!tokenQuery.data,
+    queryFn: async () => {
+      const token = await authStorage.getToken();
+      if (!token || !user) return;
+      return authApi.getCurrentUser(token, user?.id);
+    },
     staleTime: 5 * 60 * 1000,
   });
 };
@@ -71,16 +73,15 @@ export const useUpdateCurrentUser = () => {
   const { setUser, user } = useAuthStore();
   return useMutation({
     mutationKey: ["update-current-user"],
-    mutationFn: async (data: Partial<User>) => {
+    mutationFn: async (data: FormData) => {
       const token = await authStorage.getToken();
       if (!token) {
-        throw new Error("No user found in storage");
+        throw new Error("No token found in storage");
       }
       if (!user?.id) {
         throw new Error("No user found in storage");
       }
-      const response = authApi.updateCurrentUser(user.id, data, token);
-      return response;
+      return authApi.updateCurrentUser(user.id, data, token);
     },
     onSuccess: async (data) => {
       console.log(data);
