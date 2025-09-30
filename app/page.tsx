@@ -27,12 +27,12 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background">
       <section className="relative overflow-hidden border-b border-border m-auto">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
-        <div className="relative container mx-auto px-6 py-24">
-          <div className="mx-auto max-w-4xl text-center">
+        <div className="relative container m-auto px-6 pt-24 lg:pt-44">
+          <div className="m-auto min-h-screen flex-col items-center max-w-4xl text-center">
             <Badge variant="secondary" className="mb-6">
               AI-Powered Dermatology Platform
             </Badge>
-            <h1 className="mb-6 text-5xl font-bold tracking-tight text-balance">
+            <h1 className="mb-6 text-5xl font-bold  tracking-tight text-balance">
               Advanced skin condition detection with{" "}
               <span className="text-primary">AI precision</span>
             </h1>
@@ -192,7 +192,7 @@ export default function LandingPage() {
               <div className="text-sm text-muted-foreground">Accuracy Rate</div>
             </div>
             <div className="space-y-2">
-              <div className="text-4xl font-bold text-primary">50K+</div>
+              <div className="text-4xl font-bold text-primary">100</div>
               <div className="text-sm text-muted-foreground">
                 Scans Completed
               </div>
@@ -204,7 +204,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <div className="text-4xl font-bold text-primary">500+</div>
+              <div className="text-4xl font-bold text-primary">50+</div>
               <div className="text-sm text-muted-foreground">
                 Trusted Clinics
               </div>
