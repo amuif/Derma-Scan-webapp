@@ -116,8 +116,7 @@ export const authApi = {
       throw new Error("Failed to fetch user");
     }
 
-    console.log("retunrinig");
-    return response.json();
+    return response.json() as unknown as User;
   },
 
   updateCurrentUser: async (

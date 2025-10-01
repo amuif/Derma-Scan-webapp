@@ -17,8 +17,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavUser } from "./sidebar-user";
 import { ModeToggle } from "../mode-toggle";
-import { useAuthStore } from "@/stores/auth";
 import { useCurrentUserQuery } from "@/hooks/useAuth";
+import { useEffect } from "react";
 
 const items = [
   { name: "Dashboard", href: "/home", icon: Home },
@@ -28,9 +28,12 @@ const items = [
   { name: "Trusted Clinics", href: "/clinics", icon: Hospital },
 ];
 export function AppSidebar() {
-  const { data: user, isLoading } = useCurrentUserQuery();
+  const { data: user } = useCurrentUserQuery();
   const pathname = usePathname();
   const isAdminButtonActive = pathname === "/admin";
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <Sidebar>
@@ -96,7 +99,8 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{ name: "Ibrahim", email: "amudi@", avatar: "" }} />
+        {" "}
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );
