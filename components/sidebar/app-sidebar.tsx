@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import { NavUser } from "./sidebar-user";
 import { ModeToggle } from "../mode-toggle";
 import { useAuthStore } from "@/stores/auth";
+import { useCurrentUserQuery } from "@/hooks/useAuth";
 
 const items = [
   { name: "Dashboard", href: "/home", icon: Home },
@@ -27,7 +28,7 @@ const items = [
   { name: "Trusted Clinics", href: "/clinics", icon: Hospital },
 ];
 export function AppSidebar() {
-  const { user } = useAuthStore();
+  const { data: user, isLoading } = useCurrentUserQuery();
   const pathname = usePathname();
   const isAdminButtonActive = pathname === "/admin";
 
