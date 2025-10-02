@@ -27,9 +27,16 @@ import { Scan } from "@/types/scan";
 interface ScanResultsProps {
   result: Scan;
   onNewScan: () => void;
+  onShareScan: () => void;
+  isAnalyzing: boolean;
 }
 
-export function ScanResults({ result, onNewScan }: ScanResultsProps) {
+export function ScanResults({
+  result,
+  onNewScan,
+  onShareScan,
+  isAnalyzing,
+}: ScanResultsProps) {
   const getRiskColor = (risk: string) => {
     switch (risk) {
       case "low":
@@ -77,10 +84,15 @@ export function ScanResults({ result, onNewScan }: ScanResultsProps) {
             AI-powered skin condition analysis
           </p>
         </div>
-        <Button onClick={onNewScan} variant="outline">
-          <ScanIcon className="mr-2 h-4 w-4" />
-          New Scan
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button variant="default" onClick={onShareScan}>
+            Share with community
+          </Button>
+          <Button onClick={onNewScan} variant="outline" disabled={isAnalyzing}>
+            <ScanIcon className="mr-2 h-4 w-4" />
+            New Scan
+          </Button>
+        </div>
       </div>
 
       <Card>

@@ -17,49 +17,71 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-
+import imageCompression from "browser-image-compression";
 import Image from "next/image";
 import {
   Upload,
   FileImage,
   Scan as ScanIcon,
-  AlertCircle,
-  CheckCircle,
   Info,
+  CircleCheckBig,
+  CircleX,
+  LoaderCircle,
 } from "lucide-react";
 import { ScanResults } from "./scan-results";
 import { ImageValidation } from "@/lib/check-image-quality";
-import { useImageUploadMutation } from "@/hooks/useAuth";
 import { Scan } from "@/types/scan";
-import { useTextScan } from "@/hooks/useScan";
+import {
+  useCheckImage,
+  useImageUploadMutation,
+  useTextScan,
+} from "@/hooks/useScan";
 import { TextAnalysisResult, TextScanResults } from "./text-scan-results";
 
 export function ScanInterface() {
   const { mutateAsync: UploadImage } = useImageUploadMutation();
   const { mutateAsync: UploadText } = useTextScan();
+  const { mutateAsync: checkImage } = useCheckImage();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [symptoms, setSymptoms] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
+  const [isSkin, setIsSkin] = useState<boolean | null>(null);
   const [results, setResults] = useState<Scan | null>(null);
   const [textResults, setTextResults] = useState<TextAnalysisResult | null>(
     null,
   );
-  const [imageQuality, setImageQuality] = useState<"good" | "poor" | null>(
+  const [imageQuality, setImageQuality] = useState<"Good" | "Poor" | null>(
     null,
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const options = {
+    maxSizeMB: 4,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
   const handleImageUpload = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (file) {
         const reader = new FileReader();
-        setImageFile(file);
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
+          const compressedFile = await imageCompression(file, options);
+          setImageFile(compressedFile);
           const imageUrl = e.target?.result as string;
-          ImageValidation(file);
+          const quality = await ImageValidation(compressedFile);
+          setImageQuality(quality || "Good");
+          const checkedImage = await checkImage(compressedFile);
+          if (
+            checkedImage?.message === "No skin condition detected." ||
+            checkedImage?.conditions.length === 0
+          ) {
+            setIsSkin(false);
+          } else {
+            setIsSkin(true);
+          }
           setSelectedImage(imageUrl);
         };
         reader.readAsDataURL(file);
@@ -79,9 +101,22 @@ export function ScanInterface() {
 
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
+        const compressedFile = await imageCompression(file, options);
+        setImageFile(compressedFile);
         const imageUrl = e.target?.result as string;
-        ImageValidation(file);
+        const quality = await ImageValidation(compressedFile);
+        setImageQuality(quality || "Good");
+        const checkedImage = await checkImage(compressedFile);
+        if (
+          checkedImage?.message === "No skin condition detected." ||
+          checkedImage?.conditions.length === 0
+        ) {
+          setIsSkin(false);
+        } else {
+          setIsSkin(true);
+        }
+
         setSelectedImage(imageUrl);
       };
       reader.readAsDataURL(file);
@@ -94,7 +129,7 @@ export function ScanInterface() {
     setResults(null);
     try {
       if (!imageFile) {
-        const response = await UploadText({ symptoms });
+        const response = await UploadText({ symptoms, consent: "false" });
         console.log("Analysis property type:", typeof response.analysis);
 
         const { conditions, risk_level, confidence, guidance } =
@@ -118,7 +153,11 @@ export function ScanInterface() {
         console.log("Mapped result:", mappedResult);
         setTextResults(mappedResult);
       } else {
-        const response: Scan = await UploadImage({ imageFile, symptoms });
+        const response: Scan = await UploadImage({
+          imageFile,
+          symptoms,
+          consent: "false",
+        });
         console.log(response);
         setResults(response);
       }
@@ -128,29 +167,29 @@ export function ScanInterface() {
       setIsAnalyzing(false);
     }
   };
+  const shareWithCommunity = async () => {
+    setIsAnalyzing(true);
 
-  const getQualityMessage = (quality: string) => {
-    switch (quality) {
-      case "good":
-        return {
-          message: "Excellent image quality for analysis",
-          icon: CheckCircle,
-          color: "text-green-500",
-        };
-      case "fair":
-        return {
-          message: "Good quality - analysis possible",
-          icon: Info,
-          color: "text-yellow-500",
-        };
-      case "poor":
-        return {
-          message: "Poor quality - consider retaking photo",
-          icon: AlertCircle,
-          color: "text-red-500",
-        };
-      default:
-        return { message: "", icon: Info, color: "text-muted-foreground" };
+    try {
+      if (textResults || !imageFile) {
+        const response = await UploadText({ symptoms, consent: "true" });
+        console.log("Shared with community text upload:", response);
+      } else if (results) {
+        // We already have image results, just share them
+        const response: Scan = await UploadImage({
+          imageFile,
+          symptoms,
+          consent: "true",
+        });
+        console.log("Shared with community:", response);
+      }
+
+      // Show success message or handle post-share logic
+      alert("Successfully shared with community!");
+    } catch (error) {
+      console.error("Error sharing with community:", error);
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -158,10 +197,14 @@ export function ScanInterface() {
     return (
       <ScanResults
         result={results as Scan}
+        onShareScan={shareWithCommunity}
+        isAnalyzing={isAnalyzing}
         onNewScan={() => {
           setResults(null);
           setSelectedImage(null);
+          setTextResults(null);
           setSymptoms("");
+          setImageFile(null);
           setImageQuality(null);
           setAnalysisProgress(0);
         }}
@@ -172,12 +215,15 @@ export function ScanInterface() {
     return (
       <TextScanResults
         result={textResults}
+        isAnalyzing={isAnalyzing}
+        onShareScan={shareWithCommunity}
         onNewScan={() => {
           setTextResults(null);
           setResults(null);
           setSelectedImage(null);
           setSymptoms("");
           setImageQuality(null);
+          setImageFile(null);
           setAnalysisProgress(0);
         }}
       />
@@ -200,10 +246,30 @@ export function ScanInterface() {
                 Upload Skin Image
               </CardTitle>
               <CardDescription>
-                Upload a clear, well-lit photo of the affected skin area for AI
-                analysis.
+                <div className="flex justify-between ">
+                  <span>
+                    {" "}
+                    Upload a clear, well-lit photo of the affected skin area for
+                    AI analysis.
+                  </span>
+
+                  <div className="flex justify-end items-end">
+                    {imageQuality && (
+                      <>
+                        {console.log(imageQuality)}
+                        {imageQuality === "Good" ? (
+                          <CircleCheckBig className="h-6 w-6 pr-2 text-green-500" />
+                        ) : (
+                          <CircleX className="h-6 w-4 text-red-500" />
+                        )}
+                        <span className="flex gap-3">
+                          {imageQuality} quality
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </CardDescription>
-              <div className="flex justify-end items-end"></div>
             </CardHeader>
             <CardContent>
               <div
@@ -221,25 +287,6 @@ export function ScanInterface() {
                       width={500}
                       height={500}
                     />
-                    {imageQuality && (
-                      <div className="flex items-center justify-center gap-2">
-                        {(() => {
-                          const {
-                            message,
-                            icon: Icon,
-                            color,
-                          } = getQualityMessage(imageQuality);
-                          return (
-                            <>
-                              <Icon className={`h-4 w-4 ${color}`} />
-                              <span className={`text-sm ${color}`}>
-                                {message}
-                              </span>
-                            </>
-                          );
-                        })()}
-                      </div>
-                    )}
                     <Button
                       variant="outline"
                       onClick={(e) => {
@@ -250,6 +297,19 @@ export function ScanInterface() {
                     >
                       Remove Image
                     </Button>
+                    <div>
+                      {isSkin === null && (
+                        <span>
+                          <LoaderCircle className="animate-spin" />
+                          Processing....
+                        </span>
+                      )}
+                      {isSkin === false && (
+                        <span className="text-destructive">
+                          No skin detected try to upload a different image.
+                        </span>
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -259,7 +319,7 @@ export function ScanInterface() {
                         Drop your image here or click to browse
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Supports JPG, PNG, WebP up to 10MB
+                        Supports JPG, PNG, WebP up to 5MB
                       </p>
                     </div>
                   </div>
@@ -308,6 +368,10 @@ export function ScanInterface() {
                   onChange={(e) => setSymptoms(e.target.value)}
                   className="min-h-32"
                 />
+                <Label className="py-2">
+                  minimum amount of allowed characters are 10,your current
+                  characters are {symptoms.length}
+                </Label>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="secondary">Redness</Badge>
@@ -344,7 +408,12 @@ export function ScanInterface() {
         <Button
           size="lg"
           onClick={simulateAnalysis}
-          disabled={(!selectedImage && !symptoms.trim()) || isAnalyzing}
+          disabled={
+            (!selectedImage && !symptoms.trim()) ||
+            (!imageFile && symptoms.length < 10) ||
+            (imageFile && !isSkin) ||
+            isAnalyzing
+          }
           className="px-8"
         >
           {isAnalyzing ? (

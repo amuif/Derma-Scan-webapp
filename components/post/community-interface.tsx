@@ -35,14 +35,14 @@ import {
 } from "lucide-react";
 import { Post } from "@/types/post";
 import { useGetAllowedPost, usePostCreation } from "@/hooks/usePost";
-import { useAuthStore } from "@/stores/auth";
 import { Label } from "../ui/label";
 import { authStorage } from "@/lib/auth";
+import { useCurrentUserQuery } from "@/hooks/useAuth";
 
 export function CommunityInterface() {
   const { data: posts, isLoading, isError } = useGetAllowedPost();
   const { mutateAsync: createPost } = usePostCreation();
-  const { user } = useAuthStore();
+  const { data: user } = useCurrentUserQuery();
   const [activeTab, setActiveTab] = useState("history");
   const [newPost, setNewPost] = useState("");
   const [newPostTitle, setNewPostTitle] = useState("");
@@ -52,7 +52,11 @@ export function CommunityInterface() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    console.log(user);
+  }, [user]);
+  useEffect(() => {
     if (!user) return;
+    console.log(user);
     const selfPost = posts?.filter((post) => post.author.id === user.id) || [];
     console.log(selfPost);
     setSelfPosts(selfPost);
@@ -71,6 +75,7 @@ export function CommunityInterface() {
   const handleCreatePost = async () => {
     if (!newPost.trim() || !newPostTitle.trim()) return;
     if (!user) return;
+
     const token = await authStorage.getToken();
     if (!token) return;
     setLoading(true);

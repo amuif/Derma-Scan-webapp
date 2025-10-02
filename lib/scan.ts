@@ -1,20 +1,38 @@
 import { API_URL } from "@/constants/backend-url";
-import { Scan } from "@/types/scan";
+import { CheckImage, Scan } from "@/types/scan";
 
 export const scanApi = {
+  checkImage: async (token: string, file: File) => {
+    const form = new FormData();
+    form.append("file", file);
+    try {
+      const response = await fetch(`${API_URL}/models/check`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: form,
+      });
+
+      const result = (await response.json()) as CheckImage;
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error("Error uploading image", error);
+      throw error;
+    }
+  },
   uploadImage: async (
     token: string,
     imageFile: File,
     userId: string,
+    consent: string,
     symptoms?: string,
   ) => {
     const form = new FormData();
-
-    console.log("userId", userId);
-
     form.append("file", imageFile);
-
     form.append("userId", userId);
+    form.append("consent", consent);
 
     if (symptoms) {
       form.append("symptoms", symptoms);
@@ -38,7 +56,12 @@ export const scanApi = {
     }
   },
 
-  textUpload: async (token: string, prompt: string, userId: string) => {
+  textUpload: async (
+    token: string,
+    prompt: string,
+    consent: string,
+    userId: string,
+  ) => {
     try {
       const response = await fetch(`${API_URL}/models/text`, {
         method: "POST",
@@ -46,7 +69,7 @@ export const scanApi = {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt, userId }),
+        body: JSON.stringify({ prompt, consent, userId }),
       });
       if (response.ok) {
         const result = await response.json();

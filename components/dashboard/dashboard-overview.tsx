@@ -12,11 +12,11 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import {
   Scan,
-  Users,
   Hospital,
   AlertTriangle,
   CheckCircle,
   Plus,
+  FilePenLine,
 } from "lucide-react";
 import Link from "next/link";
 import { FeatureCard } from "@/types/feature-card";
@@ -24,26 +24,31 @@ import { useScanHistory } from "@/hooks/useScan";
 import { FILES_URL } from "@/constants/backend-url";
 import { useGetAllowedPost } from "@/hooks/usePost";
 import { useFindClinic } from "@/hooks/useClinic";
+import { useCurrentUserQuery } from "@/hooks/useAuth";
 
 export function DashboardOverview() {
   const { data: recentScans, isLoading } = useScanHistory();
   const { data: posts, isLoading: isPostLoading } = useGetAllowedPost();
+  const { data: user } = useCurrentUserQuery();
   const { data: clinics, isLoading: isClincsLoading } = useFindClinic();
   if (isLoading || isPostLoading || isClincsLoading) {
     return;
   }
+  if (!user) return;
+  const yourScans = recentScans?.filter((scan) => scan.id === user.id);
+  const yourPosts = posts?.filter((scan) => scan.id === user.id);
   const featureCards: FeatureCard[] = [
     {
       id: 1,
-      title: "Total Scans",
+      title: "Your Scans",
       Icon: Scan,
-      amount: recentScans?.length || 0,
+      amount: yourScans?.length || 0,
     },
     {
       id: 2,
-      title: "Community Posts",
-      Icon: Users,
-      amount: posts?.length || 0,
+      title: "Your Posts",
+      Icon: FilePenLine,
+      amount: yourPosts?.length || 0,
     },
   ];
   const getRiskColor = (risk: string) => {

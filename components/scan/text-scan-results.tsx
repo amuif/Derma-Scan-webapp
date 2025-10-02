@@ -41,9 +41,16 @@ export interface TextAnalysisResult {
 interface TextScanResultsProps {
   result: TextAnalysisResult;
   onNewScan: () => void;
+  onShareScan: () => void;
+  isAnalyzing: boolean;
 }
 
-export function TextScanResults({ result, onNewScan }: TextScanResultsProps) {
+export function TextScanResults({
+  result,
+  onNewScan,
+  onShareScan,
+  isAnalyzing,
+}: TextScanResultsProps) {
   const getRiskColor = (risk: string) => {
     switch (risk.toLowerCase()) {
       case "low":
@@ -80,11 +87,44 @@ export function TextScanResults({ result, onNewScan }: TextScanResultsProps) {
             AI-powered symptom assessment based on your description
           </p>
         </div>
-        <Button onClick={onNewScan} variant="outline">
-          <Scan className="mr-2 h-4 w-4" />
-          New Analysis
-        </Button>
+
+        <div className="flex items-center gap-4">
+          <Button onClick={onShareScan} disabled={isAnalyzing}>
+            Share with community
+          </Button>
+          <Button onClick={onNewScan} variant="outline">
+            <Scan className="mr-2 h-4 w-4" />
+            New Analysis
+          </Button>
+        </div>
       </div>
+      {/* Medical Guidance */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Medical Guidance</CardTitle>
+          <CardDescription>
+            Professional recommendations based on your symptoms
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {result.guidance.map((guide, index) => (
+              <div
+                key={index}
+                className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg"
+              >
+                <Info className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="space-y-1">
+                  <p className="font-medium">{guide.message}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {guide.reason}
+                  </p>{" "}
+                </div>
+              </div>
+            ))}{" "}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Risk Level Overview */}
       <Card>
@@ -136,34 +176,6 @@ export function TextScanResults({ result, onNewScan }: TextScanResultsProps) {
               </p>
             </div>
           ))}
-        </CardContent>
-      </Card>
-
-      {/* Medical Guidance */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Medical Guidance</CardTitle>
-          <CardDescription>
-            Professional recommendations based on your symptoms
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {result.guidance.map((guide, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg"
-              >
-                <Info className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                <div className="space-y-1">
-                  <p className="font-medium">{guide.message}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {guide.reason}
-                  </p>{" "}
-                </div>
-              </div>
-            ))}{" "}
-          </div>
         </CardContent>
       </Card>
 

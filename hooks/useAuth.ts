@@ -1,6 +1,5 @@
 "use client";
 import { authApi, authStorage } from "@/lib/auth";
-import { scanApi } from "@/lib/scan";
 import { useAuthStore } from "@/stores/auth";
 import { User } from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -8,10 +7,6 @@ import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-interface UploadVariables {
-  imageFile: File;
-  symptoms: string;
-}
 export const useTokenQuery = () => {
   return useQuery({
     queryKey: authQueryKeys.token(),
@@ -53,8 +48,8 @@ export const useLoginMutation = () => {
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       authApi.login(email, password),
     onSuccess: async (data) => {
+      console.log(data);
       setCookie("authToken", data.accessToken, { path: "/" });
-
       const safeUser = sanitizeUser(data.user);
       setUser(safeUser);
       queryClient.setQueryData(authQueryKeys.token(), data.accessToken);
@@ -175,26 +170,6 @@ export const useDeleteMutation = () => {
       console.error("Delete Current user error", error);
       await authStorage.clearAuth();
       queryClient.removeQueries({ queryKey: authQueryKeys.all });
-    },
-  });
-};
-
-export const useImageUploadMutation = () => {
-  const { user } = useAuthStore();
-  return useMutation({
-    mutationFn: async ({ imageFile, symptoms }: UploadVariables) => {
-      const token = await authStorage.getToken();
-
-      if (!user?.id) {
-        throw new Error("No user found in storage");
-      }
-      return scanApi.uploadImage(token!, imageFile, user.id, symptoms);
-    },
-    onSuccess: () => {
-      console.log("uploaded successfully!");
-    },
-    onError: (error) => {
-      console.error("Error uploading image", error);
     },
   });
 };

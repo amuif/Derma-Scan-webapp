@@ -25,3 +25,9 @@ export interface Condition {
   description: string;
   scans: ScanCondition[];
 }
+export interface CheckImage {
+  conditions:string[];
+  confidence:number;
+  message:string;
+  timestamp:string;
+}
