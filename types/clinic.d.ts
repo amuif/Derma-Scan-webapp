@@ -1,7 +1,4 @@
-export interface Status {
-  approved: "APPROVED";
-  pending: "PENDING";
-}
+export const Status = "PENDING" | "APPROVED";
 export interface Clinic {
   id: string;
   name: string;

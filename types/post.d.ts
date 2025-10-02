@@ -1,5 +1,9 @@
 import { User } from "./user";
-
+export type PostCategory =
+  | "PREVENTION"
+  | "TREATMENT"
+  | "AWARENESS"
+  | "RESEARCH";
 export interface CreatePost {
   title: string;
   content: string;

@@ -104,6 +104,21 @@ export const authApi = {
     return await authStorage.clearAuth();
   },
 
+  getAllUsers: async (token: string) => {
+    const response = await fetch(`${API_URL}/auth/all`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+
+    return response.json() as unknown as User[];
+  },
+
   getCurrentUser: async (token: string, id: string) => {
     const response = await fetch(`${API_URL}/auth/${id}`, {
       method: "GET",

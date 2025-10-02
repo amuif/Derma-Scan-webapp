@@ -1,7 +1,7 @@
 "use client";
 import { authStorage } from "@/lib/auth";
 import { postApi } from "@/lib/post";
-import { CreatePost, UpdatePost } from "@/types/post";
+import { CreatePost, Post, UpdatePost } from "@/types/post";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -36,6 +36,7 @@ export const usePostCreation = () => {
     },
   });
 };
+
 export const useGetAllowedPost = () => {
   return useQuery({
     queryKey: ["get-allowed-post"],
@@ -62,16 +63,18 @@ export const useGetAllAllowedPost = () => {
 export const useUpdatePost = () => {
   return useMutation({
     mutationFn: async ({
+      id,
       title,
       content,
       category,
       language,
       status,
-    }: UpdatePost) => {
+    }: Partial<Post>) => {
       const token = await authStorage.getToken();
 
-      if (!token) return;
+      if (!token || !id) return;
       return postApi.updatePost({
+        id,
         title,
         content,
         category,
@@ -79,6 +82,12 @@ export const useUpdatePost = () => {
         status,
         token,
       });
+    },
+    onSuccess: () => {
+      toast.success("Successfully updated post");
+    },
+    onError: () => {
+      toast.error("Error occured updated user");
     },
   });
 };
@@ -90,6 +99,12 @@ export const useDeletePost = () => {
       if (!token) return;
 
       return postApi.deletePost(id, token);
+    },
+    onSuccess: () => {
+      toast.success("Successfully deleted post");
+    },
+    onError: () => {
+      toast.error("Error occured deleting user");
     },
   });
 };

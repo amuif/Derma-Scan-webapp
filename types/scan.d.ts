@@ -4,7 +4,7 @@ export interface Scan {
   imageUrl: string;
   imageQuality: string;
   confidence: number;
-  conditions: string[];
+  conditions: ScanCondition[];
   risk: "HIGH" | "LOW" | "MEDIUM";
   notes: string;
   timestamp: string;
@@ -26,8 +26,8 @@ export interface Condition {
   scans: ScanCondition[];
 }
 export interface CheckImage {
-  conditions:string[];
-  confidence:number;
-  message:string;
-  timestamp:string;
+  conditions: string[];
+  confidence: number;
+  message: string;
+  timestamp: string;
 }

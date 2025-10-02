@@ -39,6 +39,16 @@ export const useCurrentUserQuery = () => {
   });
 };
 
+export const useFindAllUsers = () => {
+  return useQuery({
+    queryKey: ["get-all-users-for-admin"],
+    queryFn: async () => {
+      const token = await authStorage.getToken();
+      if (!token) return;
+      return authApi.getAllUsers(token);
+    },
+  });
+};
 export const useLoginMutation = () => {
   const queryClient = useQueryClient();
   const { setUser } = useAuthStore();
@@ -153,23 +163,17 @@ export const useLogoutMutation = () => {
 };
 
 export const useDeleteMutation = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
   return useMutation({
     mutationFn: async (id: string) => {
       const token = await authStorage.getToken();
       authApi.deleteCurrentUser(id, token!);
     },
     onSuccess: async () => {
-      router.replace("/login");
-
-      queryClient.removeQueries({ queryKey: authQueryKeys.all });
+      toast.success("User deleted successfully");
     },
     onError: async (error) => {
-      console.error("Delete Current user error", error);
-      await authStorage.clearAuth();
-      queryClient.removeQueries({ queryKey: authQueryKeys.all });
+      console.error("Error deleting user", error);
+      toast.error("Error deleting user");
     },
   });
 };

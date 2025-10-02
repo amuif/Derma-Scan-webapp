@@ -183,9 +183,6 @@ export function ScanInterface() {
         });
         console.log("Shared with community:", response);
       }
-
-      // Show success message or handle post-share logic
-      alert("Successfully shared with community!");
     } catch (error) {
       console.error("Error sharing with community:", error);
     } finally {

@@ -49,7 +49,7 @@ export const postApi = {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.json();
+      return response.json() as unknown as Post[];
     } catch (error) {
       console.log("Error creating post", error);
     }
@@ -68,36 +68,30 @@ export const postApi = {
     }
   },
   updatePost: async ({
+    id,
     title,
     content,
     category,
     language,
     status,
     token,
-  }: UpdatePost) => {
-    const form = new FormData();
-    if (title) {
-      form.append("title", title);
-    }
-    if (content) {
-      form.append("content", content);
-    }
-    if (status) {
-      form.append("status", status);
-    }
-    if (language) {
-      form.append("language", language);
-    }
-    if (category) {
-      form.append("category", category);
-    }
+  }: UpdatePost & { id: string }) => {
+    const payload: Record<string, unknown> = {};
+
+    if (title !== undefined) payload.title = title;
+    if (status !== undefined) payload.status = status;
+    if (content !== undefined) payload.content = content;
+    if (language !== undefined) payload.language = language;
+    if (category !== undefined) payload.email = category;
+
     try {
-      const response = await fetch(`${API_URL}/education`, {
+      const response = await fetch(`${API_URL}/education/${id}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: form,
+        body: JSON.stringify(payload),
       });
       return response.json();
     } catch (error) {
@@ -106,7 +100,7 @@ export const postApi = {
   },
   deletePost: async (id: string, token: string) => {
     try {
-      const response = await fetch(`${API_URL}/education`, {
+      const response = await fetch(`${API_URL}/education/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -76,7 +76,7 @@ export const clinicApi = {
         throw new Error(`Failed to getting clinic: ${response.statusText}`);
       }
 
-      return await response.json();
+      return (await response.json()) as Clinic[];
     } catch (error) {
       console.error("Error getting clinic:", error);
       throw error;
@@ -93,39 +93,27 @@ export const clinicApi = {
     specialties,
     id,
   }: UpdateClinicPayload) => {
-    const form = new FormData();
+    const payload: Record<string, unknown> = {};
 
-    if (name) {
-      form.append("name", name);
-    }
-    if (status) {
-      form.append("status", status);
-    }
-    if (address) {
-      form.append("address", address);
-    }
-    if (specialties) {
-      specialties.forEach((specialty: string) => {
-        form.append("specialties", specialty);
-      });
-    }
+    if (name !== undefined) payload.name = name;
+    if (status !== undefined) payload.status = status;
+    if (address !== undefined) payload.address = address;
+    if (phone !== undefined) payload.phone = phone;
+    if (email !== undefined) payload.email = email;
+    if (website !== undefined) payload.website = website;
+    if (specialties !== undefined) payload.specialties = specialties;
 
-    if (phone) {
-      form.append("phone", phone);
-    }
-    if (email) {
-      form.append("email", email);
-    }
-    if (website) {
-      form.append("website", website);
-    }
+    console.log("Updating clinic with:", payload);
+
     try {
       const response = await fetch(`${API_URL}/clinics/${id}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: form,
+
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -141,7 +129,7 @@ export const clinicApi = {
   deleteClinic: async (id: string, token: string) => {
     try {
       const response = await fetch(`${API_URL}/clinics/${id}`, {
-        method: "POST",
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },

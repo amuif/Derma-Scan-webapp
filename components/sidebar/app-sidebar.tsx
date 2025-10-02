@@ -1,5 +1,5 @@
 "use client";
-import { Activity, History, Home } from "lucide-react";
+import { Activity, BookText, History, Home } from "lucide-react";
 
 import {
   Sidebar,
@@ -23,18 +23,15 @@ import { useEffect } from "react";
 const items = [
   { name: "Dashboard", href: "/home", icon: Home },
   { name: "Scan", href: "/scan", icon: Scan },
-  { name: "Scan history", href: "/community", icon: History },
-  { name: "Posts", href: "/posts", icon: Users },
+  { name: "Scan history", href: "/history", icon: History },
+  { name: "Posts", href: "/posts", icon: BookText },
+  { name: "Community", href: "/community", icon: Users },
   { name: "Trusted Clinics", href: "/clinics", icon: Hospital },
 ];
 export function AppSidebar() {
   const { data: user } = useCurrentUserQuery();
   const pathname = usePathname();
   const isAdminButtonActive = pathname === "/admin";
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   return (
     <Sidebar>
       <SidebarHeader>

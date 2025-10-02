@@ -2,8 +2,9 @@
 
 import { authStorage } from "@/lib/auth";
 import { clinicApi } from "@/lib/clinic";
-import { CreateClinic } from "@/types/clinic";
+import { Clinic, CreateClinic } from "@/types/clinic";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const useClinicCreation = () => {
   return useMutation({
@@ -53,10 +54,31 @@ export const useFindAllClinic = () => {
 };
 export const useUpdateClinic = () => {
   return useMutation({
+    mutationFn: async ({ status, id }: Partial<Clinic>) => {
+      const token = await authStorage.getToken();
+      if (!token || !id) return;
+      return clinicApi.updateClinic({ id, token, status });
+    },
+    onSuccess: () => {
+      toast.success("Successfully updated clinic");
+    },
+    onError: () => {
+      toast.error("Error updated clinic");
+    },
+  });
+};
+export const useDeleteClinic = () => {
+  return useMutation({
     mutationFn: async (id: string) => {
       const token = await authStorage.getToken();
       if (!token) return;
       return clinicApi.deleteClinic(id, token);
+    },
+    onSuccess: () => {
+      toast.success("Successfully deleted clinic");
+    },
+    onError: () => {
+      toast.error("Error deleting clinic");
     },
   });
 };

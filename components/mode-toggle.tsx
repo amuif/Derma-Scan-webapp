@@ -6,6 +6,9 @@ import { Switch } from "./ui/switch";
 
 export function ModeToggle() {
   const { setTheme, theme } = useTheme();
+  React.useEffect(() => {
+    console.log(theme);
+  }, [theme]);
 
   function handleThemeChange(checked: boolean) {
     setTheme(checked ? "dark" : "light");
