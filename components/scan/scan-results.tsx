@@ -98,11 +98,13 @@ export function ScanResults({
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl">{result.conditions.map((scanCondition) => (
-  <CardTitle key={scanCondition.id} className="text-xl">
-    {scanCondition.condition.name}
-  </CardTitle>
-))}</CardTitle>
+            <CardTitle className="text-xl">
+              {result.conditions.map((scanCondition) => (
+                <CardTitle key={scanCondition.id} className="text-xl">
+                  {scanCondition.condition.name}
+                </CardTitle>
+              ))}
+            </CardTitle>
             <Badge className={getRiskColor(result.risk)}>
               <RiskIcon className="mr-1 h-3 w-3" />
               {result.risk.toUpperCase()} RISK

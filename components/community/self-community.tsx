@@ -3,12 +3,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import {
-  Clock,
-  AlertTriangle,
-  CheckCircle,
-  AlertCircle,
-} from "lucide-react";
+import { Clock, AlertTriangle, CheckCircle, AlertCircle } from "lucide-react";
 import type { Scan } from "@/types/scan";
 import { useScanHistory } from "@/hooks/useScan";
 import { useCurrentUserQuery } from "@/hooks/useAuth";
@@ -177,7 +172,6 @@ export function SelfCommunity() {
                           </p>
                         </div>
                       )}
-
                     </div>
                   </div>
                 </CardContent>
