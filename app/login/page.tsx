@@ -124,17 +124,9 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <div className="flex py-2 items-center justify-between">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-            </CardContent>
+                         </CardContent>
 
-            <CardFooter className="flex flex-col space-y-4">
+            <CardFooter className="flex flex-col space-y-4 py-2">
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>

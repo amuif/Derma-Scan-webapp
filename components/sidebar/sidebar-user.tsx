@@ -36,7 +36,20 @@ export function NavUser() {
   }
   console.log(user);
   if (isLoading) {
-    return;
+    return (
+      <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus:bg-sidebar-accent focus:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+        <Avatar className="h-8 w-8 rounded-lg grayscale">
+          <AvatarFallback className="rounded-lg">Derma User</AvatarFallback>
+        </Avatar>
+        <div className="grid flex-1 text-left text-sm leading-tight">
+          <span className="truncate font-medium">User</span>
+          <span className="truncate text-xs text-muted-foreground">
+            Derama@gmail.com
+          </span>
+        </div>
+        <IconDotsVertical className="ml-auto size-4" />
+      </button>
+    );
   }
   return (
     <SidebarMenu>
@@ -44,7 +57,7 @@ export function NavUser() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus:bg-sidebar-accent focus:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
+              <Avatar className="h-8 w-8 rounded-lg ">
                 <AvatarImage
                   src={`${FILES_URL}${user?.profilePicture}`}
                   alt={user?.name}

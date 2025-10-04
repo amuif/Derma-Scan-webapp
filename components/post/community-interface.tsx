@@ -21,28 +21,22 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import {
-  History,
-  Users,
-  MessageSquare,
-  Heart,
-  Share2,
-  Search,
-  Filter,
-  Calendar,
-  Clock,
-} from "lucide-react";
+import { History, Users, Search, Filter, Calendar, Clock } from "lucide-react";
 import { Post } from "@/types/post";
-import { useGetAllowedPost, usePostCreation } from "@/hooks/usePost";
+import {
+  useDeletePost,
+  useGetAllowedPost,
+  usePostCreation,
+} from "@/hooks/usePost";
 import { Label } from "../ui/label";
 import { authStorage } from "@/lib/auth";
 import { useCurrentUserQuery } from "@/hooks/useAuth";
 
 export function CommunityInterface() {
-  const { data: posts, isLoading, isError } = useGetAllowedPost();
+  const { data: posts, isLoading, isError, refetch } = useGetAllowedPost();
   const { mutateAsync: createPost } = usePostCreation();
   const { data: user } = useCurrentUserQuery();
+  const { mutateAsync: deletePost } = useDeletePost();
   const [activeTab, setActiveTab] = useState("history");
   const [newPost, setNewPost] = useState("");
   const [newPostTitle, setNewPostTitle] = useState("");
@@ -50,15 +44,18 @@ export function CommunityInterface() {
   const [selfPosts, setSelfPosts] = useState<Post[]>([]);
   const [communityPosts, setCommunityPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     console.log(user);
   }, [user]);
+
   useEffect(() => {
     if (!user) return;
     console.log(user);
     const selfPost = posts?.filter((post) => post.author.id === user.id) || [];
-    console.log(selfPost);
+    const isAdmin = user.role === "ADMIN";
+    setIsAdmin(isAdmin);
     setSelfPosts(selfPost);
 
     const communityPost =
@@ -72,6 +69,10 @@ export function CommunityInterface() {
     setNewPostCatagory(catagory);
   };
 
+  const handleDeletePost = async (id: string) => {
+    await deletePost(id);
+    refetch();
+  };
   const handleCreatePost = async () => {
     if (!newPost.trim() || !newPostTitle.trim()) return;
     if (!user) return;
@@ -209,7 +210,6 @@ export function CommunityInterface() {
             </Card>
           </div>
 
-          {/* Scan History */}
           <Card>
             <CardHeader>
               <CardTitle>Post History</CardTitle>
@@ -258,7 +258,6 @@ export function CommunityInterface() {
         </TabsContent>
 
         <TabsContent value="community" className="space-y-6">
-          {/* Community Header */}
           <div className="flex flex-col sm:flex-row gap-4 justify-between">
             <div className="flex gap-2">
               <div className="relative flex">
@@ -368,29 +367,40 @@ export function CommunityInterface() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 space-y-3">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold">
-                            {post.author.name}
-                          </span>
-                          <Badge
-                            variant="outline"
-                            className={getCategoryColor(post.category)}
-                          >
-                            {post.category}
-                          </Badge>
-                          <Badge
-                            variant="outline"
-                            className={getStatusColor(post.status)}
-                          >
-                            {post.status}
-                          </Badge>
-                          <span className="text-sm text-muted-foreground">
-                            •
-                          </span>
-                          <span className="text-sm text-muted-foreground flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {formatDate(post.createdAt)}
-                          </span>
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-semibold">
+                              {post.author.name}
+                            </span>
+                            <Badge
+                              variant="outline"
+                              className={getCategoryColor(post.category)}
+                            >
+                              {post.category}
+                            </Badge>
+                            <Badge
+                              variant="outline"
+                              className={getStatusColor(post.status)}
+                            >
+                              {post.status}
+                            </Badge>
+                            <span className="text-sm text-muted-foreground">
+                              •
+                            </span>
+                            <span className="text-sm text-muted-foreground flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              {formatDate(post.createdAt)}
+                            </span>
+                          </div>
+                          {isAdmin && (
+                            <Button
+                              className=""
+                              variant="destructive"
+                              onClick={() => handleDeletePost(post.id)}
+                            >
+                              Delete Post
+                            </Button>
+                          )}
                         </div>
 
                         <div>
@@ -400,35 +410,6 @@ export function CommunityInterface() {
                           <p className="text-sm leading-relaxed">
                             {post.content}
                           </p>
-                        </div>
-
-                        <Separator />
-
-                        <div className="flex items-center gap-6">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-muted-foreground hover:text-red-500"
-                          >
-                            <Heart className="mr-2 h-4 w-4" />
-                            Like
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-muted-foreground"
-                          >
-                            <MessageSquare className="mr-2 h-4 w-4" />
-                            Comment
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-muted-foreground"
-                          >
-                            <Share2 className="mr-2 h-4 w-4" />
-                            Share
-                          </Button>
                         </div>
                       </div>
                     </div>

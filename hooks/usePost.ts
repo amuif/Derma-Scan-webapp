@@ -100,8 +100,10 @@ export const useDeletePost = () => {
 
       return postApi.deletePost(id, token);
     },
-    onSuccess: () => {
-      toast.success("Successfully deleted post");
+    onSuccess: (data) => {
+      if (data) {
+        toast.success("Successfully deleted post");
+      }
     },
     onError: () => {
       toast.error("Error occured deleting user");
