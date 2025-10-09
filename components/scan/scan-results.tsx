@@ -27,7 +27,7 @@ import { Scan } from "@/types/scan";
 interface ScanResultsProps {
   result: Scan;
   onNewScan: () => void;
-  onShareScan: () => void;
+  onShareScan: (scanId: string) => void;
   isAnalyzing: boolean;
 }
 
@@ -85,7 +85,7 @@ export function ScanResults({
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="default" onClick={onShareScan}>
+          <Button variant="default" onClick={() => onShareScan(result.id)}>
             Share with community
           </Button>
           <Button onClick={onNewScan} variant="outline" disabled={isAnalyzing}>

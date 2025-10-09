@@ -18,7 +18,9 @@ export function SelfCommunity() {
   useEffect(() => {
     if (!user) return;
     if (!scans) return;
+    console.log(scans);
     const selfScan = scans?.filter((post) => post.userId === user.id) || [];
+    console.log("selfScan", selfScan);
     setSelfScans(selfScan);
   }, [scans, user]);
 

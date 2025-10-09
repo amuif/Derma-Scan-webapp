@@ -8,7 +8,9 @@ interface TextInputProps {
   symptoms: string;
   consent: string;
 }
-
+interface ApproveScan {
+  scanId: string;
+}
 interface UploadVariables {
   imageFile: File;
   symptoms: string;
@@ -55,13 +57,21 @@ export const useTextScan = () => {
     },
   });
 };
-
 export const useScanHistory = () => {
   return useQuery({
     queryKey: ["get-scan-history"],
     queryFn: async () => {
       const token = await authStorage.getToken();
       return scanApi.scanHistory(token!);
+    },
+  });
+};
+export const useApproveScan = () => {
+  return useMutation({
+    mutationFn: async ({ scanId }: ApproveScan) => {
+      const token = await authStorage.getToken();
+      console.log("scaId", scanId);
+      return scanApi.approveScan(token!, scanId);
     },
   });
 };

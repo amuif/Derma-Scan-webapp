@@ -32,6 +32,7 @@ import { ScanResults } from "./scan-results";
 import { ImageValidation } from "@/lib/check-image-quality";
 import { Scan } from "@/types/scan";
 import {
+  useApproveScan,
   useCheckImage,
   useImageUploadMutation,
   useTextScan,
@@ -42,6 +43,7 @@ export function ScanInterface() {
   const { mutateAsync: UploadImage } = useImageUploadMutation();
   const { mutateAsync: UploadText } = useTextScan();
   const { mutateAsync: checkImage } = useCheckImage();
+  const { mutateAsync: approveScan } = useApproveScan();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [symptoms, setSymptoms] = useState("");
@@ -194,7 +196,7 @@ export function ScanInterface() {
     return (
       <ScanResults
         result={results as Scan}
-        onShareScan={shareWithCommunity}
+        onShareScan={() => approveScan({ scanId: results.id })}
         isAnalyzing={isAnalyzing}
         onNewScan={() => {
           setResults(null);
