@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { MessageSquare, Heart, Share2, Clock } from "lucide-react";
+import { Clock } from "lucide-react";
 import { Scan } from "@/types/scan";
 import { useAuthStore } from "@/stores/auth";
 import { useScanHistory } from "@/hooks/useScan";
+import Image from "next/image";
+import { FILES_URL } from "@/constants/backend-url";
 
 export function Community() {
   const { user } = useAuthStore();
@@ -95,33 +95,13 @@ export function Community() {
                       </span>
                     </div>
 
-                    <Separator />
-
-                    <div className="flex items-center gap-6">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground hover:text-red-500"
-                      >
-                        <Heart className="mr-2 h-4 w-4" />
-                        Like
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground"
-                      >
-                        <MessageSquare className="mr-2 h-4 w-4" />
-                        Comment
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground"
-                      >
-                        <Share2 className="mr-2 h-4 w-4" />
-                        Share
-                      </Button>
+                    <div className="relative h-40 w-40 rounded-lg overflow-hidden bg-muted">
+                      <Image
+                        src={`${FILES_URL}/${post.imageUrl}`}
+                        alt="Skin scan"
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                   </div>
                 </div>

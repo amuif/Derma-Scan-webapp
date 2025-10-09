@@ -38,6 +38,7 @@ import {
   useTextScan,
 } from "@/hooks/useScan";
 import { TextAnalysisResult, TextScanResults } from "./text-scan-results";
+import { toast } from "sonner";
 
 export function ScanInterface() {
   const { mutateAsync: UploadImage } = useImageUploadMutation();
@@ -196,7 +197,10 @@ export function ScanInterface() {
     return (
       <ScanResults
         result={results as Scan}
-        onShareScan={() => approveScan({ scanId: results.id })}
+        onShareScan={() => {
+          approveScan({ scanId: results.id });
+          toast.success("Shared successfully");
+        }}
         isAnalyzing={isAnalyzing}
         onNewScan={() => {
           setResults(null);
