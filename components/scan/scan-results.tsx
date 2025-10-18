@@ -22,7 +22,7 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { Scan } from "@/types/scan";
+import { Scan, ScanCondition } from "@/types/scan";
 
 interface ScanResultsProps {
   result: Scan;
@@ -99,12 +99,21 @@ export function ScanResults({
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl">
-              {result.conditions.map((scanCondition) => (
-                <CardTitle key={scanCondition.id} className="text-xl">
-                  {scanCondition.condition.name}
-                </CardTitle>
-              ))}
-            </CardTitle>
+              {Array.isArray(result.conditions) &&
+              result.conditions.length > 0 ? (
+                typeof result.conditions[0] === "string" ? (
+                  <span>{result.conditions.join(", ")}</span>
+                ) : (
+                  result.conditions.map((scanCondition: ScanCondition) => (
+                    <span key={scanCondition.id}>
+                      {scanCondition.condition?.name || scanCondition}
+                    </span>
+                  ))
+                )
+              ) : (
+                <span>No conditions detected</span>
+              )}
+            </CardTitle>{" "}
             <Badge className={getRiskColor(result.risk)}>
               <RiskIcon className="mr-1 h-3 w-3" />
               {result.risk.toUpperCase()} RISK

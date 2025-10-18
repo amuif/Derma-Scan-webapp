@@ -322,7 +322,7 @@ export function ScanInterface() {
                         Drop your image here or click to browse
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Supports JPG, PNG, WebP up to 5MB
+                        Supports JPG, PNG up to 5MB
                       </p>
                     </div>
                   </div>
