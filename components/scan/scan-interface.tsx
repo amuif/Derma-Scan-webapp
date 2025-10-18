@@ -133,16 +133,18 @@ export function ScanInterface() {
     try {
       if (!imageFile) {
         const response = await UploadText({ symptoms, consent: "false" });
-        console.log("Analysis property type:", typeof response.analysis);
+        console.log(response);
 
+        const { id } = response;
         const { conditions, risk_level, confidence, guidance } =
           response.analysis;
         const mappedResult: TextAnalysisResult = {
+          id: id,
           conditions:
             conditions?.map((c: string) => ({
               name: c,
               description: "",
-            })) || [], // Fallback to empty array
+            })) || [],
           risk_level: risk_level || "Unknown",
           confidence: confidence || 0,
           guidance: [
@@ -170,6 +172,7 @@ export function ScanInterface() {
       setIsAnalyzing(false);
     }
   };
+
   const shareWithCommunity = async () => {
     setIsAnalyzing(true);
 
@@ -219,7 +222,10 @@ export function ScanInterface() {
       <TextScanResults
         result={textResults}
         isAnalyzing={isAnalyzing}
-        onShareScan={shareWithCommunity}
+        onShareScan={() => {
+          approveScan({ scanId: textResults.id });
+          toast.success("Shared successfully");
+        }}
         onNewScan={() => {
           setTextResults(null);
           setResults(null);

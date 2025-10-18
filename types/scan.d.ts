@@ -9,6 +9,7 @@ export interface Scan {
   notes: string;
   timestamp: string;
   user: User;
+  question?:string;
 }
 
 export interface ScanCondition {
