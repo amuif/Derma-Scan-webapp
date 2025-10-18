@@ -31,6 +31,7 @@ import {
 import { ScanResults } from "./scan-results";
 import { ImageValidation } from "@/lib/check-image-quality";
 import { Scan } from "@/types/scan";
+
 import {
   useApproveScan,
   useCheckImage,

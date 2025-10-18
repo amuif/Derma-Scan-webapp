@@ -32,7 +32,7 @@ interface TextGuidance {
 }
 
 export interface TextAnalysisResult {
-  id:string;
+  id: string;
   conditions: TextCondition[];
   risk_level: string;
   confidence: number;

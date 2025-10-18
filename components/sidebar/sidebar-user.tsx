@@ -34,6 +34,7 @@ export function NavUser() {
   async function handleLogOut() {
     await mutateAsync();
   }
+  console.log(user);
   if (isLoading) {
     return (
       <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus:bg-sidebar-accent focus:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
