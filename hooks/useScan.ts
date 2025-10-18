@@ -8,7 +8,9 @@ interface TextInputProps {
   symptoms: string;
   consent: string;
 }
-
+interface ApproveScan {
+  scanId: string;
+}
 interface UploadVariables {
   imageFile: File;
   symptoms: string;
@@ -60,7 +62,6 @@ export const useTextScan = () => {
     },
   });
 };
-
 export const useScanHistory = () => {
   return useQuery({
     queryKey: ["get-scan-history"],
