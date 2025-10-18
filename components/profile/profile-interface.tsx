@@ -22,6 +22,8 @@ import {
   CheckCircle,
   Shield,
   Calendar,
+  EyeOff,
+  Eye,
 } from "lucide-react";
 import { useCurrentUserQuery, useUpdateCurrentUser } from "@/hooks/useAuth";
 import { User } from "@/types/user";
@@ -33,6 +35,9 @@ export function ProfileInterface() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState<User | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [matchPassword, setMatchPassword] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -50,6 +55,9 @@ export function ProfileInterface() {
       formData.append("name", profileData.name);
       formData.append("email", profileData.email);
 
+      if (password && matchPassword) {
+        formData.append("password", password);
+      }
       if (fileInputRef.current?.files?.[0]) {
         formData.append("profilePicture", fileInputRef.current.files[0]);
       }
@@ -140,7 +148,6 @@ export function ProfileInterface() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Avatar Section */}
           <div className="flex items-center gap-6">
             <Avatar className="h-24 w-24">
               <AvatarImage
@@ -226,7 +233,50 @@ export function ProfileInterface() {
                 />
               </div>
             </div>
-
+            <div className="">
+              <div className="space-y-2">
+                <Label htmlFor="password">New Password</Label>
+                <div className="relative w-full">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter new password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={!isEditing}
+                    className="w-full flex"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    type="button"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff /> : <Eye />}
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type={showPassword ? "text" : "password"}
+                placeholder="Re-enter new password"
+                onChange={(e) => setMatchPassword(e.target.value === password)}
+                disabled={!isEditing}
+              />
+              {password && (
+                <p
+                  className={`text-sm ${
+                    matchPassword ? "text-green-600" : "text-red-500"
+                  }`}
+                >
+                  {!matchPassword && "❌ Passwords do not match"}
+                </p>
+              )}
+            </div>
             <div className="space-y-2">
               <Label htmlFor="createdAt">Member Since</Label>
               <div className="relative">
