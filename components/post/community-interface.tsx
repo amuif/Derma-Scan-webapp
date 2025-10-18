@@ -21,7 +21,15 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { History, Users, Search, Filter, Calendar, Clock } from "lucide-react";
+import {
+  History,
+  Users,
+  Search,
+  Filter,
+  Calendar,
+  Clock,
+  Plus,
+} from "lucide-react";
 import { Post } from "@/types/post";
 import {
   useDeletePost,
@@ -45,6 +53,9 @@ export function CommunityInterface() {
   const [communityPosts, setCommunityPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  // NEW: toggle for showing the create-post composer
+  const [showComposer, setShowComposer] = useState(false);
 
   useEffect(() => {
     console.log(user);
@@ -73,6 +84,7 @@ export function CommunityInterface() {
     await deletePost(id);
     refetch();
   };
+
   const handleCreatePost = async () => {
     if (!newPost.trim() || !newPostTitle.trim()) return;
     if (!user) return;
@@ -94,6 +106,9 @@ export function CommunityInterface() {
         setNewPost("");
         setNewPostTitle("");
         setNewPostCatagory("");
+        // NEW: close the composer after successful post
+        setShowComposer(false);
+        refetch();
       }
     } catch (error) {
       console.error("Failed to create post:", error);
@@ -268,68 +283,80 @@ export function CommunityInterface() {
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
+
+            {/* NEW: Add Post toggle button */}
+            <Button
+              onClick={() => setShowComposer((prev) => !prev)}
+              className="self-end sm:self-auto"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              {showComposer ? "Close" : "Add Post"}
+            </Button>
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">Create new post</CardTitle>
-            </CardHeader>
-            <CardContent className="">
-              <div className="flex gap-3">
-                <div className="flex-1 space-y-3">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          {/* NEW: Create Post section is only visible when toggled on */}
+          {showComposer && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">Create new post</CardTitle>
+              </CardHeader>
+              <CardContent className="">
+                <div className="flex gap-3">
+                  <div className="flex-1 space-y-3">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                      <div className="flex-col space-y-2">
+                        <Label>Title</Label>
+                        <Input
+                          placeholder="Post title..."
+                          value={newPostTitle}
+                          onChange={(e) => setNewPostTitle(e.target.value)}
+                        />
+                      </div>
+                      <div className="flex-col space-y-2">
+                        <Label>Select Category</Label>
+                        <Select
+                          value={newPostCatagory}
+                          onValueChange={handleChange}
+                        >
+                          <SelectTrigger className="w-[250px]">
+                            <SelectValue placeholder="Catagory" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Catagory.map((cat) => (
+                              <SelectItem key={cat} value={cat}>
+                                {cat}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
                     <div className="flex-col space-y-2">
-                      <Label>Title</Label>
-                      <Input
-                        placeholder="Post title..."
-                        value={newPostTitle}
-                        onChange={(e) => setNewPostTitle(e.target.value)}
+                      <Label>Description</Label>
+                      <Textarea
+                        placeholder="Share your experience, ask questions, or offer support to the community..."
+                        value={newPost}
+                        onChange={(e) => setNewPost(e.target.value)}
+                        className="min-h-24"
                       />
                     </div>
-                    <div className="flex-col space-y-2">
-                      <Label>Select Category</Label>
-                      <Select
-                        value={newPostCatagory}
-                        onValueChange={handleChange}
-                      >
-                        <SelectTrigger className="w-[250px]">
-                          <SelectValue placeholder="Catagory" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Catagory.map((cat) => (
-                            <SelectItem key={cat} value={cat}>
-                              {cat}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="flex-col space-y-2">
-                    <Label>Description</Label>
-                    <Textarea
-                      placeholder="Share your experience, ask questions, or offer support to the community..."
-                      value={newPost}
-                      onChange={(e) => setNewPost(e.target.value)}
-                      className="min-h-24"
-                    />
-                  </div>
 
-                  <div className="flex justify-between items-center">
-                    <div className="flex gap-2">
-                      <Badge variant="secondary">General</Badge>
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-2">
+                        <Badge variant="secondary">General</Badge>
+                      </div>
+                      <Button
+                        disabled={!newPost.trim() || !newPostTitle.trim()}
+                        onClick={handleCreatePost}
+                      >
+                        Post
+                      </Button>
                     </div>
-                    <Button
-                      disabled={!newPost.trim() || !newPostTitle.trim()}
-                      onClick={handleCreatePost}
-                    >
-                      Post
-                    </Button>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
 
           <div className="space-y-6">
             {loading ? (

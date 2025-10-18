@@ -96,4 +96,23 @@ export const scanApi = {
       throw error;
     }
   },
+  approveScan: async (token: string, id: string) => {
+    try {
+      const response = await fetch(`${API_URL}/models/approve`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ scanId: id }),
+      });
+
+      const result = (await response.json()) as Scan[];
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log("Error fetching scan history", error);
+      throw error;
+    }
+  },
 };

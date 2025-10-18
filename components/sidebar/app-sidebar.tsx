@@ -35,13 +35,14 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex h-14 items-center  border-sidebar-border px-4">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
+        <div className="flex h-14 items-center justify-between border-sidebar-border px-4">
+          <div className="flex items-center gap-2 font-semibold">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Activity className="h-4 w-4" />
             </div>
             <span className="text-lg">DermaScan</span>
-          </Link>
+          </div>
+          <ModeToggle />
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -90,9 +91,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup className="mt-auto">
-          <SidebarMenu>
-            <ModeToggle />
-          </SidebarMenu>
+          <SidebarMenu></SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>

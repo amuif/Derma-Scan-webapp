@@ -18,7 +18,9 @@ export function SelfCommunity() {
   useEffect(() => {
     if (!user) return;
     if (!scans) return;
+    console.log(scans);
     const selfScan = scans?.filter((post) => post.userId === user.id) || [];
+    console.log("selfScan", selfScan);
     setSelfScans(selfScan);
   }, [scans, user]);
 
@@ -70,7 +72,7 @@ export function SelfCommunity() {
   };
 
   if (isLoading) {
-    return <div>Loading.............</div>;
+    return <div>Loading scans.............</div>;
   }
 
   if (isError) {
@@ -131,17 +133,24 @@ export function SelfCommunity() {
                         </Badge>
                       </div>
 
-                      <div className="relative h-40 w-40 rounded-lg overflow-hidden bg-muted">
-                        <Image
-                          src={`${FILES_URL}/${post.imageUrl}`}
-                          alt="Skin scan"
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
+                      {post.imageUrl !== "text-analysis" ? (
+                        <div className="relative h-40 w-40 rounded-lg overflow-hidden bg-muted">
+                          <Image
+                            src={`${FILES_URL}/${post.imageUrl}`}
+                            alt="Skin scan"
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex gap-2">
+                          <p className="font-semibold">Question:</p>
 
+                          <h3>{post.question || "User asked question"}</h3>
+                        </div>
+                      )}
                       {post.conditions.length > 0 && (
-                        <div className="space-y-2">
+                        <div className="space-y-2 pt-5">
                           <h4 className="font-semibold text-sm">
                             Detected Conditions:
                           </h4>

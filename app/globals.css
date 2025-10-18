@@ -1,4 +1,8 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* tw-animate-css provides utility classes; include via @import if the package exposes a CSS file */
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

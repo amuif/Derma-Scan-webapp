@@ -31,12 +31,30 @@ export function DashboardOverview() {
   const { data: posts, isLoading: isPostLoading } = useGetAllowedPost();
   const { data: user } = useCurrentUserQuery();
   const { data: clinics, isLoading: isClincsLoading } = useFindClinic();
+
   if (isLoading || isPostLoading || isClincsLoading) {
     return;
   }
   if (!user) return;
-  const yourScans = recentScans?.filter((scan) => scan.id === user.id);
-  const yourPosts = posts?.filter((scan) => scan.id === user.id);
+
+  // ✅ Only change: fix ownership filtering (was scan.id === user.id)
+  const yourScans = recentScans?.filter(
+    (scan: any) =>
+      scan?.userId === user.id ||
+      scan?.authorId === user.id ||
+      scan?.createdById === user.id ||
+      scan?.ownerId === user.id ||
+      scan?.user?.id === user.id,
+  );
+  const yourPosts = posts?.filter(
+    (post: any) =>
+      post?.userId === user.id ||
+      post?.authorId === user.id ||
+      post?.createdById === user.id ||
+      post?.ownerId === user.id ||
+      post?.user?.id === user.id,
+  );
+
   const featureCards: FeatureCard[] = [
     {
       id: 1,
@@ -51,6 +69,7 @@ export function DashboardOverview() {
       amount: yourPosts?.length || 0,
     },
   ];
+
   const getRiskColor = (risk: string) => {
     switch (risk) {
       case "low":
@@ -121,7 +140,7 @@ export function DashboardOverview() {
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
-              {recentScans?.map((scan) => {
+              {recentScans?.map((scan: any) => {
                 const RiskIcon = getRiskIcon(scan.risk);
                 return (
                   <div
@@ -181,7 +200,7 @@ export function DashboardOverview() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {clinics?.slice(0, 3).map((clinic) => (
+              {clinics?.slice(0, 3).map((clinic: any) => (
                 <div key={clinic.id}>
                   <div>
                     <h4 className="font-medium">{clinic.name}</h4>
@@ -189,15 +208,17 @@ export function DashboardOverview() {
                   <div>
                     <p className="text-sm font-medium mb-2">Specialties:</p>
                     <div className="flex flex-wrap gap-1">
-                      {clinic.specialties.map((specialty, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {specialty}
-                        </Badge>
-                      ))}
+                      {clinic.specialties.map(
+                        (specialty: string, index: number) => (
+                          <Badge
+                            key={index}
+                            variant="secondary"
+                            className="text-xs"
+                          >
+                            {specialty}
+                          </Badge>
+                        ),
+                      )}
                     </div>
                   </div>
                 </div>

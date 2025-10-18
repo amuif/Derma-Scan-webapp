@@ -14,6 +14,11 @@ interface UploadVariables {
   symptoms: string;
   consent: string;
 }
+
+interface ApproveScan {
+  scanId: string;
+}
+
 export const useCheckImage = () => {
   const { data: user } = useCurrentUserQuery();
   return useMutation({
@@ -62,6 +67,15 @@ export const useScanHistory = () => {
     queryFn: async () => {
       const token = await authStorage.getToken();
       return scanApi.scanHistory(token!);
+    },
+  });
+};
+export const useApproveScan = () => {
+  return useMutation({
+    mutationFn: async ({ scanId }: ApproveScan) => {
+      const token = await authStorage.getToken();
+      console.log("scaId", scanId);
+      return scanApi.approveScan(token!, scanId);
     },
   });
 };

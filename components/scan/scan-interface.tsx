@@ -32,16 +32,19 @@ import { ScanResults } from "./scan-results";
 import { ImageValidation } from "@/lib/check-image-quality";
 import { Scan } from "@/types/scan";
 import {
+  useApproveScan,
   useCheckImage,
   useImageUploadMutation,
   useTextScan,
 } from "@/hooks/useScan";
 import { TextAnalysisResult, TextScanResults } from "./text-scan-results";
+import { toast } from "sonner";
 
 export function ScanInterface() {
   const { mutateAsync: UploadImage } = useImageUploadMutation();
   const { mutateAsync: UploadText } = useTextScan();
   const { mutateAsync: checkImage } = useCheckImage();
+  const { mutateAsync: approveScan } = useApproveScan();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [symptoms, setSymptoms] = useState("");
@@ -194,7 +197,10 @@ export function ScanInterface() {
     return (
       <ScanResults
         result={results as Scan}
-        onShareScan={shareWithCommunity}
+        onShareScan={() => {
+          approveScan({ scanId: results.id });
+          toast.success("Shared successfully");
+        }}
         isAnalyzing={isAnalyzing}
         onNewScan={() => {
           setResults(null);
@@ -316,7 +322,7 @@ export function ScanInterface() {
                         Drop your image here or click to browse
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Supports JPG, PNG, WebP up to 5MB
+                        Supports JPG, PNG up to 5MB
                       </p>
                     </div>
                   </div>

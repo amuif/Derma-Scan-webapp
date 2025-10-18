@@ -1,13 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { MessageSquare, Heart, Share2, Clock } from "lucide-react";
+import { Clock } from "lucide-react";
 import { Scan } from "@/types/scan";
 import { useAuthStore } from "@/stores/auth";
 import { useScanHistory } from "@/hooks/useScan";
+import Image from "next/image";
+import { FILES_URL } from "@/constants/backend-url";
 
 export function Community() {
   const { user } = useAuthStore();
@@ -74,54 +73,42 @@ export function Community() {
         ) : (
           communityScans.map((post) => (
             <Card key={post.id}>
-              <CardContent className="pt-6">
+              <CardContent className="pt-3">
                 <div className="flex gap-3">
-                  <Avatar>
-                    <AvatarFallback>
-                      {post.user.name
-                        .split(" ")
-                        .map((n: string) => n[0])
-                        .join("")
-                        .toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
                   <div className="flex-1 space-y-3">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold">{post.user.name}</span>
-                      <span className="text-sm text-muted-foreground">•</span>
-                      <span className="text-sm text-muted-foreground flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {formatDate(post.timestamp)}
-                      </span>
-                    </div>
+                    <div className="flex items-center gap-2 justify-between flex-wrap">
+                      <div className="flex-col space-y-3">
+                        <div className="flex-col">
+                          <p className="font-bold">Conditions</p>
+                          {post.conditions.length > 0 ? (
+                            post.conditions.map((condition) => (
+                              <span key={condition.id}>
+                                {condition.condition.name}
+                              </span>
+                            ))
+                          ) : (
+                            <span>No conditions found for this image</span>
+                          )}
+                        </div>
 
-                    <Separator />
+                        <div className="flex-col">
+                          <p className="font-bold">Notes</p>
+                          <span>{post.notes}</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {formatDate(post.timestamp)}
+                        </span>
+                      </div>
 
-                    <div className="flex items-center gap-6">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground hover:text-red-500"
-                      >
-                        <Heart className="mr-2 h-4 w-4" />
-                        Like
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground"
-                      >
-                        <MessageSquare className="mr-2 h-4 w-4" />
-                        Comment
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground"
-                      >
-                        <Share2 className="mr-2 h-4 w-4" />
-                        Share
-                      </Button>
+                      <div className="relative h-40 w-40 rounded-lg overflow-hidden bg-muted">
+                        <Image
+                          src={`${FILES_URL}/${post.imageUrl}`}
+                          alt="Image not found"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
