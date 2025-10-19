@@ -11,8 +11,10 @@ import {
   Building2,
   Grid3X3,
   Rows3,
+  ShieldCheck,
 } from "lucide-react";
 
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -119,11 +121,26 @@ export function ClinicsInterface() {
           >
             <svg className="absolute inset-0 h-full w-full">
               <defs>
-                <pattern id="grid-clinic" width="28" height="28" patternUnits="userSpaceOnUse">
-                  <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+                <pattern
+                  id="grid-clinic"
+                  width="28"
+                  height="28"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 28 0 L 0 0 0 28"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth=".5"
+                  />
                 </pattern>
               </defs>
-              <rect width="100%" height="100%" fill="url(#grid-clinic)" className="text-foreground/20" />
+              <rect
+                width="100%"
+                height="100%"
+                fill="url(#grid-clinic)"
+                className="text-foreground/20"
+              />
             </svg>
           </div>
           <div className="flex items-center gap-3">
@@ -131,9 +148,12 @@ export function ClinicsInterface() {
               <Building2 className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">Trusted Clinics &amp; Specialists</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                Trusted Clinics &amp; Specialists
+              </h1>
               <p className="text-sm text-muted-foreground">
-                Find verified dermatologists and healthcare providers in your area.
+                Find verified dermatologists and healthcare providers in your
+                area.
               </p>
             </div>
           </div>
@@ -152,7 +172,9 @@ export function ClinicsInterface() {
     return (
       <div className="space-y-6">
         <header>
-          <h1 className="mb-2 text-3xl font-bold">Trusted Clinics &amp; Specialists</h1>
+          <h1 className="mb-2 text-3xl font-bold">
+            Trusted Clinics &amp; Specialists
+          </h1>
           <p className="text-lg text-muted-foreground">
             Find verified dermatologists and healthcare providers in your area.
           </p>
@@ -179,11 +201,26 @@ export function ClinicsInterface() {
         >
           <svg className="absolute inset-0 h-full w-full">
             <defs>
-              <pattern id="grid-clinicx" width="28" height="28" patternUnits="userSpaceOnUse">
-                <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+              <pattern
+                id="grid-clinicx"
+                width="28"
+                height="28"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 28 0 L 0 0 0 28"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth=".5"
+                />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid-clinicx)" className="text-foreground/20" />
+            <rect
+              width="100%"
+              height="100%"
+              fill="url(#grid-clinicx)"
+              className="text-foreground/20"
+            />
           </svg>
         </div>
         <div className="flex items-center gap-3">
@@ -191,9 +228,12 @@ export function ClinicsInterface() {
             <Building2 className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Trusted Clinics &amp; Specialists</h1>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Trusted Clinics &amp; Specialists
+            </h1>
             <p className="text-sm text-muted-foreground">
-              Find verified dermatologists and healthcare providers in your area.
+              Find verified dermatologists and healthcare providers in your
+              area.
             </p>
           </div>
         </div>
@@ -250,7 +290,7 @@ export function ClinicsInterface() {
                 onClick={() => setActiveChip(chip)}
                 className={cn(
                   "cursor-pointer rounded-full px-3 py-1",
-                  active ? "" : "hover:bg-muted"
+                  active ? "" : "hover:bg-muted",
                 )}
               >
                 {chip === "all" ? "All specialties" : chip}
@@ -392,7 +432,9 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="min-w-0">
             <div className="mb-1 flex items-center gap-2">
-              <h3 className="truncate text-base font-semibold">{clinic.name}</h3>
+              <h3 className="truncate text-base font-semibold">
+                {clinic.name}
+              </h3>
               {isVerified && (
                 <Badge
                   variant="outline"
@@ -410,23 +452,28 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
                   {clinic.address}
                 </span>
               )}
-              {Array.isArray(clinic.specialties) && clinic.specialties.length > 0 && (
-                <>
-                  <span>•</span>
-                  <span className="flex flex-wrap gap-1">
-                    {clinic.specialties.slice(0, 3).map((s) => (
-                      <Badge key={s} variant="secondary" className="rounded-full">
-                        {s}
-                      </Badge>
-                    ))}
-                    {clinic.specialties.length > 3 && (
-                      <Badge variant="outline" className="rounded-full">
-                        +{clinic.specialties.length - 3}
-                      </Badge>
-                    )}
-                  </span>
-                </>
-              )}
+              {Array.isArray(clinic.specialties) &&
+                clinic.specialties.length > 0 && (
+                  <>
+                    <span>•</span>
+                    <span className="flex flex-wrap gap-1">
+                      {clinic.specialties.slice(0, 3).map((s) => (
+                        <Badge
+                          key={s}
+                          variant="secondary"
+                          className="rounded-full"
+                        >
+                          {s}
+                        </Badge>
+                      ))}
+                      {clinic.specialties.length > 3 && (
+                        <Badge variant="outline" className="rounded-full">
+                          +{clinic.specialties.length - 3}
+                        </Badge>
+                      )}
+                    </span>
+                  </>
+                )}
             </div>
           </div>
 
@@ -450,11 +497,6 @@ function ClinicRow({ clinic }: { clinic: Clinic }) {
     </Card>
   );
 }
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Hospital, MapPin, Phone, ShieldCheck, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 
 function initials(name: string = "") {
   const parts = name.trim().split(" ").filter(Boolean);
@@ -463,10 +505,12 @@ function initials(name: string = "") {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-export function ClinicCard({ clinic }: { clinic: any }) {
+export function ClinicCardPage({ clinic }: { clinic: any }) {
   const name = clinic?.name ?? "Unnamed Clinic";
   const city = clinic?.city ?? clinic?.address ?? "—";
-  const specs: string[] = Array.isArray(clinic?.specialties) ? clinic.specialties : [];
+  const specs: string[] = Array.isArray(clinic?.specialties)
+    ? clinic.specialties
+    : [];
   const phone = clinic?.phone ?? "";
   const website = clinic?.website ?? "";
 
@@ -510,16 +554,24 @@ export function ClinicCard({ clinic }: { clinic: any }) {
       {specs.length > 0 ? (
         <div className="mt-3 flex flex-wrap gap-1.5">
           {specs.slice(0, 6).map((s, i) => (
-            <Badge key={`${clinic?.id}-${s}-${i}`} variant="secondary" className="text-[10px]">
+            <Badge
+              key={`${clinic?.id}-${s}-${i}`}
+              variant="secondary"
+              className="text-[10px]"
+            >
               {s}
             </Badge>
           ))}
           {specs.length > 6 && (
-            <Badge variant="outline" className="text-[10px]">+{specs.length - 6} more</Badge>
+            <Badge variant="outline" className="text-[10px]">
+              +{specs.length - 6} more
+            </Badge>
           )}
         </div>
       ) : (
-        <p className="mt-3 text-xs text-muted-foreground">No specialties listed.</p>
+        <p className="mt-3 text-xs text-muted-foreground">
+          No specialties listed.
+        </p>
       )}
 
       {/* actions */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,12 +26,26 @@ import { FILES_URL } from "@/constants/backend-url";
 import { useGetAllowedPost } from "@/hooks/usePost";
 import { useFindClinic } from "@/hooks/useClinic";
 import { useCurrentUserQuery } from "@/hooks/useAuth";
+import { Scan as ScanType } from "@/types/scan";
+import { Post } from "@/types/post";
 
 export function DashboardOverview() {
   const { data: recentScans, isLoading } = useScanHistory();
   const { data: posts, isLoading: isPostLoading } = useGetAllowedPost();
   const { data: user } = useCurrentUserQuery();
   const { data: clinics, isLoading: isClincsLoading } = useFindClinic();
+  const [selfScan, setSelfScan] = useState<ScanType[]>([]);
+  const [selfPost, setSelfPost] = useState<Post[]>([]);
+  useEffect(() => {
+    const selfScan =
+      recentScans?.filter((scan) => scan.userId === user?.id) || [];
+    setSelfScan(selfScan);
+  }, [recentScans, user]);
+
+  useEffect(() => {
+    const selfPost = posts?.filter((post) => post.author.id === user?.id);
+    setSelfPost(selfPost || []);
+  }, [posts, user]);
 
   // Early loading guard
   if (isLoading || isPostLoading || isClincsLoading) {
@@ -50,44 +64,18 @@ export function DashboardOverview() {
     );
   }
 
-  const yourScans = useMemo(
-    () =>
-      (recentScans ?? []).filter(
-        (scan: any) =>
-          scan?.userId === user.id ||
-          scan?.authorId === user.id ||
-          scan?.createdById === user.id ||
-          scan?.ownerId === user.id ||
-          scan?.user?.id === user.id,
-      ),
-    [recentScans, user.id],
-  );
-
-  const yourPosts = useMemo(
-    () =>
-      (posts ?? []).filter(
-        (post: any) =>
-          post?.userId === user.id ||
-          post?.authorId === user.id ||
-          post?.createdById === user.id ||
-          post?.ownerId === user.id ||
-          post?.user?.id === user.id,
-      ),
-    [posts, user.id],
-  );
-
   const featureCards: FeatureCard[] = [
     {
       id: 1,
       title: "Your Scans",
       Icon: Scan,
-      amount: yourScans.length,
+      amount: selfScan?.length || 0,
     },
     {
       id: 2,
       title: "Your Posts",
       Icon: FilePenLine,
-      amount: yourPosts.length,
+      amount: selfPost?.length || 0,
     },
   ];
 
@@ -151,7 +139,9 @@ export function DashboardOverview() {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle>Recent Scans</CardTitle>
-                <CardDescription>Your latest skin analysis results</CardDescription>
+                <CardDescription>
+                  Your latest skin analysis results
+                </CardDescription>
               </div>
               <Button asChild size="sm">
                 <Link href="/scan">
@@ -161,10 +151,11 @@ export function DashboardOverview() {
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
-              {(recentScans ?? []).map((scan: any) => {
+              {(recentScans ?? []).slice(0, 5).map((scan: any) => {
                 const RiskIcon = getRiskIcon(scan?.risk);
-                const src =
-                  scan?.imageUrl ? `${FILES_URL}/${scan.imageUrl}` : "/placeholder.svg";
+                const src = scan?.imageUrl
+                  ? `${FILES_URL}/${scan.imageUrl}`
+                  : "/placeholder.svg";
                 const ts = scan?.timestamp ? new Date(scan.timestamp) : null;
                 return (
                   <div
@@ -180,7 +171,10 @@ export function DashboardOverview() {
                     />
                     <div className="min-w-0 flex-1">
                       <div className="mb-1 flex items-center gap-2">
-                        <Badge className={getRiskColor(scan?.risk)} variant="outline">
+                        <Badge
+                          className={getRiskColor(scan?.risk)}
+                          variant="outline"
+                        >
                           <RiskIcon className="mr-1 h-3 w-3" />
                           {(scan?.risk ?? "unknown").toString()}
                         </Badge>
@@ -200,7 +194,11 @@ export function DashboardOverview() {
                   </div>
                 );
               })}
-              <Button asChild variant="outline" className="w-full bg-transparent">
+              <Button
+                asChild
+                variant="outline"
+                className="w-full bg-transparent"
+              >
                 <Link href="/community">View All Scans</Link>
               </Button>
             </CardContent>
@@ -215,7 +213,9 @@ export function DashboardOverview() {
                 <Hospital className="h-5 w-5" />
                 Clinics
               </CardTitle>
-              <CardDescription>Clinics you can refer or contact</CardDescription>
+              <CardDescription>
+                Clinics you can refer or contact
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Loading state */}
@@ -236,7 +236,9 @@ export function DashboardOverview() {
               {!isClincsLoading && (clinics?.length ?? 0) === 0 && (
                 <div className="grid place-items-center rounded-2xl border border-dashed p-10 text-center">
                   <Hospital className="mb-3 h-6 w-6 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">No clinics found.</p>
+                  <p className="text-sm text-muted-foreground">
+                    No clinics found.
+                  </p>
                 </div>
               )}
 
@@ -251,22 +253,27 @@ export function DashboardOverview() {
                       <h4 className="text-sm font-medium leading-none">
                         {clinic?.name ?? "Unnamed Clinic"}
                       </h4>
-                      <Badge variant="secondary" className="rounded-full text-[10px]">
+                      <Badge
+                        variant="secondary"
+                        className="rounded-full text-[10px]"
+                      >
                         {clinic?.city ?? "—"}
                       </Badge>
                     </div>
 
                     {(clinic?.specialties?.length ?? 0) > 0 ? (
                       <div className="mt-3 flex flex-wrap gap-1">
-                        {clinic.specialties.slice(0, 8).map((s: string, i: number) => (
-                          <Badge
-                            key={`${clinic?.id}-${s}-${i}`}
-                            variant="outline"
-                            className="text-[10px]"
-                          >
-                            {s}
-                          </Badge>
-                        ))}
+                        {clinic.specialties
+                          .slice(0, 8)
+                          .map((s: string, i: number) => (
+                            <Badge
+                              key={`${clinic?.id}-${s}-${i}`}
+                              variant="outline"
+                              className="text-[10px]"
+                            >
+                              {s}
+                            </Badge>
+                          ))}
                         {(clinic?.specialties?.length ?? 0) > 8 && (
                           <Badge variant="secondary" className="text-[10px]">
                             +{clinic.specialties.length - 8} more
