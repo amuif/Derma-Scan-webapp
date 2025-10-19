@@ -8,14 +8,17 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="flex h-screen ">
+    <div className="flex h-screen">
       <SidebarProvider>
         <AppSidebar />
+        {/* Top-left trigger keeps working; nudged spacing to align with new rounding */}
         <div className="pt-7 pl-2">
           <SidebarTrigger />
         </div>
+
         <main className="flex-1 overflow-auto">
-          <div className="container mx-auto p-6">{children}</div>
+          {/* Wider container for the modern look */}
+          <div className="mx-auto max-w-7xl p-6">{children}</div>
         </main>
       </SidebarProvider>
     </div>

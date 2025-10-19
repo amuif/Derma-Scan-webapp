@@ -1,6 +1,33 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* === Futuristic hero helpers === */
+@keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+@keyframes spin-slow { to{ transform:rotate(360deg) } }
+@keyframes dash { to{ stroke-dashoffset:-1000 } }
+
+.hero-grid {
+  mask-image: radial-gradient(70% 70% at 50% 35%, #000 60%, transparent 100%);
+  opacity:.35;
+}
+.hero-noise {
+  pointer-events:none;
+  background-image: url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>\
+    <filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter>\
+    <rect width='120' height='120' filter='url(%23n)' opacity='0.035'/>\
+  </svg>");
+  background-size: 120px 120px;
+}
+.neon-ring {
+  background:
+    radial-gradient(60% 60% at 50% 40%, hsl(var(--color-primary)/.25), transparent 60%),
+    conic-gradient(from 0deg, hsl(var(--color-primary)) 0%, transparent 30%, hsl(var(--color-primary)) 60%, transparent 85%, hsl(var(--color-primary)) 100%);
+  filter: blur(20px) saturate(1.2);
+  opacity:.55;
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
