@@ -164,13 +164,19 @@ export function AdminInterface() {
   /* ===== filters/search ===== */
   // Clinics
   const [clinicQuery, setClinicQuery] = useState("");
-  const [clinicStatus, setClinicStatus] = useState<"ALL" | "PENDING" | "APPROVED" | "REJECTED">("ALL");
+  const [clinicStatus, setClinicStatus] = useState<
+    "ALL" | "PENDING" | "APPROVED" | "REJECTED"
+  >("ALL");
   const [clinicSpecialty, setClinicSpecialty] = useState<string>("ALL");
 
   // Posts
   const [postQuery, setPostQuery] = useState("");
-  const [postStatus, setPostStatus] = useState<"ALL" | "PENDING" | "APPROVED" | "REJECTED">("ALL");
-  const [postCategory, setPostCategory] = useState<"ALL" | (typeof CATEGORY_OPTIONS)[number]>("ALL");
+  const [postStatus, setPostStatus] = useState<
+    "ALL" | "PENDING" | "APPROVED" | "REJECTED"
+  >("ALL");
+  const [postCategory, setPostCategory] = useState<
+    "ALL" | (typeof CATEGORY_OPTIONS)[number]
+  >("ALL");
 
   // Users
   const [userQuery, setUserQuery] = useState("");
@@ -212,8 +218,10 @@ export function AdminInterface() {
   }, [usersData]);
 
   useEffect(() => {
-    const pending = clinics?.filter((c) => (c.status ?? "PENDING") === "PENDING") ?? [];
-    const others = clinics?.filter((c) => (c.status ?? "PENDING") !== "PENDING") ?? [];
+    const pending =
+      clinics?.filter((c) => (c.status ?? "PENDING") === "PENDING") ?? [];
+    const others =
+      clinics?.filter((c) => (c.status ?? "PENDING") !== "PENDING") ?? [];
     setPendingClinics(pending);
     setNonPendingClinics(others);
   }, [clinics]);
@@ -231,8 +239,14 @@ export function AdminInterface() {
     const all = [...(clinics ?? [])];
     const q = clinicQuery.trim().toLowerCase();
     return all.filter((c) => {
-      const statusOk = clinicStatus === "ALL" ? true : (c.status ?? "PENDING") === clinicStatus;
-      const specOk = clinicSpecialty === "ALL" ? true : (c.specialties ?? []).includes(clinicSpecialty);
+      const statusOk =
+        clinicStatus === "ALL"
+          ? true
+          : (c.status ?? "PENDING") === clinicStatus;
+      const specOk =
+        clinicSpecialty === "ALL"
+          ? true
+          : (c.specialties ?? []).includes(clinicSpecialty);
       const textOk =
         !q ||
         toLowerSafe(c.name).includes(q) ||
@@ -244,10 +258,11 @@ export function AdminInterface() {
     });
   }, [clinics, clinicQuery, clinicStatus, clinicSpecialty]);
 
-  const { sorted: clinicsSorted, dir: clinicDir, flip: flipClinicSort } = useSort(
-    clinicsFiltered,
-    (c) => toLowerSafe(c.name),
-  );
+  const {
+    sorted: clinicsSorted,
+    dir: clinicDir,
+    flip: flipClinicSort,
+  } = useSort(clinicsFiltered, (c) => toLowerSafe(c.name));
 
   const clinicPages = Math.max(1, Math.ceil(clinicsSorted.length / PAGE_SIZE));
   const clinicsPageData = paginate(clinicsSorted, clinicPage, PAGE_SIZE);
@@ -260,9 +275,14 @@ export function AdminInterface() {
   const postsFiltered = useMemo(() => {
     const q = postQuery.trim().toLowerCase();
     return (posts ?? []).filter((p) => {
-      const sOk = postStatus === "ALL" ? true : (p.status ?? "PENDING").toUpperCase() === postStatus;
+      const sOk =
+        postStatus === "ALL"
+          ? true
+          : (p.status ?? "PENDING").toUpperCase() === postStatus;
       const cOk =
-        postCategory === "ALL" ? true : (p.category ?? "GENERAL").toUpperCase() === postCategory;
+        postCategory === "ALL"
+          ? true
+          : (p.category ?? "GENERAL").toUpperCase() === postCategory;
       const textOk =
         !q ||
         toLowerSafe(p.title).includes(q) ||
@@ -272,10 +292,11 @@ export function AdminInterface() {
     });
   }, [posts, postQuery, postStatus, postCategory]);
 
-  const { sorted: postsSorted, dir: postDir, flip: flipPostSort } = useSort(
-    postsFiltered,
-    (p) => new Date(p.createdAt ?? "").getTime() || 0,
-  );
+  const {
+    sorted: postsSorted,
+    dir: postDir,
+    flip: flipPostSort,
+  } = useSort(postsFiltered, (p) => new Date(p.createdAt ?? "").getTime() || 0);
 
   const postPages = Math.max(1, Math.ceil(postsSorted.length / PAGE_SIZE));
   const postsPageData = paginate(postsSorted, postPage, PAGE_SIZE);
@@ -296,10 +317,11 @@ export function AdminInterface() {
     });
   }, [users, userQuery]);
 
-  const { sorted: usersSorted, dir: userDir, flip: flipUserSort } = useSort(
-    usersFiltered,
-    (u) => toLowerSafe(u?.name) || "",
-  );
+  const {
+    sorted: usersSorted,
+    dir: userDir,
+    flip: flipUserSort,
+  } = useSort(usersFiltered, (u) => toLowerSafe(u?.name) || "");
 
   const userPages = Math.max(1, Math.ceil(usersSorted.length / PAGE_SIZE));
   const usersPageData = paginate(usersSorted, userPage, PAGE_SIZE);
@@ -309,7 +331,10 @@ export function AdminInterface() {
   }, [userQuery]);
 
   /* ===== bulk selection helpers ===== */
-  const toggleSel = (set: React.Dispatch<React.SetStateAction<Set<string>>>, id: string) =>
+  const toggleSel = (
+    set: React.Dispatch<React.SetStateAction<Set<string>>>,
+    id: string,
+  ) =>
     set((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -317,14 +342,20 @@ export function AdminInterface() {
       return next;
     });
 
-  const pageSelectAll = (items: { id: string }[], set: React.Dispatch<React.SetStateAction<Set<string>>>) =>
+  const pageSelectAll = (
+    items: { id: string }[],
+    set: React.Dispatch<React.SetStateAction<Set<string>>>,
+  ) =>
     set((prev) => {
       const next = new Set(prev);
       items.forEach((it) => next.add(it.id));
       return next;
     });
 
-  const pageClearAll = (items: { id: string }[], set: React.Dispatch<React.SetStateAction<Set<string>>>) =>
+  const pageClearAll = (
+    items: { id: string }[],
+    set: React.Dispatch<React.SetStateAction<Set<string>>>,
+  ) =>
     set((prev) => {
       const next = new Set(prev);
       items.forEach((it) => next.delete(it.id));
@@ -342,7 +373,10 @@ export function AdminInterface() {
     await refetchClinics();
   };
   const handleDeleteClinicHard = async (clinicId: string) => {
-    if (!window.confirm("Delete this clinic permanently? This cannot be undone.")) return;
+    if (
+      !window.confirm("Delete this clinic permanently? This cannot be undone.")
+    )
+      return;
     await deleteClinic(clinicId);
     await refetchClinics();
   };
@@ -350,7 +384,9 @@ export function AdminInterface() {
   const bulkApproveClinics = async () => {
     if (selectedClinicIds.size === 0) return;
     await Promise.all(
-      Array.from(selectedClinicIds).map((id) => updateClinic({ id, status: "APPROVED" })),
+      Array.from(selectedClinicIds).map((id) =>
+        updateClinic({ id, status: "APPROVED" }),
+      ),
     );
     setSelectedClinicIds(new Set());
     await refetchClinics();
@@ -358,7 +394,9 @@ export function AdminInterface() {
   const bulkDeleteClinics = async () => {
     if (selectedClinicIds.size === 0) return;
     if (!window.confirm("Delete selected clinics permanently?")) return;
-    await Promise.all(Array.from(selectedClinicIds).map((id) => deleteClinic(id)));
+    await Promise.all(
+      Array.from(selectedClinicIds).map((id) => deleteClinic(id)),
+    );
     setSelectedClinicIds(new Set());
     await refetchClinics();
   };
@@ -382,7 +420,9 @@ export function AdminInterface() {
   const bulkApprovePosts = async () => {
     if (selectedPostIds.size === 0) return;
     await Promise.all(
-      Array.from(selectedPostIds).map((id) => updatePost({ id, status: "APPROVED" })),
+      Array.from(selectedPostIds).map((id) =>
+        updatePost({ id, status: "APPROVED" }),
+      ),
     );
     setSelectedPostIds(new Set());
     await refetchPosts();
@@ -471,8 +511,8 @@ export function AdminInterface() {
       s === "APPROVED"
         ? "bg-green-500/10 text-green-600 border-green-500/20"
         : s === "REJECTED"
-        ? "bg-red-500/10 text-red-600 border-red-500/20"
-        : "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
+          ? "bg-red-500/10 text-red-600 border-red-500/20"
+          : "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
     return (
       <Badge variant="outline" className={`flex items-center gap-1 ${classes}`}>
         <Clock className="h-3 w-3" />
@@ -498,11 +538,26 @@ export function AdminInterface() {
         >
           <svg className="absolute inset-0 h-full w-full">
             <defs>
-              <pattern id="grid-admin-2" width="28" height="28" patternUnits="userSpaceOnUse">
-                <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+              <pattern
+                id="grid-admin-2"
+                width="28"
+                height="28"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 28 0 L 0 0 0 28"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth=".5"
+                />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid-admin-2)" className="text-foreground/20" />
+            <rect
+              width="100%"
+              height="100%"
+              fill="url(#grid-admin-2)"
+              className="text-foreground/20"
+            />
           </svg>
         </div>
         <div className="flex items-center gap-3">
@@ -522,7 +577,9 @@ export function AdminInterface() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Clinics</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Pending Clinics
+            </CardTitle>
             <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -540,7 +597,9 @@ export function AdminInterface() {
         </Card>
         <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Educational Posts</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Educational Posts
+            </CardTitle>
             <BookText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -549,7 +608,9 @@ export function AdminInterface() {
         </Card>
         <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Community Posts</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Community Posts
+            </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -559,7 +620,11 @@ export function AdminInterface() {
       </div>
 
       {/* Tabs with counts */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)} className="space-y-4">
+      <Tabs
+        value={activeTab}
+        onValueChange={(v) => setActiveTab(v as typeof activeTab)}
+        className="space-y-4"
+      >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="clinics">
             Clinics
@@ -664,19 +729,24 @@ export function AdminInterface() {
           {/* Header row: sort + select all */}
           <div className="flex items-center justify-between">
             <div className="text-muted-foreground">
-              Showing <span className="font-medium">{clinicsPageData.length}</span> of{" "}
-              <span className="font-medium">{clinicsSorted.length}</span> clinics
+              Showing{" "}
+              <span className="font-medium">{clinicsPageData.length}</span> of{" "}
+              <span className="font-medium">{clinicsSorted.length}</span>{" "}
+              clinics
             </div>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" onClick={flipClinicSort}>
-                Sort by Name {clinicDir === "asc" ? <ChevronDown /> : <ChevronUp />}
+                Sort by Name{" "}
+                {clinicDir === "asc" ? <ChevronDown /> : <ChevronUp />}
               </Button>
               {clinicsPageData.length > 0 && (
                 <>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => pageSelectAll(clinicsPageData, setSelectedClinicIds)}
+                    onClick={() =>
+                      pageSelectAll(clinicsPageData, setSelectedClinicIds)
+                    }
                   >
                     <CheckSquare className="mr-2 h-4 w-4" />
                     Select page
@@ -684,7 +754,9 @@ export function AdminInterface() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => pageClearAll(clinicsPageData, setSelectedClinicIds)}
+                    onClick={() =>
+                      pageClearAll(clinicsPageData, setSelectedClinicIds)
+                    }
                   >
                     <Square className="mr-2 h-4 w-4" />
                     Clear page
@@ -706,21 +778,33 @@ export function AdminInterface() {
               clinicsPageData.map((clinic) => {
                 const selected = selectedClinicIds.has(clinic.id);
                 return (
-                  <Card key={clinic.id} className={cn("rounded-2xl transition-shadow hover:shadow-lg", selected && "ring-2 ring-primary/30")}>
+                  <Card
+                    key={clinic.id}
+                    className={cn(
+                      "rounded-2xl transition-shadow hover:shadow-lg",
+                      selected && "ring-2 ring-primary/30",
+                    )}
+                  >
                     <CardContent className="space-y-4 p-5">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
                             checked={selected}
-                            onChange={() => toggleSel(setSelectedClinicIds, clinic.id)}
+                            onChange={() =>
+                              toggleSel(setSelectedClinicIds, clinic.id)
+                            }
                             className="h-4 w-4 accent-primary"
                             aria-label="Select clinic"
                           />
                           <div>
-                            <h3 className="text-lg font-semibold">{clinic.name}</h3>
+                            <h3 className="text-lg font-semibold">
+                              {clinic.name}
+                            </h3>
                             {clinic.address && (
-                              <p className="text-sm text-muted-foreground">{clinic.address}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {clinic.address}
+                              </p>
                             )}
                           </div>
                         </div>
@@ -728,10 +812,19 @@ export function AdminInterface() {
                       </div>
 
                       <div className="flex flex-wrap items-center gap-3 text-sm">
-                        {clinic.phone && <Badge variant="outline">{clinic.phone}</Badge>}
-                        {clinic.email && <Badge variant="outline">{clinic.email}</Badge>}
+                        {clinic.phone && (
+                          <Badge variant="outline">{clinic.phone}</Badge>
+                        )}
+                        {clinic.email && (
+                          <Badge variant="outline">{clinic.email}</Badge>
+                        )}
                         {clinic.website && (
-                          <a className="text-sm underline" href={clinic.website} target="_blank" rel="noreferrer">
+                          <a
+                            className="text-sm underline"
+                            href={clinic.website}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
                             Website
                           </a>
                         )}
@@ -740,7 +833,11 @@ export function AdminInterface() {
                       {(clinic.specialties?.length ?? 0) > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {(clinic.specialties ?? []).map((s) => (
-                            <Badge key={s} variant="secondary" className="text-xs">
+                            <Badge
+                              key={s}
+                              variant="secondary"
+                              className="text-xs"
+                            >
                               {s}
                             </Badge>
                           ))}
@@ -749,20 +846,39 @@ export function AdminInterface() {
 
                       <div className="flex flex-wrap gap-2">
                         {(clinic.status ?? "PENDING") !== "APPROVED" && (
-                          <Button size="sm" onClick={() => handleApproveClinic(clinic.id)} className="gap-1">
+                          <Button
+                            size="sm"
+                            onClick={() => handleApproveClinic(clinic.id)}
+                            className="gap-1"
+                          >
                             <CheckCircle className="h-4 w-4" />
                             Approve
                           </Button>
                         )}
-                        <Button size="sm" variant="destructive" onClick={() => handleRejectClinic(clinic.id)} className="gap-1">
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleRejectClinic(clinic.id)}
+                          className="gap-1"
+                        >
                           <XCircle className="h-4 w-4" />
                           Reject
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => openClinicEditor(clinic)} className="gap-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openClinicEditor(clinic)}
+                          className="gap-1"
+                        >
                           <Pencil className="h-4 w-4" />
                           Edit
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDeleteClinicHard(clinic.id)} className="gap-1">
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDeleteClinicHard(clinic.id)}
+                          className="gap-1"
+                        >
                           <Trash2 className="h-4 w-4" />
                           Delete
                         </Button>
@@ -777,7 +893,12 @@ export function AdminInterface() {
           {/* Pagination */}
           {clinicPages > 1 && (
             <div className="flex items-center justify-center gap-2">
-              <Button size="sm" variant="outline" disabled={clinicPage === 1} onClick={() => setClinicPage((p) => Math.max(1, p - 1))}>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={clinicPage === 1}
+                onClick={() => setClinicPage((p) => Math.max(1, p - 1))}
+              >
                 Prev
               </Button>
               <div className="text-sm">
@@ -788,7 +909,9 @@ export function AdminInterface() {
                 size="sm"
                 variant="outline"
                 disabled={clinicPage === clinicPages}
-                onClick={() => setClinicPage((p) => Math.min(clinicPages, p + 1))}
+                onClick={() =>
+                  setClinicPage((p) => Math.min(clinicPages, p + 1))
+                }
               >
                 Next
               </Button>
@@ -826,19 +949,23 @@ export function AdminInterface() {
 
           <div className="flex items-center justify-between">
             <div className="text-muted-foreground">
-              Showing <span className="font-medium">{usersPageData.length}</span> of{" "}
+              Showing{" "}
+              <span className="font-medium">{usersPageData.length}</span> of{" "}
               <span className="font-medium">{usersSorted.length}</span> users
             </div>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" onClick={flipUserSort}>
-                Sort by Name {userDir === "asc" ? <ChevronDown /> : <ChevronUp />}
+                Sort by Name{" "}
+                {userDir === "asc" ? <ChevronDown /> : <ChevronUp />}
               </Button>
               {usersPageData.length > 0 && (
                 <>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => pageSelectAll(usersPageData, setSelectedUserIds)}
+                    onClick={() =>
+                      pageSelectAll(usersPageData, setSelectedUserIds)
+                    }
                   >
                     <CheckSquare className="mr-2 h-4 w-4" />
                     Select page
@@ -846,7 +973,9 @@ export function AdminInterface() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => pageClearAll(usersPageData, setSelectedUserIds)}
+                    onClick={() =>
+                      pageClearAll(usersPageData, setSelectedUserIds)
+                    }
                   >
                     <Square className="mr-2 h-4 w-4" />
                     Clear page
@@ -879,7 +1008,13 @@ export function AdminInterface() {
                 const selected = selectedUserIds.has(user.id);
 
                 return (
-                  <div key={user.id} className={cn("flex items-center justify-between rounded-lg border p-4", selected && "ring-2 ring-primary/30")}>
+                  <div
+                    key={user.id}
+                    className={cn(
+                      "flex items-center justify-between rounded-lg border p-4",
+                      selected && "ring-2 ring-primary/30",
+                    )}
+                  >
                     <div className="flex items-center gap-3">
                       <input
                         type="checkbox"
@@ -889,17 +1024,29 @@ export function AdminInterface() {
                         aria-label="Select user"
                       />
                       <Avatar>
-                        <AvatarImage src={avatarSrc} alt={user?.name ?? "User"} />
+                        <AvatarImage
+                          src={avatarSrc}
+                          alt={user?.name ?? "User"}
+                        />
                         <AvatarFallback>{initials}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="font-medium">{user?.name ?? "Unknown"}</h3>
-                        <p className="text-sm text-muted-foreground">{user?.email ?? "—"}</p>
-                        <p className="text-xs text-muted-foreground">Joined {created || "—"}</p>
+                        <h3 className="font-medium">
+                          {user?.name ?? "Unknown"}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {user?.email ?? "—"}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Joined {created || "—"}
+                        </p>
                       </div>
                     </div>
                     <div>
-                      <Button variant="destructive" onClick={() => handleDeleteUser(user.id)}>
+                      <Button
+                        variant="destructive"
+                        onClick={() => handleDeleteUser(user.id)}
+                      >
                         Delete user
                       </Button>
                     </div>
@@ -911,7 +1058,12 @@ export function AdminInterface() {
 
           {userPages > 1 && (
             <div className="flex items-center justify-center gap-2">
-              <Button size="sm" variant="outline" disabled={userPage === 1} onClick={() => setUserPage((p) => Math.max(1, p - 1))}>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={userPage === 1}
+                onClick={() => setUserPage((p) => Math.max(1, p - 1))}
+              >
                 Prev
               </Button>
               <div className="text-sm">
@@ -987,11 +1139,19 @@ export function AdminInterface() {
                   <RefreshCcw className="mr-2 h-4 w-4" />
                   Reset
                 </Button>
-                <Button variant="default" disabled={selectedPostIds.size === 0} onClick={bulkApprovePosts}>
+                <Button
+                  variant="default"
+                  disabled={selectedPostIds.size === 0}
+                  onClick={bulkApprovePosts}
+                >
                   <CheckCircle className="mr-2 h-4 w-4" />
                   Approve Selected
                 </Button>
-                <Button variant="destructive" disabled={selectedPostIds.size === 0} onClick={bulkDeletePosts}>
+                <Button
+                  variant="destructive"
+                  disabled={selectedPostIds.size === 0}
+                  onClick={bulkDeletePosts}
+                >
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete Selected
                 </Button>
@@ -1001,19 +1161,23 @@ export function AdminInterface() {
 
           <div className="flex items-center justify-between">
             <div className="text-muted-foreground">
-              Showing <span className="font-medium">{postsPageData.length}</span> of{" "}
+              Showing{" "}
+              <span className="font-medium">{postsPageData.length}</span> of{" "}
               <span className="font-medium">{postsSorted.length}</span> posts
             </div>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" onClick={flipPostSort}>
-                Sort by Date {postDir === "asc" ? <ChevronDown /> : <ChevronUp />}
+                Sort by Date{" "}
+                {postDir === "asc" ? <ChevronDown /> : <ChevronUp />}
               </Button>
               {postsPageData.length > 0 && (
                 <>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => pageSelectAll(postsPageData, setSelectedPostIds)}
+                    onClick={() =>
+                      pageSelectAll(postsPageData, setSelectedPostIds)
+                    }
                   >
                     <CheckSquare className="mr-2 h-4 w-4" />
                     Select page
@@ -1021,7 +1185,9 @@ export function AdminInterface() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => pageClearAll(postsPageData, setSelectedPostIds)}
+                    onClick={() =>
+                      pageClearAll(postsPageData, setSelectedPostIds)
+                    }
                   >
                     <Square className="mr-2 h-4 w-4" />
                     Clear page
@@ -1042,7 +1208,13 @@ export function AdminInterface() {
               postsPageData.map((post) => {
                 const selected = selectedPostIds.has(post.id);
                 return (
-                  <Card key={post.id} className={cn("rounded-2xl transition-shadow hover:shadow-lg", selected && "ring-2 ring-primary/30")}>
+                  <Card
+                    key={post.id}
+                    className={cn(
+                      "rounded-2xl transition-shadow hover:shadow-lg",
+                      selected && "ring-2 ring-primary/30",
+                    )}
+                  >
                     <CardContent className="space-y-2 p-5">
                       {/* Row actions */}
                       <div className="flex items-center justify-between">
@@ -1050,36 +1222,63 @@ export function AdminInterface() {
                           <input
                             type="checkbox"
                             checked={selected}
-                            onChange={() => toggleSel(setSelectedPostIds, post.id)}
+                            onChange={() =>
+                              toggleSel(setSelectedPostIds, post.id)
+                            }
                             className="h-4 w-4 accent-primary"
                             aria-label="Select post"
                           />
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline">{(post.category ?? "GENERAL").toString().toUpperCase()}</Badge>
                             <Badge variant="outline">
-                              {(post.status ?? "PENDING").toString().toUpperCase()}
+                              {(post.category ?? "GENERAL")
+                                .toString()
+                                .toUpperCase()}
+                            </Badge>
+                            <Badge variant="outline">
+                              {(post.status ?? "PENDING")
+                                .toString()
+                                .toUpperCase()}
                             </Badge>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          {(post.status ?? "PENDING").toUpperCase() !== "APPROVED" && (
-                            <Button size="sm" onClick={() => handleAcceptPost(post.id)} className="gap-1">
+                          {(post.status ?? "PENDING").toUpperCase() !==
+                            "APPROVED" && (
+                            <Button
+                              size="sm"
+                              onClick={() => handleAcceptPost(post.id)}
+                              className="gap-1"
+                            >
                               <CheckCircle className="h-4 w-4" />
                               Approve
                             </Button>
                           )}
-                          <Button size="sm" variant="outline" onClick={() => openPostEditor(post)} className="gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => openPostEditor(post)}
+                            className="gap-1"
+                          >
                             <Pencil className="h-4 w-4" />
                             Edit
                           </Button>
-                          <Button size="sm" variant="destructive" onClick={() => handleDeletePostHard(post.id)} className="gap-1">
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleDeletePostHard(post.id)}
+                            className="gap-1"
+                          >
                             <Trash2 className="h-4 w-4" />
                             Delete
                           </Button>
                         </div>
                       </div>
 
-                      <PostCard post={post} onReject={handleRejectPost} onApprove={handleAcceptPost} />
+                      <PostCard
+                        post={post}
+                        onReject={handleRejectPost}
+                        onApprove={handleAcceptPost}
+                      />
                     </CardContent>
                   </Card>
                 );
@@ -1089,7 +1288,12 @@ export function AdminInterface() {
 
           {postPages > 1 && (
             <div className="flex items-center justify-center gap-2">
-              <Button size="sm" variant="outline" disabled={postPage === 1} onClick={() => setPostPage((p) => Math.max(1, p - 1))}>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={postPage === 1}
+                onClick={() => setPostPage((p) => Math.max(1, p - 1))}
+              >
                 Prev
               </Button>
               <div className="text-sm">
@@ -1110,41 +1314,75 @@ export function AdminInterface() {
       </Tabs>
 
       {/* ===== Edit Clinic Dialog ===== */}
-      <Dialog open={!!editingClinic} onOpenChange={(open) => !open && setEditingClinic(null)}>
+      <Dialog
+        open={!!editingClinic}
+        onOpenChange={(open) => !open && setEditingClinic(null)}
+      >
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Edit Clinic</DialogTitle>
-            <DialogDescription>Update clinic details and save changes.</DialogDescription>
+            <DialogDescription>
+              Update clinic details and save changes.
+            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3">
             <div>
               <label className="text-sm font-medium">Name</label>
-              <Input value={clinicForm.name} onChange={(e) => setClinicForm((f) => ({ ...f, name: e.target.value }))} />
+              <Input
+                value={clinicForm.name}
+                onChange={(e) =>
+                  setClinicForm((f) => ({ ...f, name: e.target.value }))
+                }
+              />
             </div>
             <div>
               <label className="text-sm font-medium">Address</label>
-              <Input value={clinicForm.address} onChange={(e) => setClinicForm((f) => ({ ...f, address: e.target.value }))} />
+              <Input
+                value={clinicForm.address}
+                onChange={(e) =>
+                  setClinicForm((f) => ({ ...f, address: e.target.value }))
+                }
+              />
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div>
                 <label className="text-sm font-medium">Phone</label>
-                <Input value={clinicForm.phone} onChange={(e) => setClinicForm((f) => ({ ...f, phone: e.target.value }))} />
+                <Input
+                  value={clinicForm.phone}
+                  onChange={(e) =>
+                    setClinicForm((f) => ({ ...f, phone: e.target.value }))
+                  }
+                />
               </div>
               <div>
                 <label className="text-sm font-medium">Email</label>
-                <Input value={clinicForm.email} onChange={(e) => setClinicForm((f) => ({ ...f, email: e.target.value }))} />
+                <Input
+                  value={clinicForm.email}
+                  onChange={(e) =>
+                    setClinicForm((f) => ({ ...f, email: e.target.value }))
+                  }
+                />
               </div>
             </div>
             <div>
               <label className="text-sm font-medium">Website</label>
-              <Input value={clinicForm.website} onChange={(e) => setClinicForm((f) => ({ ...f, website: e.target.value }))} />
+              <Input
+                value={clinicForm.website}
+                onChange={(e) =>
+                  setClinicForm((f) => ({ ...f, website: e.target.value }))
+                }
+              />
             </div>
             <div>
-              <label className="text-sm font-medium">Specialties (comma-separated)</label>
+              <label className="text-sm font-medium">
+                Specialties (comma-separated)
+              </label>
               <Textarea
                 value={clinicForm.specialties}
-                onChange={(e) => setClinicForm((f) => ({ ...f, specialties: e.target.value }))}
+                onChange={(e) =>
+                  setClinicForm((f) => ({ ...f, specialties: e.target.value }))
+                }
                 className="min-h-20"
               />
             </div>
@@ -1154,7 +1392,10 @@ export function AdminInterface() {
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                 value={clinicForm.status}
                 onChange={(e) =>
-                  setClinicForm((f) => ({ ...f, status: e.target.value as (typeof STATUS_OPTIONS)[number] }))
+                  setClinicForm((f) => ({
+                    ...f,
+                    status: e.target.value as (typeof STATUS_OPTIONS)[number],
+                  }))
                 }
               >
                 {STATUS_OPTIONS.map((s) => (
@@ -1176,23 +1417,35 @@ export function AdminInterface() {
       </Dialog>
 
       {/* ===== Edit Post Dialog ===== */}
-      <Dialog open={!!editingPost} onOpenChange={(open) => !open && setEditingPost(null)}>
+      <Dialog
+        open={!!editingPost}
+        onOpenChange={(open) => !open && setEditingPost(null)}
+      >
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Edit Post</DialogTitle>
-            <DialogDescription>Modify post content, category, or status.</DialogDescription>
+            <DialogDescription>
+              Modify post content, category, or status.
+            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3">
             <div>
               <label className="text-sm font-medium">Title</label>
-              <Input value={postForm.title} onChange={(e) => setPostForm((f) => ({ ...f, title: e.target.value }))} />
+              <Input
+                value={postForm.title}
+                onChange={(e) =>
+                  setPostForm((f) => ({ ...f, title: e.target.value }))
+                }
+              />
             </div>
             <div>
               <label className="text-sm font-medium">Content</label>
               <Textarea
                 value={postForm.content}
-                onChange={(e) => setPostForm((f) => ({ ...f, content: e.target.value }))}
+                onChange={(e) =>
+                  setPostForm((f) => ({ ...f, content: e.target.value }))
+                }
                 className="min-h-28"
               />
             </div>
@@ -1203,7 +1456,12 @@ export function AdminInterface() {
                 <select
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                   value={postForm.category}
-                  onChange={(e) => setPostForm((f) => ({ ...f, category: e.target.value.toUpperCase() }))}
+                  onChange={(e) =>
+                    setPostForm((f) => ({
+                      ...f,
+                      category: e.target.value.toUpperCase(),
+                    }))
+                  }
                 >
                   {CATEGORY_OPTIONS.map((c) => (
                     <option key={c} value={c}>
@@ -1217,7 +1475,12 @@ export function AdminInterface() {
                 <select
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                   value={postForm.status}
-                  onChange={(e) => setPostForm((f) => ({ ...f, status: e.target.value.toUpperCase() }))}
+                  onChange={(e) =>
+                    setPostForm((f) => ({
+                      ...f,
+                      status: e.target.value.toUpperCase(),
+                    }))
+                  }
                 >
                   {STATUS_OPTIONS.map((s) => (
                     <option key={s} value={s}>

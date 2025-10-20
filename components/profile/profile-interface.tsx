@@ -70,7 +70,8 @@ export function ProfileInterface() {
 
   const avatarSrc = useMemo(() => {
     if (previewImage) return previewImage;
-    if (profileData?.profilePicture) return `${FILES_URL}${profileData.profilePicture}`;
+    if (profileData?.profilePicture)
+      return `${FILES_URL}${profileData.profilePicture}`;
     return "/placeholder.svg";
   }, [previewImage, profileData]);
 
@@ -78,14 +79,20 @@ export function ProfileInterface() {
     const n = (name ?? "").trim();
     if (!n) return "U";
     const parts = n.split(/\s+/);
-    return (parts[0]?.[0] ?? "U").toUpperCase() + (parts[1]?.[0] ?? "").toUpperCase();
+    return (
+      (parts[0]?.[0] ?? "U").toUpperCase() + (parts[1]?.[0] ?? "").toUpperCase()
+    );
   };
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "";
     const d = new Date(dateString);
     if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    return d.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,7 +222,9 @@ export function ProfileInterface() {
           </Avatar>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-semibold leading-none">{profileData.name}</h2>
+              <h2 className="text-base font-semibold leading-none">
+                {profileData.name}
+              </h2>
               <Badge
                 variant={profileData.role === "ADMIN" ? "default" : "secondary"}
                 className="flex items-center gap-1"
@@ -230,7 +239,11 @@ export function ProfileInterface() {
 
         <div className="flex items-center gap-2">
           {!isEditing ? (
-            <Button variant="outline" onClick={() => setIsEditing(true)} className="rounded-xl">
+            <Button
+              variant="outline"
+              onClick={() => setIsEditing(true)}
+              className="rounded-xl"
+            >
               <Edit className="mr-2 h-4 w-4" />
               Edit
             </Button>
@@ -282,14 +295,21 @@ export function ProfileInterface() {
           <CardContent className="space-y-6">
             <div className="flex items-center gap-4">
               <Avatar className="h-20 w-20">
-                <AvatarImage src={avatarSrc} alt={profileData.name ?? "Profile"} />
-                <AvatarFallback className="text-lg">{getInitials(profileData.name)}</AvatarFallback>
+                <AvatarImage
+                  src={avatarSrc}
+                  alt={profileData.name ?? "Profile"}
+                />
+                <AvatarFallback className="text-lg">
+                  {getInitials(profileData.name)}
+                </AvatarFallback>
               </Avatar>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-medium">{profileData.name}</h3>
                   <Badge
-                    variant={profileData.role === "ADMIN" ? "default" : "secondary"}
+                    variant={
+                      profileData.role === "ADMIN" ? "default" : "secondary"
+                    }
                     className="flex items-center gap-1"
                   >
                     <Shield className="h-3 w-3" />
@@ -307,11 +327,15 @@ export function ProfileInterface() {
             <div className="grid gap-4 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Member since</span>
-                <span className="font-medium">{formatDate(profileData.createdAt)}</span>
+                <span className="font-medium">
+                  {formatDate(profileData.createdAt)}
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Last updated</span>
-                <span className="font-medium">{formatDate(profileData.updatedAt)}</span>
+                <span className="font-medium">
+                  {formatDate(profileData.updatedAt)}
+                </span>
               </div>
             </div>
 
@@ -365,7 +389,10 @@ export function ProfileInterface() {
                   id="name"
                   value={profileData.name ?? ""}
                   onChange={(e) =>
-                    setProfileData((prev) => ({ ...(prev as User), name: e.target.value }))
+                    setProfileData((prev) => ({
+                      ...(prev as User),
+                      name: e.target.value,
+                    }))
                   }
                   disabled={!isEditing || !!saving}
                 />
@@ -380,7 +407,10 @@ export function ProfileInterface() {
                     type="email"
                     value={profileData.email ?? ""}
                     onChange={(e) =>
-                      setProfileData((prev) => ({ ...(prev as User), email: e.target.value }))
+                      setProfileData((prev) => ({
+                        ...(prev as User),
+                        email: e.target.value,
+                      }))
                     }
                     disabled={!isEditing || !!saving}
                     className="pl-10"
@@ -415,10 +445,16 @@ export function ProfileInterface() {
                     className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground"
                     onClick={() => setShowPassword((s) => !s)}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground">Leave blank to keep current password.</p>
+                <p className="text-xs text-muted-foreground">
+                  Leave blank to keep current password.
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -432,8 +468,12 @@ export function ProfileInterface() {
                   disabled={!isEditing || !!saving}
                 />
                 {password && (
-                  <p className={`text-sm ${matchPassword ? "text-emerald-600" : "text-red-500"}`}>
-                    {matchPassword ? "✓ Passwords match" : "❌ Passwords do not match"}
+                  <p
+                    className={`text-sm ${matchPassword ? "text-emerald-600" : "text-red-500"}`}
+                  >
+                    {matchPassword
+                      ? "✓ Passwords match"
+                      : "❌ Passwords do not match"}
                   </p>
                 )}
               </div>
@@ -451,14 +491,24 @@ export function ProfileInterface() {
                 <Label htmlFor="createdAt">Member since</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input id="createdAt" value={formatDate(profileData.createdAt)} disabled className="pl-10 bg-muted" />
+                  <Input
+                    id="createdAt"
+                    value={formatDate(profileData.createdAt)}
+                    disabled
+                    className="pl-10 bg-muted"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="updatedAt">Last updated</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input id="updatedAt" value={formatDate(profileData.updatedAt)} disabled className="pl-10 bg-muted" />
+                  <Input
+                    id="updatedAt"
+                    value={formatDate(profileData.updatedAt)}
+                    disabled
+                    className="pl-10 bg-muted"
+                  />
                 </div>
               </div>
             </CardContent>

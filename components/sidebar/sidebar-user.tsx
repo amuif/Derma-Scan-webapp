@@ -4,11 +4,7 @@ import { useRouter } from "next/navigation";
 import { FILES_URL } from "@/constants/backend-url";
 import { useCurrentUserQuery, useLogoutMutation } from "@/hooks/useAuth";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +16,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { SidebarMenu, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import {
+  SidebarMenu,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 
 import {
@@ -46,7 +46,7 @@ export function NavUser() {
   const router = useRouter();
 
   const effectiveTheme = useMemo(
-    () => (theme === "system" ? systemTheme ?? "light" : theme),
+    () => (theme === "system" ? (systemTheme ?? "light") : theme),
     [theme, systemTheme],
   );
 
@@ -58,7 +58,9 @@ export function NavUser() {
       .join("")
       .toUpperCase() || "U";
 
-  const avatarSrc = user?.profilePicture ? `${FILES_URL}${user.profilePicture}` : undefined;
+  const avatarSrc = user?.profilePicture
+    ? `${FILES_URL}${user.profilePicture}`
+    : undefined;
 
   async function handleLogOut() {
     await logout();
@@ -105,11 +107,26 @@ export function NavUser() {
               >
                 <svg className="absolute inset-0 h-full w-full">
                   <defs>
-                    <pattern id="grid-acc" width="28" height="28" patternUnits="userSpaceOnUse">
-                      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+                    <pattern
+                      id="grid-acc"
+                      width="28"
+                      height="28"
+                      patternUnits="userSpaceOnUse"
+                    >
+                      <path
+                        d="M 28 0 L 0 0 0 28"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth=".5"
+                      />
                     </pattern>
                   </defs>
-                  <rect width="100%" height="100%" fill="url(#grid-acc)" className="text-foreground/15" />
+                  <rect
+                    width="100%"
+                    height="100%"
+                    fill="url(#grid-acc)"
+                    className="text-foreground/15"
+                  />
                 </svg>
               </div>
 
@@ -117,7 +134,9 @@ export function NavUser() {
                 <div className="relative">
                   <Avatar className="h-9 w-9 rounded-lg ring-1 ring-border">
                     <AvatarImage src={avatarSrc} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+                    <AvatarFallback className="rounded-lg">
+                      {initials}
+                    </AvatarFallback>
                   </Avatar>
                   {/* presence dot */}
                   <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-background" />
@@ -125,12 +144,19 @@ export function NavUser() {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="truncate text-sm font-semibold">{user.name}</span>
-                    <Badge variant="outline" className={`h-5 shrink-0 border ${roleTone}`}>
+                    <span className="truncate text-sm font-semibold">
+                      {user.name}
+                    </span>
+                    <Badge
+                      variant="outline"
+                      className={`h-5 shrink-0 border ${roleTone}`}
+                    >
                       {user.role}
                     </Badge>
                   </div>
-                  <div className="truncate text-xs text-muted-foreground">{user.email}</div>
+                  <div className="truncate text-xs text-muted-foreground">
+                    {user.email}
+                  </div>
                 </div>
 
                 <ChevronRight className="ml-auto size-4 text-muted-foreground transition group-data-[state=open]:rotate-90" />
@@ -151,11 +177,17 @@ export function NavUser() {
                 <div className="flex items-center gap-3">
                   <Avatar className="h-9 w-9 rounded-lg ring-1 ring-border">
                     <AvatarImage src={avatarSrc} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+                    <AvatarFallback className="rounded-lg">
+                      {initials}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold">{user.name}</div>
-                    <div className="truncate text-xs text-muted-foreground">{user.email}</div>
+                    <div className="truncate text-sm font-semibold">
+                      {user.name}
+                    </div>
+                    <div className="truncate text-xs text-muted-foreground">
+                      {user.email}
+                    </div>
                   </div>
                 </div>
                 <div className="mt-3 flex items-center gap-2">
@@ -224,7 +256,10 @@ export function NavUser() {
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem onClick={handleLogOut} className="text-destructive focus:text-destructive">
+            <DropdownMenuItem
+              onClick={handleLogOut}
+              className="text-destructive focus:text-destructive"
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
@@ -277,9 +312,15 @@ function ThemeToggleCompact({
       className="flex h-20 flex-col items-center justify-center gap-2 rounded-xl border bg-background/60 hover:bg-muted/60"
     >
       <div className="grid h-8 w-8 place-items-center rounded-md border bg-background">
-        {isDark ? <Sun className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
+        {isDark ? (
+          <Sun className="h-4 w-4" />
+        ) : (
+          <MoonStar className="h-4 w-4" />
+        )}
       </div>
-      <span className="text-xs font-medium">{isDark ? "Light" : "Dark"} mode</span>
+      <span className="text-xs font-medium">
+        {isDark ? "Light" : "Dark"} mode
+      </span>
     </Button>
   );
 }

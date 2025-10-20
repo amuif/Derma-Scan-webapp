@@ -72,7 +72,7 @@ function isScanConditionArray(arr: unknown[]): arr is ScanCondition[] {
     (x) =>
       typeof x === "object" &&
       x !== null &&
-      ("condition" in (x as any) || "id" in (x as any))
+      ("condition" in (x as any) || "id" in (x as any)),
   );
 }
 
@@ -87,7 +87,7 @@ function normalizeConditions(conds: Scan["conditions"]): string[] {
         (c) =>
           (c as any)?.condition?.name ??
           (c as any)?.conditionName ??
-          (typeof c === "string" ? c : undefined)
+          (typeof c === "string" ? c : undefined),
       )
       .filter((s): s is string => !!s && s.trim().length > 0);
 
@@ -142,7 +142,9 @@ export function ScanResults({
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight">Analysis Results</h2>
+            <h2 className="text-2xl font-bold tracking-tight">
+              Analysis Results
+            </h2>
             <p className="text-sm text-muted-foreground">
               AI-powered skin condition evaluation and guidance
             </p>
@@ -191,7 +193,9 @@ export function ScanResults({
                   : "No conditions detected"}
               </CardTitle>
               {result.notes && (
-                <CardDescription className="mt-1">{result.notes}</CardDescription>
+                <CardDescription className="mt-1">
+                  {result.notes}
+                </CardDescription>
               )}
             </div>
 
@@ -199,7 +203,7 @@ export function ScanResults({
               variant="outline"
               className={cls(
                 "flex items-center gap-1 rounded-full px-3 py-1",
-                tone.chip
+                tone.chip,
               )}
             >
               <RiskIcon className="mr-1 h-3.5 w-3.5" />
@@ -220,7 +224,7 @@ export function ScanResults({
               <div
                 className={cls(
                   "pointer-events-none absolute left-0 top-0 h-2 rounded-[inherit]",
-                  tone.bar
+                  tone.bar,
                 )}
                 style={{ width: `${confidencePct}%` }}
               />
@@ -266,18 +270,21 @@ export function ScanResults({
                 <>
                   <li className="flex items-start gap-2">
                     <Info className="mt-0.5 h-4 w-4 text-amber-500" />
-                    Consider scheduling a consultation to confirm and discuss treatment.
+                    Consider scheduling a consultation to confirm and discuss
+                    treatment.
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="mt-0.5 h-4 w-4 text-emerald-500" />
-                    Monitor changes; if it evolves, seek medical attention sooner.
+                    Monitor changes; if it evolves, seek medical attention
+                    sooner.
                   </li>
                 </>
               ) : (
                 <>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="mt-0.5 h-4 w-4 text-emerald-500" />
-                    Low risk detected. Keep monitoring and practice sun protection.
+                    Low risk detected. Keep monitoring and practice sun
+                    protection.
                   </li>
                   <li className="flex items-start gap-2">
                     <Info className="mt-0.5 h-4 w-4 text-amber-500" />
@@ -314,7 +321,8 @@ export function ScanResults({
           </CardHeader>
           <CardContent>
             <p className="mb-4 text-sm text-muted-foreground">
-              Explore our trusted network for professional consultation and follow-up care.
+              Explore our trusted network for professional consultation and
+              follow-up care.
             </p>
             <Button asChild className="w-full rounded-xl">
               <Link href="/clinics">View Trusted Clinics</Link>
@@ -332,7 +340,8 @@ export function ScanResults({
           </CardHeader>
           <CardFooter className="flex-col items-start justify-between">
             <p className="mb-4 text-sm text-muted-foreground">
-              Browse posts, discover shared experiences, and help raise awareness.
+              Browse posts, discover shared experiences, and help raise
+              awareness.
             </p>
             <Button
               asChild

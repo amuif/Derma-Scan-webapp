@@ -50,11 +50,18 @@ function formatDate(dateString?: string) {
   if (!dateString) return "Unknown";
   const date = new Date(dateString);
   const now = new Date();
-  const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+  const diffInHours = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60 * 60),
+  );
   if (diffInHours < 1) return "Just now";
-  if (diffInHours < 24) return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
+  if (diffInHours < 24)
+    return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
   if (diffInHours < 48) return "Yesterday";
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function getCategoryColor(category: string) {
@@ -142,10 +149,14 @@ export function CommunityInterface() {
       );
     }
     if (filterCategory !== "all") {
-      items = items.filter((p) => (p?.category || "").toLowerCase() === filterCategory);
+      items = items.filter(
+        (p) => (p?.category || "").toLowerCase() === filterCategory,
+      );
     }
     if (filterStatus !== "all") {
-      items = items.filter((p) => (p?.status || "").toUpperCase() === filterStatus.toUpperCase());
+      items = items.filter(
+        (p) => (p?.status || "").toUpperCase() === filterStatus.toUpperCase(),
+      );
     }
     return items;
   }, [communityPosts, query, filterCategory, filterStatus]);
@@ -196,9 +207,12 @@ export function CommunityInterface() {
               <Users className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">Community & Posts</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                Community & Posts
+              </h1>
               <p className="text-sm text-muted-foreground">
-                Track your progress and connect with others on their skin health journey.
+                Track your progress and connect with others on their skin health
+                journey.
               </p>
             </div>
           </div>
@@ -222,9 +236,12 @@ export function CommunityInterface() {
               <Users className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">Community & Posts</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                Community & Posts
+              </h1>
               <p className="text-sm text-muted-foreground">
-                Track your progress and connect with others on their skin health journey.
+                Track your progress and connect with others on their skin health
+                journey.
               </p>
             </div>
           </div>
@@ -250,11 +267,26 @@ export function CommunityInterface() {
         >
           <svg className="absolute inset-0 h-full w-full">
             <defs>
-              <pattern id="grid-comm-ui" width="28" height="28" patternUnits="userSpaceOnUse">
-                <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+              <pattern
+                id="grid-comm-ui"
+                width="28"
+                height="28"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 28 0 L 0 0 0 28"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth=".5"
+                />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid-comm-ui)" className="text-foreground/20" />
+            <rect
+              width="100%"
+              height="100%"
+              fill="url(#grid-comm-ui)"
+              className="text-foreground/20"
+            />
           </svg>
         </div>
 
@@ -263,9 +295,12 @@ export function CommunityInterface() {
             <Users className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Community & Posts</h1>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Community & Posts
+            </h1>
             <p className="text-sm text-muted-foreground">
-              Track your progress and connect with others on their skin health journey.
+              Track your progress and connect with others on their skin health
+              journey.
             </p>
           </div>
         </div>
@@ -290,7 +325,9 @@ export function CommunityInterface() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Posts</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Total Posts
+                    </p>
                     <p className="text-2xl font-bold">{totals.mine}</p>
                   </div>
                   <History className="h-8 w-8 text-primary" />
@@ -302,7 +339,9 @@ export function CommunityInterface() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Days Tracked since</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Days Tracked since
+                    </p>
                     <p className="text-2xl font-bold">{totals.since}</p>
                   </div>
                   <Calendar className="h-8 w-8 text-blue-500" />
@@ -314,7 +353,9 @@ export function CommunityInterface() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Community Posts</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Community Posts
+                    </p>
                     <p className="text-2xl font-bold">{totals.community}</p>
                   </div>
                   <Users className="h-8 w-8 text-emerald-500" />
@@ -342,21 +383,34 @@ export function CommunityInterface() {
                           <div>
                             <h4 className="font-semibold">{post.title}</h4>
                             <p className="text-sm text-muted-foreground">
-                              {new Date(post.createdAt).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
+                              {new Date(post.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                },
+                              )}
                             </p>
                           </div>
-                          <div className="text-sm text-muted-foreground">By {post.author?.name}</div>
+                          <div className="text-sm text-muted-foreground">
+                            By {post.author?.name}
+                          </div>
                         </div>
-                        <p className="mb-3 text-sm text-muted-foreground">{post.content}</p>
+                        <p className="mb-3 text-sm text-muted-foreground">
+                          {post.content}
+                        </p>
                         <div className="flex flex-wrap gap-2">
-                          <Badge variant="outline" className={getCategoryColor(post.category)}>
+                          <Badge
+                            variant="outline"
+                            className={getCategoryColor(post.category)}
+                          >
                             {post.category}
                           </Badge>
-                          <Badge variant="outline" className={getStatusColor(post.status)}>
+                          <Badge
+                            variant="outline"
+                            className={getStatusColor(post.status)}
+                          >
                             {post.status}
                           </Badge>
                         </div>
@@ -396,12 +450,19 @@ export function CommunityInterface() {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" size="icon" className="hidden sm:inline-flex">
+              <Button
+                variant="outline"
+                size="icon"
+                className="hidden sm:inline-flex"
+              >
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
 
-            <Button onClick={() => setShowComposer((s) => !s)} className="self-end sm:self-auto">
+            <Button
+              onClick={() => setShowComposer((s) => !s)}
+              className="self-end sm:self-auto"
+            >
               <Plus className="mr-2 h-4 w-4" />
               {showComposer ? "Close" : "Add Post"}
             </Button>
@@ -427,7 +488,10 @@ export function CommunityInterface() {
 
                       <div className="space-y-2">
                         <Label>Select Category</Label>
-                        <Select value={newPostCatagory} onValueChange={setNewPostCatagory}>
+                        <Select
+                          value={newPostCatagory}
+                          onValueChange={setNewPostCatagory}
+                        >
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Category" />
                           </SelectTrigger>
@@ -455,7 +519,10 @@ export function CommunityInterface() {
                     <div className="flex items-center justify-between">
                       <div className="flex gap-2">
                         {newPostCatagory ? (
-                          <Badge variant="outline" className={getCategoryColor(newPostCatagory)}>
+                          <Badge
+                            variant="outline"
+                            className={getCategoryColor(newPostCatagory)}
+                          >
                             {newPostCatagory}
                           </Badge>
                         ) : (
@@ -463,7 +530,9 @@ export function CommunityInterface() {
                         )}
                       </div>
                       <Button
-                        disabled={!newPost.trim() || !newPostTitle.trim() || loading}
+                        disabled={
+                          !newPost.trim() || !newPostTitle.trim() || loading
+                        }
                         onClick={handleCreatePost}
                       >
                         {loading ? "Posting…" : "Post"}
@@ -499,14 +568,24 @@ export function CommunityInterface() {
                       <div className="flex-1 space-y-3">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="font-semibold">{post.author?.name}</span>
-                            <Badge variant="outline" className={getCategoryColor(post.category)}>
+                            <span className="font-semibold">
+                              {post.author?.name}
+                            </span>
+                            <Badge
+                              variant="outline"
+                              className={getCategoryColor(post.category)}
+                            >
                               {post.category}
                             </Badge>
-                            <Badge variant="outline" className={getStatusColor(post.status)}>
+                            <Badge
+                              variant="outline"
+                              className={getStatusColor(post.status)}
+                            >
                               {post.status}
                             </Badge>
-                            <span className="text-sm text-muted-foreground">•</span>
+                            <span className="text-sm text-muted-foreground">
+                              •
+                            </span>
                             <span className="flex items-center gap-1 text-sm text-muted-foreground">
                               <Clock className="h-3 w-3" />
                               {formatDate(post.createdAt)}
@@ -525,8 +604,12 @@ export function CommunityInterface() {
                         </div>
 
                         <div>
-                          <h3 className="mb-2 text-lg font-semibold">{post.title}</h3>
-                          <p className="text-sm leading-relaxed">{post.content}</p>
+                          <h3 className="mb-2 text-lg font-semibold">
+                            {post.title}
+                          </h3>
+                          <p className="text-sm leading-relaxed">
+                            {post.content}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -541,4 +624,11 @@ export function CommunityInterface() {
   );
 }
 
-export const Catagory = ["Tips", "Prevention", "Awareness", "Treatment", "Support", "General"];
+export const Catagory = [
+  "Tips",
+  "Prevention",
+  "Awareness",
+  "Treatment",
+  "Support",
+  "General",
+];

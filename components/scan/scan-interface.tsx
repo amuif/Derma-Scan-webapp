@@ -86,16 +86,20 @@ export function ScanInterface() {
   const [analysisProgress, setAnalysisProgress] = useState(0);
 
   const [isSkin, setIsSkin] = useState<boolean | null>(null);
-  const [imageQuality, setImageQuality] = useState<"Good" | "Poor" | null>(null);
+  const [imageQuality, setImageQuality] = useState<"Good" | "Poor" | null>(
+    null,
+  );
 
   const [results, setResults] = useState<Scan | null>(null);
-  const [textResults, setTextResults] = useState<TextAnalysisResult | null>(null);
+  const [textResults, setTextResults] = useState<TextAnalysisResult | null>(
+    null,
+  );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const compressionOptions = useMemo(
     () => ({ maxSizeMB: 4, maxWidthOrHeight: 1920, useWebWorker: true }),
-    []
+    [],
   );
 
   /* -------- Progress animation while analyzing (just UX sugar) -------- */
@@ -128,7 +132,7 @@ export function ScanInterface() {
 
           const checked = await checkImage(compressedFile);
           const nothingFound =
-            checked?.message === "No skin condition detected." ||
+            checked?.message === "No skin condition detected" ||
             checked?.conditions?.length === 0;
 
           setIsSkin(!nothingFound);
@@ -139,7 +143,7 @@ export function ScanInterface() {
         toast.error("Could not process image. Try a different photo.");
       }
     },
-    [checkImage, compressionOptions]
+    [checkImage, compressionOptions],
   );
 
   const handleImageUpload = useCallback(
@@ -152,7 +156,7 @@ export function ScanInterface() {
       }
       void processAndPreview(file);
     },
-    [processAndPreview]
+    [processAndPreview],
   );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -170,7 +174,7 @@ export function ScanInterface() {
       }
       void processAndPreview(file);
     },
-    [processAndPreview]
+    [processAndPreview],
   );
 
   const clearImage = useCallback(() => {
@@ -192,15 +196,22 @@ export function ScanInterface() {
         // TEXT ANALYSIS
         const response = await UploadText({ symptoms, consent: "false" });
         const { id } = response;
-        const { conditions, risk_level, confidence, guidance } = response.analysis;
+        const { conditions, risk_level, confidence, guidance } =
+          response.analysis;
 
         const mapped: TextAnalysisResult = {
           id,
           conditions:
-            conditions?.map((c: string) => ({ name: c, description: "" })) ?? [],
+            conditions?.map((c: string) => ({ name: c, description: "" })) ??
+            [],
           risk_level: risk_level || "Unknown",
           confidence: confidence || 0,
-          guidance: [{ message: guidance || "No specific guidance available", reason: "" }],
+          guidance: [
+            {
+              message: guidance || "No specific guidance available",
+              reason: "",
+            },
+          ],
         };
 
         setTextResults(mapped);
@@ -298,11 +309,26 @@ export function ScanInterface() {
         >
           <svg className="absolute inset-0 h-full w-full">
             <defs>
-              <pattern id="grid-scan" width="28" height="28" patternUnits="userSpaceOnUse">
-                <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+              <pattern
+                id="grid-scan"
+                width="28"
+                height="28"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 28 0 L 0 0 0 28"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth=".5"
+                />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid-scan)" className="text-foreground/20" />
+            <rect
+              width="100%"
+              height="100%"
+              fill="url(#grid-scan)"
+              className="text-foreground/20"
+            />
           </svg>
         </div>
 
@@ -313,10 +339,12 @@ export function ScanInterface() {
             </div>
             <div>
               <h2 className="text-xl font-semibold md:text-2xl tracking-tight">
-                Advanced skin condition detection with <span className="text-primary">AI precision</span>
+                Advanced skin condition detection with{" "}
+                <span className="text-primary">AI precision</span>
               </h2>
               <p className="text-sm text-muted-foreground">
-                Upload a clear photo or describe symptoms. Get risk, AI confidence, and guidance.
+                Upload a clear photo or describe symptoms. Get risk, AI
+                confidence, and guidance.
               </p>
             </div>
           </div>
@@ -345,7 +373,8 @@ export function ScanInterface() {
                   Upload Skin Image
                 </CardTitle>
                 <CardDescription>
-                  Drop a clear, well-lit photo of the affected area for AI analysis.
+                  Drop a clear, well-lit photo of the affected area for AI
+                  analysis.
                 </CardDescription>
               </CardHeader>
 
@@ -354,19 +383,23 @@ export function ScanInterface() {
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") fileInputRef.current?.click();
+                    if (e.key === "Enter" || e.key === " ")
+                      fileInputRef.current?.click();
                   }}
                   className={clsx(
                     "relative overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition-colors cursor-pointer",
                     "bg-gradient-to-br from-background to-background/60 hover:border-primary/50",
-                    selectedImage ? "border-border" : "border-border/70"
+                    selectedImage ? "border-border" : "border-border/70",
                   )}
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {/* Glow ring */}
-                  <div aria-hidden className="pointer-events-none absolute -inset-1 -z-10 rounded-3xl opacity-30 blur-2xl" />
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-1 -z-10 rounded-3xl opacity-30 blur-2xl"
+                  />
 
                   {selectedImage ? (
                     <div className="mx-auto max-w-[640px] space-y-4">
@@ -399,7 +432,10 @@ export function ScanInterface() {
 
                       <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
                         <Badge variant="outline" className="rounded-full">
-                          {imageFile ? (imageFile.size / 1024 / 1024).toFixed(1) : "0.0"} MB
+                          {imageFile
+                            ? (imageFile.size / 1024 / 1024).toFixed(1)
+                            : "0.0"}{" "}
+                          MB
                         </Badge>
                         <Badge variant="outline" className="rounded-full">
                           {imageFile?.type ?? "image/*"}
@@ -410,8 +446,12 @@ export function ScanInterface() {
                     <div className="space-y-4">
                       <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
                       <div>
-                        <p className="text-lg font-medium">Drop your image here or click to browse</p>
-                        <p className="text-sm text-muted-foreground">Supports JPG, PNG up to ~5MB</p>
+                        <p className="text-lg font-medium">
+                          Drop your image here or click to browse
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Supports JPG, PNG up to ~5MB
+                        </p>
                       </div>
                     </div>
                   )}
@@ -432,7 +472,9 @@ export function ScanInterface() {
               <Card className="rounded-2xl">
                 <CardHeader>
                   <CardTitle className="text-base">Pre-check</CardTitle>
-                  <CardDescription>Image quality & skin detection</CardDescription>
+                  <CardDescription>
+                    Image quality & skin detection
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid gap-3">
@@ -447,12 +489,16 @@ export function ScanInterface() {
                         ) : (
                           <LoaderCircle className="h-5 w-5 animate-spin text-muted-foreground" />
                         )}
-                        <span className="text-sm font-medium">Image Quality</span>
+                        <span className="text-sm font-medium">
+                          Image Quality
+                        </span>
                       </div>
                       <span
                         className={clsx(
                           "rounded-full border px-3 py-1 text-xs",
-                          imageQuality ? QUALITY_COLORS[imageQuality] : "text-muted-foreground border-border"
+                          imageQuality
+                            ? QUALITY_COLORS[imageQuality]
+                            : "text-muted-foreground border-border",
                         )}
                       >
                         {imageQuality ?? "Checking…"}
@@ -468,7 +514,9 @@ export function ScanInterface() {
                         ) : (
                           <CircleX className="h-5 w-5 text-rose-600" />
                         )}
-                        <span className="text-sm font-medium">Skin Detected</span>
+                        <span className="text-sm font-medium">
+                          Skin Detected
+                        </span>
                       </div>
                       <span className="rounded-full border px-3 py-1 text-xs">
                         {isSkin === null ? "Checking…" : isSkin ? "Yes" : "No"}
@@ -480,8 +528,9 @@ export function ScanInterface() {
                     <Alert>
                       <Info className="h-4 w-4" />
                       <AlertDescription>
-                        Ensure good lighting, avoid shadows, keep the camera steady, and capture the
-                        affected area clearly for best results.
+                        Ensure good lighting, avoid shadows, keep the camera
+                        steady, and capture the affected area clearly for best
+                        results.
                       </AlertDescription>
                     </Alert>
                   )}
@@ -497,7 +546,8 @@ export function ScanInterface() {
             <CardHeader>
               <CardTitle>Describe Your Symptoms</CardTitle>
               <CardDescription>
-                Provide details like duration, sensation, location, color changes, etc.
+                Provide details like duration, sensation, location, color
+                changes, etc.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -521,7 +571,9 @@ export function ScanInterface() {
                         variant="secondary"
                         className="cursor-pointer select-none"
                         onClick={() =>
-                          setSymptoms((s) => (s.includes(chip) ? s : (s ? s + ", " : s) + chip))
+                          setSymptoms((s) =>
+                            s.includes(chip) ? s : (s ? s + ", " : s) + chip,
+                          )
                         }
                       >
                         {chip}
@@ -546,8 +598,8 @@ export function ScanInterface() {
               </div>
               <Progress value={analysisProgress} className="w-full" />
               <p className="text-sm text-muted-foreground">
-                Our AI is examining the image and processing your information. This may take a few
-                moments.
+                Our AI is examining the image and processing your information.
+                This may take a few moments.
               </p>
             </div>
           </CardContent>

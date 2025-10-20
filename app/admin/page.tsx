@@ -11,8 +11,7 @@ export default function AdminPage() {
             Manage clinic approvals, users, content, and system analytics
           </p>
         </div> */}
-        <AdminInterface />
-     
+      <AdminInterface />
     </AppLayout>
   );
 }

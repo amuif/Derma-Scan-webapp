@@ -43,7 +43,11 @@ function formatDate(dateLike?: string | Date) {
   if (diffH < 1) return "Just now";
   if (diffH < 24) return `${diffH} hour${diffH === 1 ? "" : "s"} ago`;
   if (diffH < 48) return "Yesterday";
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function riskBadge(riskRaw?: string) {
@@ -126,7 +130,7 @@ export function SelfCommunity() {
       title: "Your Scan History",
       subtitle: "A private timeline of your AI skin analyses.",
     }),
-    []
+    [],
   );
 
   /* ------------------------------- states ------------------------------ */
@@ -139,7 +143,9 @@ export function SelfCommunity() {
               <History className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{header.title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                {header.title}
+              </h1>
               <p className="text-sm text-muted-foreground">{header.subtitle}</p>
             </div>
           </div>
@@ -163,7 +169,9 @@ export function SelfCommunity() {
               <History className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{header.title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                {header.title}
+              </h1>
               <p className="text-sm text-muted-foreground">{header.subtitle}</p>
             </div>
           </div>
@@ -188,7 +196,9 @@ export function SelfCommunity() {
               <History className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{header.title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                {header.title}
+              </h1>
               <p className="text-sm text-muted-foreground">{header.subtitle}</p>
             </div>
           </div>
@@ -213,7 +223,9 @@ export function SelfCommunity() {
               <History className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{header.title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                {header.title}
+              </h1>
               <p className="text-sm text-muted-foreground">{header.subtitle}</p>
             </div>
           </div>
@@ -225,7 +237,8 @@ export function SelfCommunity() {
             <div className="space-y-1">
               <p className="font-medium">No scans yet</p>
               <p className="text-sm text-muted-foreground">
-                Your scans will appear here once you upload an image or submit a symptom description.
+                Your scans will appear here once you upload an image or submit a
+                symptom description.
               </p>
             </div>
           </CardContent>
@@ -245,11 +258,26 @@ export function SelfCommunity() {
         >
           <svg className="absolute inset-0 h-full w-full">
             <defs>
-              <pattern id="grid-self" width="28" height="28" patternUnits="userSpaceOnUse">
-                <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+              <pattern
+                id="grid-self"
+                width="28"
+                height="28"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 28 0 L 0 0 0 28"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth=".5"
+                />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid-self)" className="text-foreground/20" />
+            <rect
+              width="100%"
+              height="100%"
+              fill="url(#grid-self)"
+              className="text-foreground/20"
+            />
           </svg>
         </div>
 
@@ -258,7 +286,9 @@ export function SelfCommunity() {
             <History className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Your Scan History</h1>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Your Scan History
+            </h1>
             <p className="text-sm text-muted-foreground">
               A private timeline of your AI skin analyses.
             </p>
@@ -299,7 +329,10 @@ export function SelfCommunity() {
                       <div className="mt-1">
                         <Badge
                           variant="outline"
-                          className={cn("gap-1 rounded-full border", rb.className)}
+                          className={cn(
+                            "gap-1 rounded-full border",
+                            rb.className,
+                          )}
                         >
                           {rb.Icon ? <rb.Icon className="h-3.5 w-3.5" /> : null}
                           {rb.label}
@@ -326,44 +359,52 @@ export function SelfCommunity() {
                     <div className="space-y-1">
                       <p className="font-medium">Text Analysis</p>
                       <p className="text-sm text-muted-foreground">
-                        {post?.question || "User submitted a symptom description."}
+                        {post?.question ||
+                          "User submitted a symptom description."}
                       </p>
                     </div>
                   </div>
                 )}
 
                 {/* Conditions */}
-                {Array.isArray(post?.conditions) && post.conditions.length > 0 && (
-                  <div className="mt-4 space-y-2">
-                    <h4 className="text-sm font-semibold">Detected Conditions</h4>
-                    <div className="space-y-2">
-                      {post.conditions.map((c, idx: number) => {
-                        const name = c?.condition?.name ?? "Condition";
-                        const conf =
-                          typeof c?.confidence === "number"
-                            ? `${(c.confidence * 100).toFixed(1)}%`
-                            : "—";
-                        return (
-                          <div
-                            key={`${post.id}-cond-${idx}`}
-                            className="flex items-center justify-between rounded-lg border p-3"
-                          >
-                            <span className="text-sm font-medium">{name}</span>
-                            <Badge variant="outline" className="rounded-full">
-                              {conf} confidence
-                            </Badge>
-                          </div>
-                        );
-                      })}
+                {Array.isArray(post?.conditions) &&
+                  post.conditions.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      <h4 className="text-sm font-semibold">
+                        Detected Conditions
+                      </h4>
+                      <div className="space-y-2">
+                        {post.conditions.map((c, idx: number) => {
+                          const name = c?.condition?.name ?? "Condition";
+                          const conf =
+                            typeof c?.confidence === "number"
+                              ? `${(c.confidence * 100).toFixed(1)}%`
+                              : "—";
+                          return (
+                            <div
+                              key={`${post.id}-cond-${idx}`}
+                              className="flex items-center justify-between rounded-lg border p-3"
+                            >
+                              <span className="text-sm font-medium">
+                                {name}
+                              </span>
+                              <Badge variant="outline" className="rounded-full">
+                                {conf} confidence
+                              </Badge>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Notes */}
                 {post?.notes && (
                   <div className="mt-3 space-y-1">
                     <h4 className="text-sm font-semibold">Notes</h4>
-                    <p className="text-sm text-muted-foreground">{post.notes}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {post.notes}
+                    </p>
                   </div>
                 )}
               </CardContent>

@@ -12,7 +12,7 @@ export default function ScanPage() {
             condition analysis.
           </p>
         </div> */}
-        <ScanInterface />
+      <ScanInterface />
     </AppLayout>
   );
 }

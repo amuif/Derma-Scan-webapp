@@ -1,6 +1,15 @@
 "use client";
 
-import { Activity, BookText, History, Home, Users, Hospital, Scan, Shield } from "lucide-react";
+import {
+  Activity,
+  BookText,
+  History,
+  Home,
+  Users,
+  Hospital,
+  Scan,
+  Shield,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCurrentUserQuery } from "@/hooks/useAuth";
@@ -49,11 +58,26 @@ export function AppSidebar() {
           >
             <svg className="absolute inset-0 h-full w-full">
               <defs>
-                <pattern id="grid-sb" width="28" height="28" patternUnits="userSpaceOnUse">
-                  <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+                <pattern
+                  id="grid-sb"
+                  width="28"
+                  height="28"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 28 0 L 0 0 0 28"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth=".5"
+                  />
                 </pattern>
               </defs>
-              <rect width="100%" height="100%" fill="url(#grid-sb)" className="text-foreground/20" />
+              <rect
+                width="100%"
+                height="100%"
+                fill="url(#grid-sb)"
+                className="text-foreground/20"
+              />
             </svg>
           </div>
 
@@ -109,7 +133,9 @@ export function AppSidebar() {
                           : "border-transparent hover:bg-muted/60 text-muted-foreground",
                       ].join(" ")}
                     >
-                      <Shield className={isActive("/admin") ? "text-primary" : ""} />
+                      <Shield
+                        className={isActive("/admin") ? "text-primary" : ""}
+                      />
                       <span>Admin</span>
                     </Link>
                   </SidebarMenuButton>

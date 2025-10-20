@@ -127,7 +127,11 @@ export function TextScanResults({
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Button onClick={onShareScan} disabled={isAnalyzing} className="rounded-xl">
+            <Button
+              onClick={onShareScan}
+              disabled={isAnalyzing}
+              className="rounded-xl"
+            >
               Share with community
             </Button>
             <Button
@@ -149,8 +153,8 @@ export function TextScanResults({
         <AlertDescription>
           <strong>Medical Disclaimer:</strong> This AI analysis is for
           informational purposes only and should not be used as a substitute for
-          professional medical advice, diagnosis, or treatment. Always consult
-          a qualified healthcare provider for proper evaluation.
+          professional medical advice, diagnosis, or treatment. Always consult a
+          qualified healthcare provider for proper evaluation.
         </AlertDescription>
       </Alert>
 

@@ -35,7 +35,11 @@ function formatDate(dateLike?: string | Date) {
   if (diffH < 1) return "Just now";
   if (diffH < 24) return `${diffH} hour${diffH === 1 ? "" : "s"} ago`;
   if (diffH < 48) return "Yesterday";
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function riskBadge(riskRaw?: string) {
@@ -107,9 +111,10 @@ export function Community() {
   const header = useMemo(
     () => ({
       title: "Community & History",
-      subtitle: "Track progress and connect with others on their skin health journey.",
+      subtitle:
+        "Track progress and connect with others on their skin health journey.",
     }),
-    []
+    [],
   );
 
   /* ------------------------------- loading ------------------------------ */
@@ -122,7 +127,9 @@ export function Community() {
               <Users className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{header.title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                {header.title}
+              </h1>
               <p className="text-sm text-muted-foreground">{header.subtitle}</p>
             </div>
           </div>
@@ -147,7 +154,9 @@ export function Community() {
               <Users className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{header.title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                {header.title}
+              </h1>
               <p className="text-sm text-muted-foreground">{header.subtitle}</p>
             </div>
           </div>
@@ -174,11 +183,26 @@ export function Community() {
           >
             <svg className="absolute inset-0 h-full w-full">
               <defs>
-                <pattern id="grid-comm-empty" width="28" height="28" patternUnits="userSpaceOnUse">
-                  <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+                <pattern
+                  id="grid-comm-empty"
+                  width="28"
+                  height="28"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 28 0 L 0 0 0 28"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth=".5"
+                  />
                 </pattern>
               </defs>
-              <rect width="100%" height="100%" fill="url(#grid-comm-empty)" className="text-foreground/20" />
+              <rect
+                width="100%"
+                height="100%"
+                fill="url(#grid-comm-empty)"
+                className="text-foreground/20"
+              />
             </svg>
           </div>
 
@@ -187,7 +211,9 @@ export function Community() {
               <Users className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{header.title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                {header.title}
+              </h1>
               <p className="text-sm text-muted-foreground">{header.subtitle}</p>
             </div>
           </div>
@@ -199,7 +225,8 @@ export function Community() {
             <div className="space-y-1">
               <p className="font-medium">No posts available</p>
               <p className="text-sm text-muted-foreground">
-                Community scans will appear here once others share their results.
+                Community scans will appear here once others share their
+                results.
               </p>
             </div>
           </CardContent>
@@ -219,11 +246,26 @@ export function Community() {
         >
           <svg className="absolute inset-0 h-full w-full">
             <defs>
-              <pattern id="grid-comm" width="28" height="28" patternUnits="userSpaceOnUse">
-                <path d="M 28 0 L 0 0 0 28" fill="none" stroke="currentColor" strokeWidth=".5" />
+              <pattern
+                id="grid-comm"
+                width="28"
+                height="28"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 28 0 L 0 0 0 28"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth=".5"
+                />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid-comm)" className="text-foreground/20" />
+            <rect
+              width="100%"
+              height="100%"
+              fill="url(#grid-comm)"
+              className="text-foreground/20"
+            />
           </svg>
         </div>
 
@@ -232,7 +274,9 @@ export function Community() {
             <Users className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">{header.title}</h1>
+            <h1 className="text-2xl font-bold tracking-tight">
+              {header.title}
+            </h1>
             <p className="text-sm text-muted-foreground">{header.subtitle}</p>
           </div>
         </div>
@@ -255,7 +299,9 @@ export function Community() {
                 <div className="mb-4 flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="truncate font-semibold">{post?.user?.name ?? "Anonymous"}</p>
+                      <p className="truncate font-semibold">
+                        {post?.user?.name ?? "Anonymous"}
+                      </p>
                       <span className="text-muted-foreground">•</span>
                       <span className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Clock className="h-3.5 w-3.5" />
@@ -265,7 +311,10 @@ export function Community() {
                     <div className="mt-1">
                       <Badge
                         variant="outline"
-                        className={cn("gap-1 rounded-full border", rb.className)}
+                        className={cn(
+                          "gap-1 rounded-full border",
+                          rb.className,
+                        )}
                       >
                         {rb.Icon ? <rb.Icon className="h-3.5 w-3.5" /> : null}
                         {rb.label}
@@ -291,38 +340,48 @@ export function Community() {
                     <div className="space-y-1">
                       <p className="font-medium">Text Analysis</p>
                       <p className="text-sm text-muted-foreground">
-                        {post?.question || "User submitted a symptom description."}
+                        {post?.question ||
+                          "User submitted a symptom description."}
                       </p>
                     </div>
                   </div>
                 )}
 
                 {/* Conditions */}
-                {Array.isArray(post?.conditions) && post.conditions.length > 0 && (
-                  <div className="mt-4 space-y-2">
-                    <h4 className="text-sm font-semibold">Detected Conditions</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {post.conditions.map((c) => {
-                        const name = c?.condition?.name ?? "Condition";
-                        const conf =
-                          typeof c?.confidence === "number"
-                            ? `${(c.confidence * 100).toFixed(1)}%`
-                            : "—";
-                        return (
-                          <Badge key={c?.id} variant="secondary" className="rounded-full">
-                            {name} • {conf}
-                          </Badge>
-                        );
-                      })}
+                {Array.isArray(post?.conditions) &&
+                  post.conditions.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      <h4 className="text-sm font-semibold">
+                        Detected Conditions
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {post.conditions.map((c) => {
+                          const name = c?.condition?.name ?? "Condition";
+                          const conf =
+                            typeof c?.confidence === "number"
+                              ? `${(c.confidence * 100).toFixed(1)}%`
+                              : "—";
+                          return (
+                            <Badge
+                              key={c?.id}
+                              variant="secondary"
+                              className="rounded-full"
+                            >
+                              {name} • {conf}
+                            </Badge>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Notes */}
                 {post?.notes && (
                   <div className="mt-3 space-y-1">
                     <h4 className="text-sm font-semibold">Notes</h4>
-                    <p className="text-sm text-muted-foreground">{post.notes}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {post.notes}
+                    </p>
                   </div>
                 )}
               </CardContent>

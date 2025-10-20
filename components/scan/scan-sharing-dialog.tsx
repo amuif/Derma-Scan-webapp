@@ -48,7 +48,7 @@ export function ScanSharingDialog({
       onConfirm(value);
       onOpenChange(false);
     },
-    [onConfirm, onOpenChange]
+    [onConfirm, onOpenChange],
   );
 
   return (

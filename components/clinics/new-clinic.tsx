@@ -45,8 +45,7 @@ const initialForm: FormState = {
 const isEmail = (v: string) =>
   !!v && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
-const isPhone = (v: string) =>
-  !!v && /^[\d\s\-()+]{7,}$/.test(v.trim());
+const isPhone = (v: string) => !!v && /^[\d\s\-()+]{7,}$/.test(v.trim());
 
 const looksLikeUrl = (v: string) =>
   !!v && /^(https?:\/\/)?[^\s.]+\.[^\s]{2,}$/i.test(v.trim());
@@ -57,7 +56,9 @@ function ensureHttps(v: string) {
   return /^https?:\/\//i.test(t) ? t : `https://${t}`;
 }
 
-export function CreateClinicDialog({ setCreationCompleted }: CreateClinicDialogProps) {
+export function CreateClinicDialog({
+  setCreationCompleted,
+}: CreateClinicDialogProps) {
   const { mutateAsync: createClinic } = useClinicCreation();
 
   const [open, setOpen] = useState(false);
@@ -69,7 +70,7 @@ export function CreateClinicDialog({ setCreationCompleted }: CreateClinicDialogP
 
   const specSet = useMemo(
     () => new Set(specialties.map((s) => s.toLowerCase())),
-    [specialties]
+    [specialties],
   );
 
   const addSpecialty = useCallback(() => {
@@ -141,7 +142,9 @@ export function CreateClinicDialog({ setCreationCompleted }: CreateClinicDialogP
 
       await createClinic(payload);
 
-      toast.success("Clinic submitted for review. It will appear after admin verification.");
+      toast.success(
+        "Clinic submitted for review. It will appear after admin verification.",
+      );
       setCreationCompleted(true);
 
       // reset
@@ -170,7 +173,8 @@ export function CreateClinicDialog({ setCreationCompleted }: CreateClinicDialogP
         <DialogHeader>
           <DialogTitle>Refer a New Clinic</DialogTitle>
           <DialogDescription>
-            Add a dermatology clinic or healthcare provider to our directory. Submissions are reviewed before publishing.
+            Add a dermatology clinic or healthcare provider to our directory.
+            Submissions are reviewed before publishing.
           </DialogDescription>
         </DialogHeader>
 
@@ -285,7 +289,9 @@ export function CreateClinicDialog({ setCreationCompleted }: CreateClinicDialogP
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">Add at least one specialty.</p>
+              <p className="text-sm text-muted-foreground">
+                Add at least one specialty.
+              </p>
             )}
           </div>
 
