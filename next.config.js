@@ -8,6 +8,11 @@ const nextConfig = {
         port: "4000",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "derma-scan-backend-zcmz.onrender.com",
+        pathname: "/**",
+      },
     ],
   },
   compiler: {
@@ -16,3 +21,4 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
