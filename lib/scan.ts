@@ -96,6 +96,24 @@ export const scanApi = {
       throw error;
     }
   },
+  selfScanHistory: async (token: string, userId: string) => {
+    try {
+      const response = await fetch(`${API_URL}/models/personal/history`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      const result = (await response.json()) as Scan[];
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log("Error fetching scan history", error);
+      throw error;
+    }
+  },
   approveScan: async (token: string, id: string) => {
     try {
       const response = await fetch(`${API_URL}/models/approve`, {

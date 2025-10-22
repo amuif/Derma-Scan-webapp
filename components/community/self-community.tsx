@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 import type { Scan } from "@/types/scan";
-import { useScanHistory } from "@/hooks/useScan";
+import { useScanHistory, useSelfScanHistory } from "@/hooks/useScan";
 import { useCurrentUserQuery } from "@/hooks/useAuth";
 import { FILES_URL } from "@/constants/backend-url";
 
@@ -105,7 +105,7 @@ function SkeletonCard() {
 /* ----------------------------- component ---------------------------- */
 export function SelfCommunity() {
   const { data: user } = useCurrentUserQuery();
-  const { data: scans, isLoading, isError } = useScanHistory();
+  const { data: scans, isLoading, isError } = useSelfScanHistory();
 
   const [selfScans, setSelfScans] = useState<Scan[]>([]);
 

@@ -12,7 +12,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       <SidebarProvider>
         <AppSidebar />
         {/* Top-left trigger keeps working; nudged spacing to align with new rounding */}
-        <div className="pt-7 pl-2">
+        <div className="pt-7 pl-1">
           <SidebarTrigger />
         </div>
 

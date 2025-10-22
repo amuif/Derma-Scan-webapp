@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body
+j     <body
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}
         suppressHydrationWarning
       >

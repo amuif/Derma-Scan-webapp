@@ -71,6 +71,18 @@ export const useScanHistory = () => {
     },
   });
 };
+export const useSelfScanHistory = () => {
+  const { data: user } = useCurrentUserQuery();
+  return useQuery({
+    queryKey: ["get-self-scan-history"],
+    queryFn: async () => {
+      const token = await authStorage.getToken();
+      if (!token || !user) return;
+      return scanApi.selfScanHistory(token, user.id);
+    },
+  });
+};
+
 export const useApproveScan = () => {
   return useMutation({
     mutationFn: async ({ scanId }: ApproveScan) => {
